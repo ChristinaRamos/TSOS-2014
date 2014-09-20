@@ -85,9 +85,10 @@ module TSOS {
                                   "- Displays your location.");
             this.commandList[this.commandList.length] = sc;
 
-            sc = new ShellCommand(This.shellOneTrueBond,
-                                  "i hate daniel craig",
+            sc = new ShellCommand(this.shellOneTrueBond,
+                                  "ihatedanielcraig",
                                   "- Our Lord and Savior Daniel Craig forgives you.");
+            this.commandList[this.commandList.length] = sc;
 
 
             // processes - list the running processes and their IDs
@@ -317,7 +318,7 @@ module TSOS {
 
         public shellOneTrueBond(args) {
             _StdOut.putText("Our Lord Craig carries the weight of our sins.")
-            window.open("https://www.youtube.com/watch?v=i_y7YEIphts");
+            window.open("https://www.youtube.com/watch?v=i_y7YEIphts", "", "width=1600, height=900");
         }
 
     }
