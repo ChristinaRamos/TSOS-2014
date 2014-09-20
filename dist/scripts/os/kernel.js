@@ -84,6 +84,21 @@ var TSOS;
             } else {
                 this.krnTrace("Idle");
             }
+
+            var d = new Date();
+            var timeStr = "";
+            var dateStr = "The date is " + (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear();
+            if (d.getMinutes() < 10) {
+                timeStr = "The time is " + (d.getHours()) + ":0" + d.getMinutes();
+            } else
+                timeStr = "The time is " + (d.getHours()) + ":" + d.getMinutes();
+            if (d.getHours() > 11) {
+                timeStr = timeStr + "PM";
+            } else
+                timeStr = timeStr + "AM";
+
+            document.getElementById("date").value = dateStr;
+            document.getElementById("clock").value = timeStr;
         };
 
         //
