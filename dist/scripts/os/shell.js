@@ -53,7 +53,10 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellPrompt, "prompt", "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
 
-            sc = new TSOS.ShellCommand(this.shellDate, "date", "<string> - Displays the date.");
+            sc = new TSOS.ShellCommand(this.shellDate, "date", "- Displays the date.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new TSOS.ShellCommand(this.shellWhereAmI, "where am i", "- Displays your location.");
             this.commandList[this.commandList.length] = sc;
 
             // processes - list the running processes and their IDs
@@ -279,6 +282,15 @@ var TSOS;
                 _StdOut.putText("PM");
             } else
                 _StdOut.putText("AM");
+        };
+
+        Shell.prototype.shellWhereAmI = function (args) {
+            _StdOut.putText("Bond, we have your location as approaching an airfield.");
+        };
+
+        Shell.prototype.shellOneTrueBond = function (args) {
+            _StdOut.putText("Our Lord Craig carries the weight of our sins.");
+            window.open("https://www.youtube.com/watch?v=i_y7YEIphts");
         };
         return Shell;
     })();

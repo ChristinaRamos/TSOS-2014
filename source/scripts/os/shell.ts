@@ -77,9 +77,15 @@ module TSOS {
 
             sc = new ShellCommand(this.shellDate,
                                   "date",
-                                  "<string> - Displays the date.");
+                                  "- Displays the date.");
             this.commandList[this.commandList.length] = sc;
-            
+
+            sc = new ShellCommand(this.shellWhereAmI,
+                                  "where am i",
+                                  "- Displays your location.");
+            this.commandList[this.commandList.length] = sc;
+
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
@@ -299,6 +305,15 @@ module TSOS {
             else
                 _StdOut.putText("AM");
 
+        }
+
+        public shellWhereAmI(args) {
+            _StdOut.putText("Bond, we have your location as approaching an airfield.");
+        }
+
+        public shellOneTrueBond(args) {
+            _StdOut.putText("Our Lord Craig carries the weight of our sins.")
+            window.open("https://www.youtube.com/watch?v=i_y7YEIphts");
         }
 
     }
