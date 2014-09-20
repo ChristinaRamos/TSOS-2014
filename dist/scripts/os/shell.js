@@ -59,6 +59,8 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellWhereAmI, "where am i", "- Displays your location.");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new TSOS.ShellCommand(This.shellOneTrueBond, "i hate daniel craig", "- Our Lord and Savior Daniel Craig forgives you.");
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
