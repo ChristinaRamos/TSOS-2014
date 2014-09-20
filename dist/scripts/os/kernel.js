@@ -89,16 +89,16 @@ var TSOS;
             var timeStr = "";
             var dateStr = "The date is " + (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear();
             if (d.getMinutes() < 10) {
-                timeStr = "The time is " + (d.getHours()) + ":0" + d.getMinutes();
+                timeStr = "The time is " + d.getHours() + ":0" + d.getMinutes() + ":" + d.getSeconds();
             } else
-                timeStr = "The time is " + (d.getHours()) + ":" + d.getMinutes();
+                timeStr = "The time is " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
             if (d.getHours() > 11) {
                 timeStr = timeStr + "PM";
             } else
                 timeStr = timeStr + "AM";
 
-            document.getElementById("date").value = dateStr;
-            document.getElementById("clock").value = timeStr;
+            document.getElementById("date").innerHTML = dateStr;
+            document.getElementById("clock").innerHTML = timeStr;
         };
 
         //
