@@ -90,6 +90,11 @@ module TSOS {
                                   "- Our Lord and Savior Daniel Craig forgives you.");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new ShellCommand(this.shellStatus,
+                                  "status",
+                                  "Allows user to put dirty statuses on HostLog.");
+            this.commandList[this.commandList.length] = sc;
+
 
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
@@ -317,8 +322,13 @@ module TSOS {
         }
 
         public shellOneTrueBond(args) {
-            _StdOut.putText("Our Lord Craig carries the weight of our sins.")
+            _StdOut.putText("Our Lord Daniel Craig carries the weight of our sins.")
             window.open("https://www.youtube.com/watch?v=i_y7YEIphts", "", "width=1600, height=900");
+        }
+
+        public shellStatus(args) {
+            var input = args;
+            document.getElementById("status").innerHTML = input;
         }
 
     }
