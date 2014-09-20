@@ -75,6 +75,11 @@ module TSOS {
                                   "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new ShellCommand(this.shellDate,
+                                  "date",
+                                  "<string> - Displays the date.");
+            this.commandList[this.commandList.length] = sc;
+            
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
@@ -198,7 +203,7 @@ module TSOS {
            }
         }
 
-        public shellVer(args) {
+        public shellVer() {
             _StdOut.putText(APP_NAME + " version " + APP_VERSION);
         }
 
@@ -277,6 +282,23 @@ module TSOS {
             } else {
                 _StdOut.putText("Usage: prompt <string>  Please supply a string.");
             }
+        }
+
+        public shellDate(args) {
+            var d = new Date();
+            _StdOut.putText("The date is " + (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear());
+            _StdOut.advanceLine()
+            if(d.getMinutes() < 10){
+                _StdOut.putText("The time is " + (d.getHours()) + ":0" + d.getMinutes());
+            }
+            else
+                _StdOut.putText("The time is " + (d.getHours()) + ":" + d.getMinutes());
+            if(d.getHours() > 11){
+                _StdOut.putText("PM");
+            }
+            else
+                _StdOut.putText("AM");
+
         }
 
     }
