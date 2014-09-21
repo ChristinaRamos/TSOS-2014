@@ -47,6 +47,7 @@ module TSOS {
                         (keyCode == 8)                                    ||
                         (keyCode == 38)                                   ||
                         (keyCode == 40)                                   ||
+                        (keyCode == 9)                                    ||
                         (keyCode == 13)) {                                     // enter
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);

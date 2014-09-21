@@ -54,7 +54,7 @@ module TSOS {
                 } else if (chr === String.fromCharCode(8)) {
                     this.backspace();
                 } else if (chr === String.fromCharCode(38)) {
-                    this.currentXPosition = 12.48;
+                    this.currentXPosition = STARTING_X_POS;
                     this.buffer = "";
                     _DrawingContext.fillStyle = "#DFDBC3";
                     _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, 500, _DefaultFontSize + 
@@ -69,14 +69,17 @@ module TSOS {
                     if(this.count > 0){
                         this.count--;
                     }                 
-                    this.currentXPosition = 12.48;
+                    this.currentXPosition = STARTING_X_POS;
                     this.buffer = "";
                     _DrawingContext.fillStyle = "#DFDBC3";
                     _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, 500, _DefaultFontSize + 
                                          _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                                          _FontHeightMargin);
-                    this.putText(this.history[this.count]);
-                }                
+                    this.putText(this.history[this.history.length - this.count - 1]);
+                    this.buffer += this.history[this.history.length - this.count - 1];
+                } else if (chr === String.fromCharCode(9)) {
+                    this.tab();
+                }               
                 else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
@@ -125,14 +128,29 @@ module TSOS {
         public scroll(): void {}
 
         public backspace(): void {
-            if(this.fSize.length != 1){
-                var fSizePop= this.fSize.pop();
+            var fSizePop= this.fSize.pop();
+            if(Math.round((this.currentXPosition - fSizePop) * 10 ) / 10 >= STARTING_X_POS){
                 this.currentXPosition = this.currentXPosition - fSizePop;
                 _DrawingContext.fillStyle = "#DFDBC3";
                 _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, fSizePop, _DefaultFontSize + 
                                          _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                                          _FontHeightMargin);
                 this.buffer = this.buffer.substring(0, this.buffer.length - 1);
+            }
+        }
+
+        public tab(): void {
+            for (var i = 0; i < _OsShell.commandList.length; i++){
+                if(_OsShell.commandList[i].command.indexOf(this.buffer) == 0) {
+                    this.buffer = "";
+                    this.currentXPosition = STARTING_X_POS;
+                    _DrawingContext.fillStyle = "#DFDBC3";
+                    _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, 500, _DefaultFontSize + 
+                                         _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                                         _FontHeightMargin);
+                    this.putText(_OsShell.commandList[i].command);
+                    this.buffer += _OsShell.commandList[i].command;
+                }
             }
         }       
     }

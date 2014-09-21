@@ -56,7 +56,7 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellDate, "date", "- Displays the date.");
             this.commandList[this.commandList.length] = sc;
 
-            sc = new TSOS.ShellCommand(this.shellWhereAmI, "where am i", "- Displays your location.");
+            sc = new TSOS.ShellCommand(this.shellWhereAmI, "whereami", "- Displays your location.");
             this.commandList[this.commandList.length] = sc;
 
             sc = new TSOS.ShellCommand(this.shellOneTrueBond, "ihatedanielcraig", "- Our Lord and Savior Daniel Craig forgives you.");

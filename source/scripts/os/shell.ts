@@ -81,7 +81,7 @@ module TSOS {
             this.commandList[this.commandList.length] = sc;
 
             sc = new ShellCommand(this.shellWhereAmI,
-                                  "where am i",
+                                  "whereami",
                                   "- Displays your location.");
             this.commandList[this.commandList.length] = sc;
 
