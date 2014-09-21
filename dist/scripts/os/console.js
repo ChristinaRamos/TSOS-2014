@@ -87,6 +87,12 @@ var TSOS;
             this.currentYPosition += _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin;
             // TODO: Handle scrolling. (Project 1)
         };
+
+        Console.prototype.scroll = function () {
+        };
+
+        Console.prototype.backspace = function () {
+        };
         return Console;
     })();
     TSOS.Console = Console;

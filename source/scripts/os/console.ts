@@ -86,5 +86,13 @@ module TSOS {
 
             // TODO: Handle scrolling. (Project 1)
         }
+
+        public scroll(): void {
+            
+        }
+
+        public backspace(): void {
+            
+        }
     }
  }
