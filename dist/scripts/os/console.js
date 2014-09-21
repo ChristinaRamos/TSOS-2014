@@ -8,16 +8,18 @@ Note: This is not the Shell.  The Shell is the "command line interface" (CLI) or
 var TSOS;
 (function (TSOS) {
     var Console = (function () {
-        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, buffer) {
+        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, fSize, buffer) {
             if (typeof currentFont === "undefined") { currentFont = _DefaultFontFamily; }
             if (typeof currentFontSize === "undefined") { currentFontSize = _DefaultFontSize; }
             if (typeof currentXPosition === "undefined") { currentXPosition = 0; }
             if (typeof currentYPosition === "undefined") { currentYPosition = _DefaultFontSize; }
+            if (typeof fSize === "undefined") { fSize = []; }
             if (typeof buffer === "undefined") { buffer = ""; }
             this.currentFont = currentFont;
             this.currentFontSize = currentFontSize;
             this.currentXPosition = currentXPosition;
             this.currentYPosition = currentYPosition;
+            this.fSize = fSize;
             this.buffer = buffer;
         }
         Console.prototype.init = function () {
@@ -47,6 +49,8 @@ var TSOS;
 
                     // ... and reset our buffer.
                     this.buffer = "";
+                } else if (chr === String.fromCharCode(8)) {
+                    this.backspace();
                 } else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
@@ -72,6 +76,9 @@ var TSOS;
 
                 // Move the current X position.
                 var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
+
+                //Measure the last letter drawn so that we can backspace it if needed
+                this.fSize.push(offset);
                 this.currentXPosition = this.currentXPosition + offset;
             }
         };
@@ -92,6 +99,9 @@ var TSOS;
         };
 
         Console.prototype.backspace = function () {
+            this.currentXPosition = this.currentXPosition - this.fSize.pop();
+            _DrawingContext.fillStyle = "red";
+            _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, 20, this.fSize);
         };
         return Console;
     })();

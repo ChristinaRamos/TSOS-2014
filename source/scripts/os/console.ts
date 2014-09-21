@@ -17,6 +17,7 @@ module TSOS {
                     public currentFontSize = _DefaultFontSize,
                     public currentXPosition = 0,
                     public currentYPosition = _DefaultFontSize,
+                    public fSize = [],
                     public buffer = "") {
 
         }
@@ -46,16 +47,20 @@ module TSOS {
                     _OsShell.handleInput(this.buffer);
                     // ... and reset our buffer.
                     this.buffer = "";
+                }
+                else if (chr === String.fromCharCode(8)) {
+                    this.backspace();
                 } else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
                     this.putText(chr);
                     // ... and add it to our buffer.
                     this.buffer += chr;
-                }
+                  }
                 // TODO: Write a case for Ctrl-C.
             }
         }
+        
 
         public putText(text): void {
             // My first inclination here was to write two functions: putChar() and putString().
@@ -69,8 +74,11 @@ module TSOS {
                 _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
                 // Move the current X position.
                 var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
+                //Measure the last letter drawn so that we can backspace it if needed
+                this.fSize.push(offset);
                 this.currentXPosition = this.currentXPosition + offset;
             }
+
          }
 
         public advanceLine(): void {
@@ -87,12 +95,12 @@ module TSOS {
             // TODO: Handle scrolling. (Project 1)
         }
 
-        public scroll(): void {
-            
-        }
+        public scroll(): void {}
 
         public backspace(): void {
-            
+            this.currentXPosition = this.currentXPosition - this.fSize.pop();
+            _DrawingContext.fillStyle = "red";
+            _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, 20, );
         }
     }
- }
+ } 
