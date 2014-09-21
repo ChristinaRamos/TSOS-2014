@@ -19,6 +19,7 @@ module TSOS {
                     public currentYPosition = _DefaultFontSize,
                     public fSize = [],
                     public history = [],
+                    public count = 0,
                     public buffer = "") {
 
         }
@@ -49,10 +50,34 @@ module TSOS {
                     this.history.push(this.buffer);
                     // ... and reset our buffer.
                     this.buffer = "";
-                }
-                else if (chr === String.fromCharCode(8)) {
+                    this.count = 0;
+                } else if (chr === String.fromCharCode(8)) {
                     this.backspace();
-                } else {
+                } else if (chr === String.fromCharCode(38)) {
+                    this.currentXPosition = 12.48;
+                    this.buffer = "";
+                    _DrawingContext.fillStyle = "#DFDBC3";
+                    _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, 500, _DefaultFontSize + 
+                                         _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                                         _FontHeightMargin);
+                    this.putText(this.history[this.history.length - this.count - 1]);
+                    this.buffer += this.history[this.history.length - this.count - 1];
+                    if(this.count < this.history.length - 1){
+                        this.count++;
+                    }
+                } else if (chr === String.fromCharCode(40)) {
+                    if(this.count > 0){
+                        this.count--;
+                    }                 
+                    this.currentXPosition = 12.48;
+                    this.buffer = "";
+                    _DrawingContext.fillStyle = "#DFDBC3";
+                    _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, 500, _DefaultFontSize + 
+                                         _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                                         _FontHeightMargin);
+                    this.putText(this.history[this.count]);
+                }                
+                else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
                     this.putText(chr);
@@ -109,10 +134,6 @@ module TSOS {
                                          _FontHeightMargin);
                 this.buffer = this.buffer.substring(0, this.buffer.length - 1);
             }
-        }
-
-        public hist(): void {
-
-        }
+        }       
     }
  } 

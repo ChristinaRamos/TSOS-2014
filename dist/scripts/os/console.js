@@ -8,13 +8,14 @@ Note: This is not the Shell.  The Shell is the "command line interface" (CLI) or
 var TSOS;
 (function (TSOS) {
     var Console = (function () {
-        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, fSize, history, buffer) {
+        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, fSize, history, count, buffer) {
             if (typeof currentFont === "undefined") { currentFont = _DefaultFontFamily; }
             if (typeof currentFontSize === "undefined") { currentFontSize = _DefaultFontSize; }
             if (typeof currentXPosition === "undefined") { currentXPosition = 0; }
             if (typeof currentYPosition === "undefined") { currentYPosition = _DefaultFontSize; }
             if (typeof fSize === "undefined") { fSize = []; }
             if (typeof history === "undefined") { history = []; }
+            if (typeof count === "undefined") { count = 0; }
             if (typeof buffer === "undefined") { buffer = ""; }
             this.currentFont = currentFont;
             this.currentFontSize = currentFontSize;
@@ -22,6 +23,7 @@ var TSOS;
             this.currentYPosition = currentYPosition;
             this.fSize = fSize;
             this.history = history;
+            this.count = count;
             this.buffer = buffer;
         }
         Console.prototype.init = function () {
@@ -52,8 +54,28 @@ var TSOS;
 
                     // ... and reset our buffer.
                     this.buffer = "";
+                    this.count = 0;
                 } else if (chr === String.fromCharCode(8)) {
                     this.backspace();
+                } else if (chr === String.fromCharCode(38)) {
+                    this.currentXPosition = 12.48;
+                    this.buffer = "";
+                    _DrawingContext.fillStyle = "#DFDBC3";
+                    _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, 500, _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin);
+                    this.putText(this.history[this.history.length - this.count - 1]);
+                    this.buffer += this.history[this.history.length - this.count - 1];
+                    if (this.count < this.history.length - 1) {
+                        this.count++;
+                    }
+                } else if (chr === String.fromCharCode(40)) {
+                    if (this.count > 0) {
+                        this.count--;
+                    }
+                    this.currentXPosition = 12.48;
+                    this.buffer = "";
+                    _DrawingContext.fillStyle = "#DFDBC3";
+                    _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, 500, _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin);
+                    this.putText(this.history[this.count]);
                 } else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
@@ -109,9 +131,6 @@ var TSOS;
                 _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, fSizePop, _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin);
                 this.buffer = this.buffer.substring(0, this.buffer.length - 1);
             }
-        };
-
-        Console.prototype.hist = function () {
         };
         return Console;
     })();
