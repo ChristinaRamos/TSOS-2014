@@ -18,6 +18,7 @@ module TSOS {
                     public currentXPosition = 0,
                     public currentYPosition = _DefaultFontSize,
                     public fSize = [],
+                    public history = [],
                     public buffer = "") {
 
         }
@@ -45,6 +46,7 @@ module TSOS {
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
+                    this.history.push(this.buffer);
                     // ... and reset our buffer.
                     this.buffer = "";
                 }
@@ -105,7 +107,12 @@ module TSOS {
                 _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, fSizePop, _DefaultFontSize + 
                                          _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                                          _FontHeightMargin);
+                this.buffer = this.buffer.substring(0, this.buffer.length - 1);
             }
+        }
+
+        public hist(): void {
+
         }
     }
  } 

@@ -45,6 +45,8 @@ module TSOS {
             } else if (((keyCode >= 48) && (keyCode <= 57)) && !isShifted ||   // digits
                         (keyCode == 32)                                   ||   // space
                         (keyCode == 8)                                    ||
+                        (keyCode == 38)                                   ||
+                        (keyCode == 40)                                   ||
                         (keyCode == 13)) {                                     // enter
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
