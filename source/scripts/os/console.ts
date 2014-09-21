@@ -98,12 +98,14 @@ module TSOS {
         public scroll(): void {}
 
         public backspace(): void {
-            var fSizePop= this.fSize.pop();
-            this.currentXPosition = this.currentXPosition - fSizePop;
-            _DrawingContext.fillStyle = "#DFDBC3";
-            _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, fSizePop, _DefaultFontSize + 
-                                     _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
-                                     _FontHeightMargin);
+            if(this.fSize.length != 1){
+                var fSizePop= this.fSize.pop();
+                this.currentXPosition = this.currentXPosition - fSizePop;
+                _DrawingContext.fillStyle = "#DFDBC3";
+                _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, fSizePop, _DefaultFontSize + 
+                                         _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                                         _FontHeightMargin);
+            }
         }
     }
  } 
