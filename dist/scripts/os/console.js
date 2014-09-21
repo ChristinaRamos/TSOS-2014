@@ -99,9 +99,10 @@ var TSOS;
         };
 
         Console.prototype.backspace = function () {
-            this.currentXPosition = this.currentXPosition - this.fSize.pop();
-            _DrawingContext.fillStyle = "red";
-            _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, 20, this.fSize);
+            var fSizePop = this.fSize.pop();
+            this.currentXPosition = this.currentXPosition - fSizePop;
+            _DrawingContext.fillStyle = "#DFDBC3";
+            _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, fSizePop, _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin);
         };
         return Console;
     })();
