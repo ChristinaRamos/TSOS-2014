@@ -137,14 +137,29 @@ var TSOS;
         };
 
         Console.prototype.tab = function () {
+            var prefixCount = 0;
             for (var i = 0; i < _OsShell.commandList.length; i++) {
                 if (_OsShell.commandList[i].command.indexOf(this.buffer) == 0) {
-                    this.buffer = "";
-                    this.currentXPosition = STARTING_X_POS;
-                    _DrawingContext.fillStyle = "#DFDBC3";
-                    _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, 500, _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin);
-                    this.putText(_OsShell.commandList[i].command);
-                    this.buffer += _OsShell.commandList[i].command;
+                    prefixCount++;
+                }
+            }
+            if (prefixCount <= 1) {
+                for (var i = 0; i < _OsShell.commandList.length; i++) {
+                    if (_OsShell.commandList[i].command.indexOf(this.buffer) == 0) {
+                        this.buffer = "";
+                        this.currentXPosition = STARTING_X_POS;
+                        _DrawingContext.fillStyle = "#DFDBC3";
+                        _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, 500, _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin);
+                        this.putText(_OsShell.commandList[i].command);
+                        this.buffer += _OsShell.commandList[i].command;
+                    }
+                }
+            } else {
+                _StdOut.advanceLine();
+                for (var i = 0; i < _OsShell.commandList.length; i++) {
+                    if (_OsShell.commandList[i].command.indexOf(this.buffer) == 0) {
+                        _StdOut.putText(_OsShell.commandList[i].command + "    ");
+                    }
                 }
             }
         };
