@@ -142,6 +142,7 @@ module TSOS {
                     break;
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
+
             }
         }
 
@@ -186,9 +187,17 @@ module TSOS {
         }
 
         public krnTrapError(msg) {
+            this.bsod();
             Control.hostLog("OS ERROR - TRAP: " + msg);
             // TODO: Display error on console, perhaps in some sort of colored screen. (Perhaps blue?)
             this.krnShutdown();
+        }
+
+        public bsod() {
+            _DrawingContext.clearRect(0, 0, _Canvas.width, _Canvas.height);
+            _DrawingContext.fillStyle = "blue";
+            _DrawingContext.fillRect(0, 0, _Canvas.width, _Canvas.height);
+
         }
     }
 }

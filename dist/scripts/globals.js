@@ -9,7 +9,7 @@ Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 
 // Global "CONSTANTS" (There is currently no const or final or readonly type annotation in TypeScript.)
 // TODO: Make a global object and use that instead of the "_" naming convention in the global namespace.
 //
-var APP_NAME = "Quantum SolOS";
+var APP_NAME = "Quantum of SolOS";
 var APP_VERSION = "realest bestest one true 0.07";
 
 var CPU_CLOCK_INTERVAL = 100;

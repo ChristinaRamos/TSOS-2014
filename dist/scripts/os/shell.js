@@ -65,6 +65,13 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellStatus, "status", "Allows user to put dirty statuses on HostLog.");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new TSOS.ShellCommand(this.shellBsod, "bsod", "CAUTION: DO NOT PRESS THIS BUTTON.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new TSOS.ShellCommand(this.shellLoad, "load", "Allows user to load code.  It damn well better be hex.");
+
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -133,7 +140,9 @@ var TSOS;
             }
 
             // ... and finally write the prompt again.
-            this.putPrompt();
+            if (_DrawingContext.fillStyle != "#0000ff") {
+                this.putPrompt();
+            }
         };
 
         Shell.prototype.parseInput = function (buffer) {
@@ -302,6 +311,33 @@ var TSOS;
         Shell.prototype.shellStatus = function (args) {
             var input = args;
             document.getElementById("status").innerHTML = input;
+        };
+
+        Shell.prototype.shellBsod = function () {
+            _Kernel.krnTrapError("This is a test BSOD");
+            _DrawingContext.fillStyle = "blue";
+            _DrawingContext.fillRect(0, 0, _Canvas.width, _Canvas.height);
+        };
+
+        Shell.prototype.shellLoad = function () {
+            var input = "";
+            var isHex = 0;
+            var hexCharacters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", " "];
+            input = document.getElementById("taProgramInput").value.trim().toLowerCase();
+
+            if (input === "") {
+                _StdOut.putText("Have you tried actually typing something?");
+            } else {
+                for (var i = 0; i < input.length; i++) {
+                    if (hexCharacters.indexOf(input.charAt(i)) === -1 && i === input.length - 1) {
+                        _StdOut.putText("This isn't hex.  Are you even trying?");
+                    } else {
+                        if (i === input.length - 1) {
+                            _StdOut.putText("This is hex.  Fanfuckintastic.");
+                        }
+                    }
+                }
+            }
         };
         return Shell;
     })();
