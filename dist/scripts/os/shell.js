@@ -68,7 +68,7 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellBsod, "bsod", "CAUTION: DO NOT PRESS THIS BUTTON.");
             this.commandList[this.commandList.length] = sc;
 
-            sc = new TSOS.ShellCommand(this.shellLoad, "load", "Allows user to load code.  It damn well better be hex.");
+            sc = new TSOS.ShellCommand(this.shellLoad, "load", "Allows user to load code.  It better be hex.");
 
             this.commandList[this.commandList.length] = sc;
 
@@ -321,7 +321,7 @@ var TSOS;
 
         Shell.prototype.shellLoad = function () {
             var input = "";
-            var isHex = 0;
+            var isHex = true;
             var hexCharacters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", " "];
             input = document.getElementById("taProgramInput").value.trim().toLowerCase();
 
@@ -329,13 +329,14 @@ var TSOS;
                 _StdOut.putText("Have you tried actually typing something?");
             } else {
                 for (var i = 0; i < input.length; i++) {
-                    if (hexCharacters.indexOf(input.charAt(i)) === -1 && i === input.length - 1) {
-                        _StdOut.putText("This isn't hex.  Are you even trying?");
-                    } else {
-                        if (i === input.length - 1) {
-                            _StdOut.putText("This is hex.  Fanfuckintastic.");
-                        }
+                    if (hexCharacters.indexOf(input.charAt(i)) === -1) {
+                        isHex = false;
                     }
+                }
+                if (isHex === false) {
+                    _StdOut.putText("This isn't hex.  Are you even trying?");
+                } else {
+                    _StdOut.putText("This is hex.  Fanfuckintastic.");
                 }
             }
         };
