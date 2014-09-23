@@ -44,11 +44,13 @@ module TSOS {
                 _KernelInputQueue.enqueue(chr);
             } else if ((!isShifted && (keyCode >= 48) && (keyCode <= 57)) ||   // digits
                         (keyCode == 32)                                   ||   // space
-                        (keyCode == 8)                                    ||
-                        (keyCode == 9)                                    ||
+                        (keyCode == 8)                                    ||   // backspace
+                        (keyCode == 9)                                    ||   // tab
                         (keyCode == 13)) {                                     // enter
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
+                //had issue with ampersand, so had to name upArrow and downArrow instead
+                //of just using their keycodes
             } else if (keyCode == 38 && !isShifted){
                 chr = "upArrow";
                 _KernelInputQueue.enqueue(chr);
@@ -57,6 +59,7 @@ module TSOS {
                 _KernelInputQueue.enqueue(chr);
 
             } else {
+                //buncha keycodes man
                 if(isShifted){
                     switch(keyCode) {
                         case 192: chr = "~";
@@ -110,7 +113,7 @@ module TSOS {
                         case 186: chr = ":";
                         break;
 
-                        case 222: chr = "\"";
+                        case 222: chr = "\"";   //IT BOTHERS ME SO MUCH THAT THIS IS PURPLE IN SUBLIME TEXT
                         break;
 
                         case 188: chr = "<";
@@ -144,7 +147,7 @@ module TSOS {
                             case 221: chr = "]";
                             break;
 
-                            case 220: chr = "\\";
+                            case 220: chr = "\\";       //AHHGH THIS IS PURPLE TOO
                             break;
 
                             case 186: chr = ";";

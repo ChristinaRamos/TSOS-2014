@@ -12,8 +12,8 @@
 // Global "CONSTANTS" (There is currently no const or final or readonly type annotation in TypeScript.)
 // TODO: Make a global object and use that instead of the "_" naming convention in the global namespace.
 //
-var APP_NAME: string    = "Quantum of SolOS";   // 'cause Bob and I were at a loss for a better name.
-var APP_VERSION: string = "realest bestest one true 0.07";   // What did you expect?
+var APP_NAME: string    = "Quantum of SolOS";   // 'cause best move ever amirite?
+var APP_VERSION: string = "realest bestest one true 0.07";   // What did you expect?  No really, what DID you expect?
 
 var CPU_CLOCK_INTERVAL: number = 100;   // This is in ms, or milliseconds, so 1000 = 1 second.
 
@@ -66,7 +66,8 @@ var _hardwareClockID: number = null;
 var _GLaDOS: any = null;
 var Glados: any = null;
 
-var _ScrollDiv = null;
+//We need this stupid thing for scrollTop and scrollHeight in console.ts
+var _ScrollDiv = null; 
 
 var onDocumentLoad = function() {
 	TSOS.Control.hostInit();

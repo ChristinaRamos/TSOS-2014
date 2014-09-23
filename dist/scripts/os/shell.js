@@ -51,21 +51,33 @@ var TSOS;
 
             // prompt <string>
             sc = new TSOS.ShellCommand(this.shellPrompt, "prompt", "<string> - Sets the prompt.");
+
+            // date
             this.commandList[this.commandList.length] = sc;
 
             sc = new TSOS.ShellCommand(this.shellDate, "date", "- Displays the date.");
+
+            // where am i
             this.commandList[this.commandList.length] = sc;
 
             sc = new TSOS.ShellCommand(this.shellWhereAmI, "whereami", "- Displays your location.");
+
+            // the truth
             this.commandList[this.commandList.length] = sc;
 
             sc = new TSOS.ShellCommand(this.shellOneTrueBond, "ihatedanielcraig", "- Our Lord and Savior Daniel Craig forgives you.");
+
+            // status
             this.commandList[this.commandList.length] = sc;
 
             sc = new TSOS.ShellCommand(this.shellStatus, "status", "Allows user to put dirty statuses on HostLog.");
+
+            // bsod
             this.commandList[this.commandList.length] = sc;
 
             sc = new TSOS.ShellCommand(this.shellBsod, "bsod", "CAUTION: DO NOT PRESS THIS BUTTON.");
+
+            // load
             this.commandList[this.commandList.length] = sc;
 
             sc = new TSOS.ShellCommand(this.shellLoad, "load", "Allows user to load code.  It better be hex.");
@@ -139,9 +151,9 @@ var TSOS;
                 _StdOut.advanceLine();
             }
 
-            // ... and finally write the prompt again.
+            // ... and finally write the prompt again...or not?
             if (_DrawingContext.fillStyle != "#0000ff") {
-                this.putPrompt();
+                this.putPrompt(); //don't write that goddamn prompt if there's a blue screen of death dammit.
             }
         };
 
@@ -300,42 +312,48 @@ var TSOS;
         };
 
         Shell.prototype.shellWhereAmI = function (args) {
-            _StdOut.putText("Bond, we have your location as approaching an airfield.");
+            _StdOut.putText("Bond, we have your location as approaching an airfield."); //It's a quote from a DANIEL CRAIG Bond movie :D
         };
 
         Shell.prototype.shellOneTrueBond = function (args) {
             _StdOut.putText("Our Lord Daniel Craig carries the weight of our sins.");
-            window.open("https://www.youtube.com/watch?v=i_y7YEIphts", "", "width=1600, height=900");
+            window.open("https://www.youtube.com/watch?v=i_y7YEIphts", "", "width=1600, height=900"); //This should make you happy
         };
 
         Shell.prototype.shellStatus = function (args) {
-            TSOS.Control.setInput(args.join(" "));
+            TSOS.Control.setInput(args.join(" ")); //args is an array, gotta make it a string and delimit with spaces, not commas!
         };
 
         Shell.prototype.shellBsod = function () {
-            _Kernel.krnTrapError("This is a test BSOD");
-            _DrawingContext.fillStyle = "blue";
-            _DrawingContext.fillRect(0, 0, _Canvas.width, _Canvas.height);
+            _Kernel.krnTrapError("This is a test BSOD"); //nifty host log text
+            _DrawingContext.fillStyle = "blue"; //what a creative color to use for a bsod
+            _DrawingContext.fillRect(0, 0, _Canvas.width, _Canvas.height); //draw a cool rectangle as big as the canvas
         };
 
         Shell.prototype.shellLoad = function () {
             var input = "";
             var isHex = true;
+
+            //all those valid hex characters.  what a bunch of kool kidz
             var hexCharacters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", " "];
+
+            //the stuff in the damn user program box casted because typescript is silly
+            //and made lower case because I don't want to check for capitals
             input = document.getElementById("taProgramInput").value.trim().toLowerCase();
 
             if (input === "") {
-                _StdOut.putText("Have you tried actually typing something?");
+                _StdOut.putText("Have you tried actually typing something?"); //well, have you?
             } else {
                 for (var i = 0; i < input.length; i++) {
+                    //is the input character at i found in the valid hex characters array?
                     if (hexCharacters.indexOf(input.charAt(i)) === -1) {
-                        isHex = false;
+                        isHex = false; //no, it's not!
                     }
                 }
                 if (isHex === false) {
-                    _StdOut.putText("This isn't hex.  Are you even trying?");
+                    _StdOut.putText("This isn't hex.  Are you even trying?"); //well, are you?
                 } else {
-                    _StdOut.putText("This is hex.  Fanfuckintastic.");
+                    _StdOut.putText("This is hex.  Fanfuckintastic."); //I was frustrated by this point...
                 }
             }
         };

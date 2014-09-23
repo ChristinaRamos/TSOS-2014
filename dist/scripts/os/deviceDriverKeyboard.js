@@ -48,6 +48,8 @@ var TSOS;
             } else if ((!isShifted && (keyCode >= 48) && (keyCode <= 57)) || (keyCode == 32) || (keyCode == 8) || (keyCode == 9) || (keyCode == 13)) {
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
+                //had issue with ampersand, so had to name upArrow and downArrow instead
+                //of just using their keycodes
             } else if (keyCode == 38 && !isShifted) {
                 chr = "upArrow";
                 _KernelInputQueue.enqueue(chr);
@@ -55,6 +57,7 @@ var TSOS;
                 chr = "downArrow";
                 _KernelInputQueue.enqueue(chr);
             } else {
+                //buncha keycodes man
                 if (isShifted) {
                     switch (keyCode) {
                         case 192:
@@ -126,7 +129,7 @@ var TSOS;
                             break;
 
                         case 222:
-                            chr = "\"";
+                            chr = "\""; //IT BOTHERS ME SO MUCH THAT THIS IS PURPLE IN SUBLIME TEXT
                             break;
 
                         case 188:
@@ -165,7 +168,7 @@ var TSOS;
                             break;
 
                         case 220:
-                            chr = "\\";
+                            chr = "\\"; //AHHGH THIS IS PURPLE TOO
                             break;
 
                         case 186:

@@ -186,6 +186,7 @@ module TSOS {
         }
 
         public krnTrapError(msg) {
+            //calls bsod, explained further below
             this.bsod();
             Control.hostLog("OS ERROR - TRAP: " + msg);
             // TODO: Display error on console, perhaps in some sort of colored screen. (Perhaps blue?)
@@ -193,6 +194,9 @@ module TSOS {
         }
 
         public bsod() {
+            //Ok so my bsod sucks right now because I just wanted it working.  It'll be cooler later.
+            //I almost promise
+            //We wipe the whole canvas to death and then flood it with blue
             _DrawingContext.clearRect(0, 0, _Canvas.width, _Canvas.height);
             _DrawingContext.fillStyle = "blue";
             _DrawingContext.fillRect(0, 0, _Canvas.width, _Canvas.height);

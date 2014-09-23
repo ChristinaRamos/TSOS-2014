@@ -17,10 +17,10 @@ module TSOS {
                     public currentFontSize = _DefaultFontSize,
                     public currentXPosition = 0,
                     public currentYPosition = _DefaultFontSize,
-                    public fSize = [],
-                    public history = [],
-                    public count = 0,
-                    public buffer = "") {
+                    public fSize = [],      //keeps track of the font size of the previous letter for backspacey purposes
+                    public history = [],    //keeps track of what's been entered into console for up/down history purposes
+                    public count = 0,       //what a specific variable name!  helps get the end of the array without popping
+                    public buffer = "") {   //why am I commenting this...it was already here
 
         }
 
@@ -47,38 +47,58 @@ module TSOS {
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
-                    this.history.push(this.buffer);
+                    //better add what's in the buffer to our history array before it gets spirited away!
+                    this.history.push(this.buffer);     
                     // ... and reset our buffer.
                     this.buffer = "";
+                    //reset count back to 0 every time we type a new command to add to history
                     this.count = 0;
+
+                    //backspace key.  no waaaaaaaaaaaaaay!
                 } else if (chr === String.fromCharCode(8)) {
-                    this.backspace();
-                } else if (chr === "upArrow") {
-                    this.currentXPosition = STARTING_X_POS;
-                    this.buffer = "";
+                    //you'll never guess what this does    
+                    this.backspace();   
+                    //had issue with ampersand, so had to change it up here                        
+                } else if (chr === "upArrow") {         
+                    //yay no magic numbers!  position after prompt        
+                    this.currentXPosition = STARTING_X_POS; 
+                    //clear buffer    
+                    this.buffer = "";    
+                    //clear what's been written after the prompt                       
                     _DrawingContext.fillStyle = "#DFDBC3";
                     _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, 500, _DefaultFontSize + 
                                          _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                                          _FontHeightMargin);
+                    //draw the previous command onto canvas
                     this.putText(this.history[this.history.length - this.count - 1]);
+                    //add it to the buffer so it isn't just a pretty, meaningless drawing
                     this.buffer += this.history[this.history.length - this.count - 1];
+                    //stop cycling through history once we reach the first command ever
                     if(this.count < this.history.length - 1){
                         this.count++;
                     }
+                    //this time, left parenthesis decided to be an ass instead of ampersand.  oh boy.
                 } else if (chr === "downArrow") {
+                    //don't go below zero or we all actually die.  WE ACTUALLY DIE.
                     if(this.count > 0){
                         this.count--;
                     }                 
+                    //set ourselves up at the position right after the prompt.  no eating the prompt, kids.
                     this.currentXPosition = STARTING_X_POS;
+                    //clear dat buffa
                     this.buffer = "";
+                    //erase that crap from the canvas
                     _DrawingContext.fillStyle = "#DFDBC3";
                     _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, 500, _DefaultFontSize + 
                                          _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                                          _FontHeightMargin);
+                    //draw command onto canvas and add to buffer.  come on, you've seen this before.
                     this.putText(this.history[this.history.length - this.count - 1]);
                     this.buffer += this.history[this.history.length - this.count - 1];
                 } else if (chr === String.fromCharCode(9)) {
+                    //hey, can you pick up the...
                     this.tab();
+                    //heh, get it?
                 }               
                 else {
                     // This is a "normal" character, so ...
@@ -104,8 +124,9 @@ module TSOS {
                 _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
                 // Move the current X position.
                 var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
-                //Measure the last letter drawn so that we can backspace it if needed
+                //add the font size to our font size array.  how exciting.
                 this.fSize.push(offset);
+                //Measure the last letter drawn so that we can backspace it if needed
                 this.currentXPosition = this.currentXPosition + offset;
             }
 
@@ -123,36 +144,58 @@ module TSOS {
                                      _FontHeightMargin;
 
             // TODO: Handle scrolling. (Project 1)
+            //more like, toDONE amirite?!
+            //please don't leave
+            //if we have reached the bottom of the page...canvas...thing
             if (this.currentYPosition >= _Canvas.height){
+                //pictures, pictures of spida-man.  and our canvas.
                 var imgData = _DrawingContext.getImageData(0,0,_Canvas.width,_Canvas.height);
+                //I like to increase the canvas height by the same amount that advanceLine moves the YPosition!
                 _Canvas.height += _DefaultFontSize + 
                                   _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                                   _FontHeightMargin;
+                //draw dat canvas back.
                 _DrawingContext.putImageData(imgData,0,0);
+                //make sure that the scroll bar automatically goes to the bottom of canvas once it scrolls
                 Control.setScrollDiv();
                 _ScrollDiv.scrollTop = _ScrollDiv.scrollHeight;
             }         
         }
-
+        //totally unrelated but I'm listening to this as I write comments and it's awesome if you like electronic music
+        //https://www.youtube.com/watch?v=xUVmvqwyAeg
         public backspace(): void {
+            //we gotta use this thing twice which means we can't pop it twice because REMOVALS so here's a var
             var fSizePop= this.fSize.pop();
+            //Had to round to the nearest single decimal place because otherwise
+            //I got 12.47999999999... which wouldn't allow me to backspace my first character after prompt
+            //basically we're trying to not eat the prompt with backspace and also not backspace too little
             if(Math.round((this.currentXPosition - fSizePop) * 10 ) / 10 >= STARTING_X_POS){
+                //put ourselves at x position 1 character backwards.  almost like a real backspace, WHOA.
                 this.currentXPosition = this.currentXPosition - fSizePop;
+                //cover that ugly, unwanted letter with a rectangle of the canvas's color omg so racist
                 _DrawingContext.fillStyle = "#DFDBC3";
                 _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, fSizePop, _DefaultFontSize + 
                                          _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                                          _FontHeightMargin);
+                //get rid of that unwanted character from the buffer
                 this.buffer = this.buffer.substring(0, this.buffer.length - 1);
             }
         }
 
         public tab(): void {
+            //keeps track of whether a prefix has multiple commands it can autocomplete into
             var prefixCount = 0;
+            //first let's see if a prefix DOES have multiple commands it can be
+            //they told that prefix it could be anything, so it became Documents, Downloads, AND Desktop!
             for (var i = 0; i < _OsShell.commandList.length; i++){
                 if(_OsShell.commandList[i].command.indexOf(this.buffer) == 0) {
                     prefixCount++;
                 }
-            }            
+            } 
+            //if this prefix is unique and can only be one thing (how sad and oppressive)
+            //this whole block just wipes the buffer and the command line and puts the whole command there for you!
+            //it of course then updates the buffer.  a picture may be a thousand words but a buffer is...well
+            //however many you want, man           
             if(prefixCount <= 1){
                 for (var i = 0; i < _OsShell.commandList.length; i++){
                     if(_OsShell.commandList[i].command.indexOf(this.buffer) == 0) {
@@ -167,6 +210,8 @@ module TSOS {
                     }
                 }
             }
+            //otherwise, we display the possibilities and the user can then just backspace or enter out
+            //and then be more fuckin specific next time.  COME ON USER, STOP MESSING AROUND.
             else {
                 _StdOut.advanceLine();
                 for (var i = 0; i < _OsShell.commandList.length; i++){

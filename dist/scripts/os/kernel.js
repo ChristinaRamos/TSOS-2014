@@ -173,6 +173,7 @@ var TSOS;
         };
 
         Kernel.prototype.krnTrapError = function (msg) {
+            //calls bsod, explained further below
             this.bsod();
             TSOS.Control.hostLog("OS ERROR - TRAP: " + msg);
 
@@ -181,6 +182,9 @@ var TSOS;
         };
 
         Kernel.prototype.bsod = function () {
+            //Ok so my bsod sucks right now because I just wanted it working.  It'll be cooler later.
+            //I almost promise
+            //We wipe the whole canvas to death and then flood it with blue
             _DrawingContext.clearRect(0, 0, _Canvas.width, _Canvas.height);
             _DrawingContext.fillStyle = "blue";
             _DrawingContext.fillRect(0, 0, _Canvas.width, _Canvas.height);

@@ -115,15 +115,15 @@ var TSOS;
         };
 
         Control.setDate = function (dateStr) {
-            document.getElementById("date").innerHTML = dateStr;
+            document.getElementById("date").innerHTML = dateStr; //sets date for use in shell.ts-shell.Date
         };
 
         Control.setTime = function (timeStr) {
-            document.getElementById("clock").innerHTML = timeStr;
+            document.getElementById("clock").innerHTML = timeStr; //sets time for use in shell.ts-shellTime
         };
 
         Control.setInput = function (input) {
-            document.getElementById("status").innerHTML = input;
+            document.getElementById("status").innerHTML = input; //sets input for use in shell.ts-shellStatus
         };
         return Control;
     })();

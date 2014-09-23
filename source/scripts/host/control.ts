@@ -112,21 +112,21 @@ module TSOS {
             // page from its cache, which is not what we want.
         }
 
-        public static setScrollDiv(): void {
-            _ScrollDiv = document.getElementById("divConsole")
+        public static setScrollDiv(): void {    
+            _ScrollDiv = document.getElementById("divConsole")      //sets ScrollDiv for use in console.ts-advanceLine
         }
 
         public static setDate(dateStr): void {
-            document.getElementById("date").innerHTML = dateStr;
+            document.getElementById("date").innerHTML = dateStr;    //sets date for use in shell.ts-shell.Date
         }
 
         public static setTime(timeStr): void {
-            document.getElementById("clock").innerHTML = timeStr;
+            document.getElementById("clock").innerHTML = timeStr;   //sets time for use in shell.ts-shellTime
 
         }
 
         public static setInput(input): void {
-            document.getElementById("status").innerHTML = input;
+            document.getElementById("status").innerHTML = input;    //sets input for use in shell.ts-shellStatus
         }
     }
 }
