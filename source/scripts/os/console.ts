@@ -112,6 +112,9 @@ module TSOS {
          }
 
         public advanceLine(): void {
+            var canvas = <HTMLCanvasElement>document.getElementById('display');
+            _DrawingContext = canvas.getContext('2d');
+            var imgData = _DrawingContext.getImageData(0,0,canvas.width,canvas.height);
             this.currentXPosition = 0;
             /*
              * Font size measures from the baseline to the highest point in the font.
@@ -121,11 +124,13 @@ module TSOS {
             this.currentYPosition += _DefaultFontSize + 
                                      _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                                      _FontHeightMargin;
+            canvas.height +=         _DefaultFontSize + 
+                                     _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                                     _FontHeightMargin;
 
             // TODO: Handle scrolling. (Project 1)
+            _DrawingContext.putImageData(imgData,0,0);
         }
-
-        public scroll(): void {}
 
         public backspace(): void {
             var fSizePop= this.fSize.pop();

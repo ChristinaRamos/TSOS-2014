@@ -112,6 +112,9 @@ var TSOS;
         };
 
         Console.prototype.advanceLine = function () {
+            var canvas = document.getElementById('display');
+            _DrawingContext = canvas.getContext('2d');
+            var imgData = _DrawingContext.getImageData(0, 0, canvas.width, canvas.height);
             this.currentXPosition = 0;
 
             /*
@@ -120,10 +123,10 @@ var TSOS;
             * Font height margin is extra spacing between the lines.
             */
             this.currentYPosition += _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin;
-            // TODO: Handle scrolling. (Project 1)
-        };
+            canvas.height += _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin;
 
-        Console.prototype.scroll = function () {
+            // TODO: Handle scrolling. (Project 1)
+            _DrawingContext.putImageData(imgData, 0, 0);
         };
 
         Console.prototype.backspace = function () {
