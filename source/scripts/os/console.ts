@@ -129,8 +129,8 @@ module TSOS {
                                   _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                                   _FontHeightMargin;
                 _DrawingContext.putImageData(imgData,0,0);
-                var scrollDiv = document.getElementById("divConsole");
-                scrollDiv.scrollTop = scrollDiv.scrollHeight;
+                Control.setScrollDiv();
+                _ScrollDiv.scrollTop = _ScrollDiv.scrollHeight;
             }         
         }
 

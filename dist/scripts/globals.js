@@ -64,6 +64,8 @@ var _hardwareClockID = null;
 var _GLaDOS = null;
 var Glados = null;
 
+var _ScrollDiv = null;
+
 var onDocumentLoad = function () {
     TSOS.Control.hostInit();
 };

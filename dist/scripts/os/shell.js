@@ -309,8 +309,7 @@ var TSOS;
         };
 
         Shell.prototype.shellStatus = function (args) {
-            var input = args;
-            document.getElementById("status").innerHTML = input;
+            TSOS.Control.setInput(args.join(" "));
         };
 
         Shell.prototype.shellBsod = function () {

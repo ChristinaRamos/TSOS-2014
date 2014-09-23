@@ -340,8 +340,7 @@ module TSOS {
         }
 
         public shellStatus(args) {
-            var input = args;
-            document.getElementById("status").innerHTML = input;
+            Control.setInput(args.join(" "));    
         }
 
         public shellBsod() {

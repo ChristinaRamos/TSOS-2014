@@ -126,8 +126,8 @@ var TSOS;
                 var imgData = _DrawingContext.getImageData(0, 0, _Canvas.width, _Canvas.height);
                 _Canvas.height += _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin;
                 _DrawingContext.putImageData(imgData, 0, 0);
-                var scrollDiv = document.getElementById("divConsole");
-                scrollDiv.scrollTop = scrollDiv.scrollHeight;
+                TSOS.Control.setScrollDiv();
+                _ScrollDiv.scrollTop = _ScrollDiv.scrollHeight;
             }
         };
 

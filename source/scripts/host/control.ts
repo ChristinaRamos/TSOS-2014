@@ -111,5 +111,22 @@ module TSOS {
             // be reloaded from the server. If it is false or not specified the browser may reload the
             // page from its cache, which is not what we want.
         }
+
+        public static setScrollDiv(): void {
+            _ScrollDiv = document.getElementById("divConsole")
+        }
+
+        public static setDate(dateStr): void {
+            document.getElementById("date").innerHTML = dateStr;
+        }
+
+        public static setTime(timeStr): void {
+            document.getElementById("clock").innerHTML = timeStr;
+
+        }
+
+        public static setInput(input): void {
+            document.getElementById("status").innerHTML = input;
+        }
     }
 }

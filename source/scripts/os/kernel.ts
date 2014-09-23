@@ -102,9 +102,8 @@ module TSOS {
             else
                 timeStr = timeStr + "AM";
 
-            document.getElementById("date").innerHTML = dateStr;
-            document.getElementById("clock").innerHTML = timeStr;
-            
+            Control.setDate(dateStr);
+            Control.setTime(timeStr);            
         }
 
 

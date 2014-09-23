@@ -97,8 +97,8 @@ var TSOS;
             } else
                 timeStr = timeStr + "AM";
 
-            document.getElementById("date").innerHTML = dateStr;
-            document.getElementById("clock").innerHTML = timeStr;
+            TSOS.Control.setDate(dateStr);
+            TSOS.Control.setTime(timeStr);
         };
 
         //

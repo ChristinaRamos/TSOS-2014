@@ -109,6 +109,22 @@ var TSOS;
             // be reloaded from the server. If it is false or not specified the browser may reload the
             // page from its cache, which is not what we want.
         };
+
+        Control.setScrollDiv = function () {
+            _ScrollDiv = document.getElementById("divConsole");
+        };
+
+        Control.setDate = function (dateStr) {
+            document.getElementById("date").innerHTML = dateStr;
+        };
+
+        Control.setTime = function (timeStr) {
+            document.getElementById("clock").innerHTML = timeStr;
+        };
+
+        Control.setInput = function (input) {
+            document.getElementById("status").innerHTML = input;
+        };
         return Control;
     })();
     TSOS.Control = Control;
