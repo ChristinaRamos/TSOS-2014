@@ -57,7 +57,7 @@ var TSOS;
                     this.count = 0;
                 } else if (chr === String.fromCharCode(8)) {
                     this.backspace();
-                } else if (chr === String.fromCharCode(38)) {
+                } else if (chr === "upArrow") {
                     this.currentXPosition = STARTING_X_POS;
                     this.buffer = "";
                     _DrawingContext.fillStyle = "#DFDBC3";
@@ -67,7 +67,7 @@ var TSOS;
                     if (this.count < this.history.length - 1) {
                         this.count++;
                     }
-                } else if (chr === String.fromCharCode(40)) {
+                } else if (chr === "downArrow") {
                     if (this.count > 0) {
                         this.count--;
                     }
@@ -112,9 +112,6 @@ var TSOS;
         };
 
         Console.prototype.advanceLine = function () {
-            var canvas = document.getElementById('display');
-            _DrawingContext = canvas.getContext('2d');
-            var imgData = _DrawingContext.getImageData(0, 0, canvas.width, canvas.height);
             this.currentXPosition = 0;
 
             /*
@@ -123,10 +120,15 @@ var TSOS;
             * Font height margin is extra spacing between the lines.
             */
             this.currentYPosition += _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin;
-            canvas.height += _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin;
 
             // TODO: Handle scrolling. (Project 1)
-            _DrawingContext.putImageData(imgData, 0, 0);
+            if (this.currentYPosition >= _Canvas.height) {
+                var imgData = _DrawingContext.getImageData(0, 0, _Canvas.width, _Canvas.height);
+                _Canvas.height += _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin;
+                _DrawingContext.putImageData(imgData, 0, 0);
+                var scrollDiv = document.getElementById("divConsole");
+                scrollDiv.scrollTop = scrollDiv.scrollHeight;
+            }
         };
 
         Console.prototype.backspace = function () {

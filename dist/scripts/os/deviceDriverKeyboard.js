@@ -45,8 +45,14 @@ var TSOS;
 
                 // TODO: Check for caps-lock and handle as shifted if so.
                 _KernelInputQueue.enqueue(chr);
-            } else if (((keyCode >= 48) && (keyCode <= 57)) && !isShifted || (keyCode == 32) || (keyCode == 8) || (keyCode == 38) || (keyCode == 40) || (keyCode == 9) || (keyCode == 13)) {
+            } else if ((!isShifted && (keyCode >= 48) && (keyCode <= 57)) || (keyCode == 32) || (keyCode == 8) || (keyCode == 9) || (keyCode == 13)) {
                 chr = String.fromCharCode(keyCode);
+                _KernelInputQueue.enqueue(chr);
+            } else if (keyCode == 38 && !isShifted) {
+                chr = "upArrow";
+                _KernelInputQueue.enqueue(chr);
+            } else if (keyCode == 40 && !isShifted) {
+                chr = "downArrow";
                 _KernelInputQueue.enqueue(chr);
             } else {
                 if (isShifted) {
@@ -93,10 +99,6 @@ var TSOS;
 
                         case 57:
                             chr = "(";
-                            break;
-
-                        case 58:
-                            chr = ")";
                             break;
 
                         case 189:
