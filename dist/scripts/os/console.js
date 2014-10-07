@@ -161,7 +161,7 @@ var TSOS;
                 //pictures, pictures of spida-man.  and our canvas.
                 var imgData = _DrawingContext.getImageData(0, 0, _Canvas.width, _Canvas.height);
 
-                //draw dat canvas back.
+                //clear screen and draw dat canvas back except higher than before.
                 this.clearScreen();
                 _DrawingContext.putImageData(imgData, 0, -(_DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin));
                 this.currentYPosition -= (_DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin);
@@ -193,6 +193,9 @@ var TSOS;
         Console.prototype.tab = function () {
             //keeps track of whether a prefix has multiple commands it can autocomplete into
             var prefixCount = 0;
+
+            //make sure that something has been typed so we don't get a giant mother list
+            //of all commands for no reason
             if (this.buffer != "") {
                 for (var i = 0; i < _OsShell.commandList.length; i++) {
                     if (_OsShell.commandList[i].command.indexOf(this.buffer) == 0) {
@@ -222,6 +225,9 @@ var TSOS;
                             _StdOut.putText(_OsShell.commandList[i].command + "    ");
                         }
                     }
+
+                    //after showing the user the possibilities, put the user on the next line
+                    //and write the part of the word that they already wrote before
                     _StdOut.advanceLine();
                     _OsShell.putPrompt();
                     this.putText(this.buffer);
