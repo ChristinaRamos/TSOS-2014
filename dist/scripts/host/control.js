@@ -110,10 +110,6 @@ var TSOS;
             // page from its cache, which is not what we want.
         };
 
-        Control.setScrollDiv = function () {
-            _ScrollDiv = document.getElementById("divConsole");
-        };
-
         Control.setDate = function (dateStr) {
             document.getElementById("date").innerHTML = dateStr; //sets date for use in shell.ts-shell.Date
         };

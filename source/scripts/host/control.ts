@@ -112,10 +112,6 @@ module TSOS {
             // page from its cache, which is not what we want.
         }
 
-        public static setScrollDiv(): void {    
-            _ScrollDiv = document.getElementById("divConsole")      //sets ScrollDiv for use in console.ts-advanceLine
-        }
-
         public static setDate(dateStr): void {
             document.getElementById("date").innerHTML = dateStr;    //sets date for use in shell.ts-shell.Date
         }

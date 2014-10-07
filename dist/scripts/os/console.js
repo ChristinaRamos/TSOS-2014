@@ -161,15 +161,10 @@ var TSOS;
                 //pictures, pictures of spida-man.  and our canvas.
                 var imgData = _DrawingContext.getImageData(0, 0, _Canvas.width, _Canvas.height);
 
-                //I like to increase the canvas height by the same amount that advanceLine moves the YPosition!
-                _Canvas.height += _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin;
-
                 //draw dat canvas back.
-                _DrawingContext.putImageData(imgData, 0, 0);
-
-                //make sure that the scroll bar automatically goes to the bottom of canvas once it scrolls
-                TSOS.Control.setScrollDiv();
-                _ScrollDiv.scrollTop = _ScrollDiv.scrollHeight;
+                this.clearScreen();
+                _DrawingContext.putImageData(imgData, 0, -(_DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin));
+                this.currentYPosition -= (_DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin);
             }
         };
 

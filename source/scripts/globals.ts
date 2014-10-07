@@ -66,9 +66,6 @@ var _hardwareClockID: number = null;
 var _GLaDOS: any = null;
 var Glados: any = null;
 
-//We need this stupid thing for scrollTop and scrollHeight in console.ts
-var _ScrollDiv = null; 
-
 var onDocumentLoad = function() {
 	TSOS.Control.hostInit();
 };
