@@ -198,34 +198,38 @@ var TSOS;
         Console.prototype.tab = function () {
             //keeps track of whether a prefix has multiple commands it can autocomplete into
             var prefixCount = 0;
-
-            for (var i = 0; i < _OsShell.commandList.length; i++) {
-                if (_OsShell.commandList[i].command.indexOf(this.buffer) == 0) {
-                    prefixCount++;
-                }
-            }
-
-            //if this prefix is unique and can only be one thing (how sad and oppressive)
-            //this whole block just wipes the buffer and the command line and puts the whole command there for you!
-            //it of course then updates the buffer.  a picture may be a thousand words but a buffer is...well
-            //however many you want, man
-            if (prefixCount <= 1) {
+            if (this.buffer != "") {
                 for (var i = 0; i < _OsShell.commandList.length; i++) {
                     if (_OsShell.commandList[i].command.indexOf(this.buffer) == 0) {
-                        this.buffer = "";
-                        this.currentXPosition = STARTING_X_POS;
-                        _DrawingContext.fillStyle = "#DFDBC3";
-                        _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, 500, _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin);
-                        this.putText(_OsShell.commandList[i].command);
-                        this.buffer += _OsShell.commandList[i].command;
+                        prefixCount++;
                     }
                 }
-            } else {
-                _StdOut.advanceLine();
-                for (var i = 0; i < _OsShell.commandList.length; i++) {
-                    if (_OsShell.commandList[i].command.indexOf(this.buffer) == 0) {
-                        _StdOut.putText(_OsShell.commandList[i].command + "    ");
+
+                //if this prefix is unique and can only be one thing (how sad and oppressive)
+                //this whole block just wipes the buffer and the command line and puts the whole command there for you!
+                //it of course then updates the buffer.  a picture may be a thousand words but a buffer is...well
+                //however many you want, man
+                if (prefixCount <= 1) {
+                    for (var i = 0; i < _OsShell.commandList.length; i++) {
+                        if (_OsShell.commandList[i].command.indexOf(this.buffer) == 0) {
+                            this.buffer = "";
+                            this.currentXPosition = STARTING_X_POS;
+                            _DrawingContext.fillStyle = "#DFDBC3";
+                            _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, 500, _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin);
+                            this.putText(_OsShell.commandList[i].command);
+                            this.buffer += _OsShell.commandList[i].command;
+                        }
                     }
+                } else {
+                    _StdOut.advanceLine();
+                    for (var i = 0; i < _OsShell.commandList.length; i++) {
+                        if (_OsShell.commandList[i].command.indexOf(this.buffer) == 0) {
+                            _StdOut.putText(_OsShell.commandList[i].command + "    ");
+                        }
+                    }
+                    _StdOut.advanceLine();
+                    _OsShell.putPrompt();
+                    this.putText(this.buffer);
                 }
             }
         };
