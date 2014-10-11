@@ -7,12 +7,12 @@ var TSOS;
 (function (TSOS) {
     var Memory = (function () {
         function Memory(memArray) {
-            if (typeof memArray === "undefined") { memArray = [256]; }
+            if (typeof memArray === "undefined") { memArray = new Array(_MemorySize); }
             this.memArray = memArray;
         }
         Memory.prototype.init = function () {
             for (var i = 0; i < this.memArray.length; i++) {
-                this.memArray[i] = 00;
+                this.memArray[i] = "00";
             }
         };
 
@@ -25,7 +25,7 @@ var TSOS;
         };
 
         Memory.prototype.isByte = function (index) {
-            return this.memArray[index] >= 0 && this.memArray[index] <= 255;
+            return +this.memArray[index] >= 0 && this.memArray[index] <= _MemorySize - 1;
         };
         return Memory;
     })();
