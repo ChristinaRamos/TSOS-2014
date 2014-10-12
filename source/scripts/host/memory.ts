@@ -16,18 +16,6 @@ module TSOS {
 			}
 		}
 
-		public getMem(index: number): number {
-			return this.memArray[index];
-		}
-
-		public setMem(index: number, value: number): void {
-			this.memArray[index] = value;
-		}
-
-		public isByte(index: number): boolean {
-			return +this.memArray[index] >= 0 && this.memArray[index] <= _MemorySize - 1; 
-		}
-
 
 	
 	}

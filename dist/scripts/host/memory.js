@@ -15,18 +15,6 @@ var TSOS;
                 this.memArray[i] = "00";
             }
         };
-
-        Memory.prototype.getMem = function (index) {
-            return this.memArray[index];
-        };
-
-        Memory.prototype.setMem = function (index, value) {
-            this.memArray[index] = value;
-        };
-
-        Memory.prototype.isByte = function (index) {
-            return +this.memArray[index] >= 0 && this.memArray[index] <= _MemorySize - 1;
-        };
         return Memory;
     })();
     TSOS.Memory = Memory;

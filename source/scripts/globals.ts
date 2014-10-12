@@ -69,6 +69,7 @@ var Glados: any = null;
 var onDocumentLoad = function() {
 	TSOS.Control.hostInit();
 };
+
 // I HATE YOU.
 var _MemorySize: number = 256;
 var _Memory: TSOS.Memory;

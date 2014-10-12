@@ -41,6 +41,17 @@ var TSOS;
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
         };
+
+        Cpu.prototype.execute = function (opcode) {
+            //switch(opcode){
+            //    case: "A9"
+            //}
+        };
+
+        Cpu.prototype.loadConstant = function () {
+            var nextByte;
+            this.Acc = parseInt(nextByte, 16);
+        };
         return Cpu;
     })();
     TSOS.Cpu = Cpu;

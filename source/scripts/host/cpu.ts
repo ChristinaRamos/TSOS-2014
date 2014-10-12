@@ -42,5 +42,19 @@ module TSOS {
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
         }
+
+        public execute(opcode): void {
+            //switch(opcode){
+            //    case: "A9"
+                    
+            //}
+        }
+
+        public loadConstant(): void {
+            var nextByte;
+            this.Acc = parseInt(nextByte,16);
+        }
+
+
     }
 }
