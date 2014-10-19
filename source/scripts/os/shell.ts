@@ -380,8 +380,7 @@ module TSOS {
                 }
                 else {  
                     //_StdOut.putText("This is hex.  Fanfuckintastic.");        //I was frustrated by this point...
-                    _Memory.memArray[0] = input.substring(0,1);
-                    console.log(_Memory.memArray[0]);
+                    _MemoryManager.loadProg();
                 }
 
             }

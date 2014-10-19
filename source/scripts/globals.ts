@@ -73,3 +73,5 @@ var onDocumentLoad = function() {
 // I HATE YOU.
 var _MemorySize: number = 256;
 var _Memory: TSOS.Memory;
+var _MemoryManager: TSOS.MemoryManager;
+var _PID;

@@ -11,7 +11,7 @@ var TSOS;
             this.memArray = memArray;
         }
         Memory.prototype.init = function () {
-            for (var i = 0; i < this.memArray.length; i++) {
+            for (var i = 0; i < _MemorySize; i++) {
                 this.memArray[i] = "00";
             }
         };

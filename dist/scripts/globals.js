@@ -71,3 +71,5 @@ var onDocumentLoad = function () {
 // I HATE YOU.
 var _MemorySize = 256;
 var _Memory;
+var _MemoryManager;
+var _PID;
