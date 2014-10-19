@@ -1,0 +1,33 @@
+module TSOS {
+
+    export class MemoryManager {
+
+        constructor(public mem: new Memory(_MemorySize)) {}
+
+
+        public init(): void {
+       		
+        }
+
+        public getMem(index: number): number {
+			return mem.memArray[index];
+		}
+
+		public setMem(index: number, value: number): void {
+			mem.memArray[index] = value;
+		}
+
+		public isByte(index: number): boolean {
+			return mem.memArray[index] >= 0 && mem.memArray[index] <= memSize - 1; 
+		}
+
+		public nextByte(): string {
+			return mem.memArray[++_CPU.PC];
+		}
+
+		public loadProg(): void {
+			
+		}
+
+	}
+}
