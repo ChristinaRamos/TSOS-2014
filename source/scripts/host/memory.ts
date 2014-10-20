@@ -6,7 +6,8 @@
 
 module TSOS {
 	export class Memory {
-		constructor(public memArray = new String[_MemorySize]){
+		constructor(public memArray){
+			this.memArray = new Array(_MemorySize);
 			this.init();
 		}
 

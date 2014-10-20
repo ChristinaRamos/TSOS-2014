@@ -13,9 +13,9 @@ var TSOS;
 
             for (var i = 0; i < _MemorySize; i++) {
                 if (i % 8 === 0) {
-                    output += "</tr><tr><td>" + "bitch" + "</td>";
+                    output += "</tr><tr><td>" + "</td>";
                 }
-                output += "<td id='fuck'" + i + "'>" + this.mem.memArray[i] + '</td>';
+                output += "<td id='cell'" + i + "'>" + this.mem.memArray[i] + '</td>';
             }
             output += "</tr>";
             TSOS.Control.displayMemory(output);
@@ -33,6 +33,14 @@ var TSOS;
         };
 
         MemoryManager.prototype.loadProg = function () {
+        };
+
+        MemoryManager.prototype.hexToDecimal = function (hexNum) {
+            return parseInt(hexNum, 16);
+        };
+
+        MemoryManager.prototype.decimalToHex = function (decNum) {
+            return decNum.toString(16).toUpperCase();
         };
         return MemoryManager;
     })();

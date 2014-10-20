@@ -3,7 +3,7 @@ module TSOS {
     export class MemoryManager {
 
         constructor(public mem: Memory = new Memory(_MemorySize)) {
-        	
+
         }
 
 
@@ -15,9 +15,9 @@ module TSOS {
 
         	for(var i = 0; i < _MemorySize; i++) {
         		if(i % 8 === 0) {
-        			output += "</tr><tr><td>" + "bitch" + "</td>";
+        			output += "</tr><tr><td>" + "</td>";
         		}
-        		output += "<td id='fuck'" + i + "'>" + this.mem.memArray[i] + '</td>';
+        		output += "<td id='cell'" + i + "'>" + this.mem.memArray[i] + '</td>';
         	}
         	output += "</tr>"
         	Control.displayMemory(output);
@@ -36,6 +36,14 @@ module TSOS {
 
 		public loadProg(): void {
 			
+		}
+
+		public hexToDecimal(hexNum: string) {
+			return parseInt(hexNum, 16);
+		}
+
+		public decimalToHex(decNum: number) {
+			return decNum.toString(16).toUpperCase();
 		}
 
 	}
