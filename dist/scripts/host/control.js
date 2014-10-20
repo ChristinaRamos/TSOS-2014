@@ -82,6 +82,9 @@ var TSOS;
             _CPU = new TSOS.Cpu();
             _CPU.init();
 
+            _MemoryManager = new TSOS.MemoryManager();
+            _MemoryManager.init();
+
             // ... then set the host clock pulse ...
             _hardwareClockID = setInterval(TSOS.Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
 
@@ -120,6 +123,10 @@ var TSOS;
 
         Control.setInput = function (input) {
             document.getElementById("status").innerHTML = input; //sets input for use in shell.ts-shellStatus
+        };
+
+        Control.displayMemory = function (memory) {
+            document.getElementById("memTable").innerHTML = memory;
         };
         return Control;
     })();

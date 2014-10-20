@@ -87,6 +87,9 @@ module TSOS {
             _CPU = new Cpu();
             _CPU.init();
 
+            _MemoryManager = new MemoryManager();
+            _MemoryManager.init();
+
             // ... then set the host clock pulse ...
             _hardwareClockID = setInterval(Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
             // .. and call the OS Kernel Bootstrap routine.
@@ -123,6 +126,10 @@ module TSOS {
 
         public static setInput(input): void {
             document.getElementById("status").innerHTML = input;    //sets input for use in shell.ts-shellStatus
+        }
+
+        public static displayMemory(memory): void {
+            document.getElementById("memTable").innerHTML = memory;   
         }
     }
 }

@@ -54,6 +54,7 @@ module TSOS {
             if (_GLaDOS) {
                 _GLaDOS.afterStartup();
             }
+            
         }
 
         public krnShutdown() {

@@ -46,3 +46,8 @@ h3 {
   font-size: 8pt;
   text-align: center;
 }
+
+#memLog {
+  float: right;
+  border: 1px solid #9999FF; 
+}

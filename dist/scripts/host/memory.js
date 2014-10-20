@@ -7,8 +7,9 @@ var TSOS;
 (function (TSOS) {
     var Memory = (function () {
         function Memory(memArray) {
-            if (typeof memArray === "undefined") { memArray = new Array(_MemorySize); }
+            if (typeof memArray === "undefined") { memArray = new String[_MemorySize]; }
             this.memArray = memArray;
+            this.init();
         }
         Memory.prototype.init = function () {
             for (var i = 0; i < _MemorySize; i++) {
