@@ -43,15 +43,20 @@ module TSOS {
             // Do the real work here. Be sure to set this.isExecuting appropriately.
         }
 
-        public execute(opcode): void {
-            //switch(opcode){
-            //    case: "A9"
-                    
-            //}
-        }
+        public execProg(opcode): void {
+            switch(opcode) {
+                case "a9": 
+                    this.loadConstant();
+                    break;
+
+
+                
+            }
+        } 
 
         public loadConstant(): void {
-            var nextByte;
+            _MemoryManager.nextByte()
+            var nextByte = _MemoryManager.getMem(this.PC).toString();
             this.Acc = parseInt(nextByte,16);
         }
 

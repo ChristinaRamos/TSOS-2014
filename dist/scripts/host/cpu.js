@@ -42,14 +42,17 @@ var TSOS;
             // Do the real work here. Be sure to set this.isExecuting appropriately.
         };
 
-        Cpu.prototype.execute = function (opcode) {
-            //switch(opcode){
-            //    case: "A9"
-            //}
+        Cpu.prototype.execProg = function (opcode) {
+            switch (opcode) {
+                case "a9":
+                    this.loadConstant();
+                    break;
+            }
         };
 
         Cpu.prototype.loadConstant = function () {
-            var nextByte;
+            _MemoryManager.nextByte();
+            var nextByte = _MemoryManager.getMem(this.PC).toString();
             this.Acc = parseInt(nextByte, 16);
         };
         return Cpu;

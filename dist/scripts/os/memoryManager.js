@@ -8,6 +8,7 @@ var TSOS;
         MemoryManager.prototype.init = function () {
             this.displayMem();
         };
+
         MemoryManager.prototype.displayMem = function () {
             var output = "<tr>";
 
@@ -26,13 +27,25 @@ var TSOS;
 
         MemoryManager.prototype.setMem = function (index, value) {
             this.mem.memArray[index] = value;
+            this.displayMem();
         };
 
         MemoryManager.prototype.nextByte = function () {
             return this.mem.memArray[++_CPU.PC];
         };
 
+        MemoryManager.prototype.nextTwoBytes = function () {
+            return this.mem.memArray[++_CPU.PC];
+        };
+
         MemoryManager.prototype.loadProg = function () {
+            var program = TSOS.Control.getProgramInput();
+            var substr = "";
+            for (var i = 0; i < program.length; i += 2) {
+                substr = program.substr(i, 2);
+                _CPU.execProg(substr);
+                this.nextByte();
+            }
         };
 
         MemoryManager.prototype.hexToDecimal = function (hexNum) {

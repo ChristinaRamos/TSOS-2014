@@ -359,10 +359,10 @@ module TSOS {
             var input = "";
             var isHex = true;
             //all those valid hex characters.  what a bunch of kool kidz
-            var hexCharacters = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"," "];
+            var hexCharacters = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"," "];
             //the stuff in the damn user program box casted because typescript is silly
             //and made lower case because I don't want to check for capitals
-            input = (<HTMLInputElement>document.getElementById("taProgramInput")).value.replace(/\s + /g, '').toLowerCase();
+            input = Control.getProgramInput();
            
             if(input === ""){
                 _StdOut.putText("Have you tried actually typing something?");   //well, have you?
@@ -380,7 +380,14 @@ module TSOS {
                 }
                 else {  
                     //_StdOut.putText("This is hex.  Fanfuckintastic.");        //I was frustrated by this point...
-                    _MemoryManager.loadProg();
+                    if(input.length % 2 != 0) {
+                        _StdOut.putText("This isn't an even number of hex characters.");
+                    }
+
+                    else {
+                        _StdOut.putText("Me.  Fgt.");                        
+                        _MemoryManager.loadProg();
+                    }
                 }
 
             }

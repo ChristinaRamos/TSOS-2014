@@ -128,6 +128,13 @@ var TSOS;
         Control.displayMemory = function (memory) {
             document.getElementById("memTable").innerHTML = memory;
         };
+
+        Control.setMemory = function (memory) {
+            document.getElementById("memtable").innerHTML = memory;
+        };
+        Control.getProgramInput = function () {
+            return document.getElementById("taProgramInput").value.replace(/\s/g, '').toUpperCase();
+        };
         return Control;
     })();
     TSOS.Control = Control;

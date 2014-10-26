@@ -6,10 +6,10 @@ module TSOS {
 
         }
 
-
         public init(): void {
        		this.displayMem();
         }
+
         public displayMem(): void {
         	var output = "<tr>";
 
@@ -26,16 +26,28 @@ module TSOS {
 			return this.mem.memArray[index];
 		}
 
-		public setMem(index: number, value: number): void {
+		public setMem(index: number, value: string): void {
 			this.mem.memArray[index] = value;
+			this.displayMem();
 		}
 
 		public nextByte(): string {
 			return this.mem.memArray[++_CPU.PC];
 		}
 
+		public nextTwoBytes(): string {
+			return this.mem.memArray[++_CPU.PC];
+		}
+
 		public loadProg(): void {
-			
+			var program = Control.getProgramInput();
+			var substr = "";
+			for(var i = 0; i < program.length; i+=2) {
+				substr = program.substr(i, 2);
+				_CPU.execProg(substr);
+				this.nextByte();
+			}
+
 		}
 
 		public hexToDecimal(hexNum: string) {
@@ -45,6 +57,8 @@ module TSOS {
 		public decimalToHex(decNum: number) {
 			return decNum.toString(16).toUpperCase();
 		}
+
+
 
 	}
 }

@@ -131,5 +131,13 @@ module TSOS {
         public static displayMemory(memory): void {
             document.getElementById("memTable").innerHTML = memory;   
         }
+
+        public static setMemory(memory): void {
+            document.getElementById("memtable").innerHTML = memory;
+        }
+        public static getProgramInput(): string {
+            return (<HTMLInputElement>document.getElementById("taProgramInput")).value.replace(/\s/g, '').toUpperCase();    //sets input for use in shell.ts-shellStatus
+        }
+
     }
 }
