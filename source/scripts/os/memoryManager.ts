@@ -48,11 +48,12 @@ module TSOS {
 			var program = Control.getProgramInput();
 			var substr = "";
 			var opcode = "";
+			var count = 0;
 			opcode = program.substr(0,2);
 			for(var i = 0; i < program.length; i+=2) {
 				substr = program.substr(i, 2);
-				this.setMem(_CPU.PC, substr);
-				this.nextByte();
+				this.setMem(count, substr);
+				count++;
 			}
 			_StdOut.putText("PID is " + _PID + ".");
 			_ProgramList[_ProgramList.length] = new PCB;

@@ -44,14 +44,16 @@ var TSOS;
 
         Cpu.prototype.runProg = function (pid) {
             this.isExecuting = true;
-            this.execProg(_MemoryManager.getMem(0));
+            this.execProg(_MemoryManager.getMem(this.PC));
         };
 
         Cpu.prototype.execProg = function (opcode) {
+            this.PC++;
             switch (opcode) {
                 case "A9":
                     this.loadConstant();
                     break;
+
                 case "AD":
                     this.loadAcc();
                     break;
@@ -60,15 +62,17 @@ var TSOS;
         };
 
         Cpu.prototype.loadConstant = function () {
-            debugger;
+            //debugger;
             var nextByte = _MemoryManager.getMem(this.PC).toString();
-            this.Acc = parseInt(nextByte, 16);
+            this.Acc = _MemoryManager.hexToDecimal(nextByte);
+            this.PC++;
             this.printResults();
         };
 
         Cpu.prototype.loadAcc = function () {
             var memLocation = _MemoryManager.nextTwoBytes();
             this.Acc = _MemoryManager.getMem(parseInt(memLocation, 10));
+            this.PC++;
             this.printResults();
         };
 

@@ -45,14 +45,16 @@ module TSOS {
 
         public runProg(pid:number): void {
             this.isExecuting = true;
-            this.execProg(_MemoryManager.getMem(0));
+            this.execProg(_MemoryManager.getMem(this.PC));
         }
 
         public execProg(opcode): void {
+            this.PC++;
             switch(opcode) {
                 case "A9": 
                     this.loadConstant();
                     break;
+
                 case "AD":
                     this.loadAcc();
                     break;
@@ -61,15 +63,17 @@ module TSOS {
         }
 
         public loadConstant(): void {
-            debugger;
+            //debugger;
             var nextByte = _MemoryManager.getMem(this.PC).toString();
-            this.Acc = parseInt(nextByte,16);
+            this.Acc = _MemoryManager.hexToDecimal(nextByte);
+            this.PC++;            
             this.printResults();
         }
 
         public loadAcc(): void {
             var memLocation = _MemoryManager.nextTwoBytes();
             this.Acc = _MemoryManager.getMem(parseInt(memLocation,10));
+            this.PC++;            
             this.printResults();
         }
 
