@@ -42,18 +42,41 @@ var TSOS;
             // Do the real work here. Be sure to set this.isExecuting appropriately.
         };
 
+        Cpu.prototype.runProg = function (pid) {
+            this.isExecuting = true;
+            this.execProg(_MemoryManager.getMem(0));
+        };
+
         Cpu.prototype.execProg = function (opcode) {
             switch (opcode) {
-                case "a9":
+                case "A9":
                     this.loadConstant();
                     break;
+                case "AD":
+                    this.loadAcc();
+                    break;
             }
+            this.isExecuting = false;
         };
 
         Cpu.prototype.loadConstant = function () {
-            _MemoryManager.nextByte();
+            debugger;
             var nextByte = _MemoryManager.getMem(this.PC).toString();
             this.Acc = parseInt(nextByte, 16);
+            this.printResults();
+        };
+
+        Cpu.prototype.loadAcc = function () {
+            var memLocation = _MemoryManager.nextTwoBytes();
+            this.Acc = _MemoryManager.getMem(parseInt(memLocation, 10));
+            this.printResults();
+        };
+
+        Cpu.prototype.storeAcc = function () {
+        };
+
+        Cpu.prototype.printResults = function () {
+            _StdOut.putText("PC: " + this.PC + " | Acc: " + this.Acc + " | X Reg: " + this.Xreg + " | Y Reg: " + this.Yreg + " | zFlag: " + this.Zflag);
         };
         return Cpu;
     })();

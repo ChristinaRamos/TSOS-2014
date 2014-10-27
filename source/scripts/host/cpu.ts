@@ -43,23 +43,46 @@ module TSOS {
             // Do the real work here. Be sure to set this.isExecuting appropriately.
         }
 
-        public execProg(opcode): void {
-            switch(opcode) {
-                case "a9": 
-                    this.loadConstant();
-                    break;
-
-
-                
-            }
-        } 
-
-        public loadConstant(): void {
-            _MemoryManager.nextByte()
-            var nextByte = _MemoryManager.getMem(this.PC).toString();
-            this.Acc = parseInt(nextByte,16);
+        public runProg(pid:number): void {
+            this.isExecuting = true;
+            this.execProg(_MemoryManager.getMem(0));
         }
 
+        public execProg(opcode): void {
+            switch(opcode) {
+                case "A9": 
+                    this.loadConstant();
+                    break;
+                case "AD":
+                    this.loadAcc();
+                    break;
+            }
+            this.isExecuting = false;
+        }
 
+        public loadConstant(): void {
+            debugger;
+            var nextByte = _MemoryManager.getMem(this.PC).toString();
+            this.Acc = parseInt(nextByte,16);
+            this.printResults();
+        }
+
+        public loadAcc(): void {
+            var memLocation = _MemoryManager.nextTwoBytes();
+            this.Acc = _MemoryManager.getMem(parseInt(memLocation,10));
+            this.printResults();
+        }
+
+        public storeAcc(): void {
+
+        }
+
+        public printResults(): void {
+            _StdOut.putText("PC: " + this.PC + 
+                            " | Acc: " + this.Acc + 
+                            " | X Reg: " + this.Xreg + 
+                            " | Y Reg: " + this.Yreg +
+                            " | zFlag: " + this.Zflag);
+        }
     }
 }

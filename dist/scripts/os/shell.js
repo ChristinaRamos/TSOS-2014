@@ -65,7 +65,7 @@ var TSOS;
             // the truth
             this.commandList[this.commandList.length] = sc;
 
-            sc = new TSOS.ShellCommand(this.shellOneTrueBond, "ihatedanielcraig", "- Our Lord and Savior Daniel Craig forgives you.");
+            sc = new TSOS.ShellCommand(this.shellOneTrueBond, "ihatedanielcraig", "Our Lord and Savior Daniel Craig forgives you.");
 
             // status
             this.commandList[this.commandList.length] = sc;
@@ -82,6 +82,9 @@ var TSOS;
 
             sc = new TSOS.ShellCommand(this.shellLoad, "load", "Allows user to load code.  It better be hex.");
 
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new TSOS.ShellCommand(this.shellRun, "run", "Allows user to run a program that has been loaded into memory.");
             this.commandList[this.commandList.length] = sc;
 
             // processes - list the running processes and their IDs
@@ -297,7 +300,7 @@ var TSOS;
             }
         };
 
-        Shell.prototype.shellDate = function (args) {
+        Shell.prototype.shellDate = function () {
             var d = new Date();
             _StdOut.putText("The date is " + (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear());
             _StdOut.advanceLine();
@@ -311,11 +314,11 @@ var TSOS;
                 _StdOut.putText("AM");
         };
 
-        Shell.prototype.shellWhereAmI = function (args) {
+        Shell.prototype.shellWhereAmI = function () {
             _StdOut.putText("Bond, we have your location as approaching an airfield."); //It's a quote from a DANIEL CRAIG Bond movie :D
         };
 
-        Shell.prototype.shellOneTrueBond = function (args) {
+        Shell.prototype.shellOneTrueBond = function () {
             _StdOut.putText("Our Lord Daniel Craig carries the weight of our sins.");
             window.open("https://www.youtube.com/watch?v=i_y7YEIphts", "", "width=1600, height=900"); //This should make you happy
         };
@@ -357,11 +360,14 @@ var TSOS;
                     if (input.length % 2 != 0) {
                         _StdOut.putText("This isn't an even number of hex characters.");
                     } else {
-                        _StdOut.putText("Me.  Fgt.");
                         _MemoryManager.loadProg();
                     }
                 }
             }
+        };
+
+        Shell.prototype.shellRun = function (args) {
+            _CPU.runProg(args[0]);
         };
         return Shell;
     })();

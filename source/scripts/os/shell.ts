@@ -90,7 +90,7 @@ module TSOS {
 
             sc = new ShellCommand(this.shellOneTrueBond,
                                   "ihatedanielcraig",
-                                  "- Our Lord and Savior Daniel Craig forgives you.");
+                                  "Our Lord and Savior Daniel Craig forgives you.");
             // status
             this.commandList[this.commandList.length] = sc;
 
@@ -111,6 +111,12 @@ module TSOS {
                                   "Allows user to load code.  It better be hex.");
 
             this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellRun,
+                                  "run",
+                                  "Allows user to run a program that has been loaded into memory.");
+            this.commandList[this.commandList.length] = sc;
+
 
 
             // processes - list the running processes and their IDs
@@ -319,7 +325,7 @@ module TSOS {
             }
         }
 
-        public shellDate(args) {
+        public shellDate() {
             var d = new Date();
             _StdOut.putText("The date is " + (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear());
             _StdOut.advanceLine()
@@ -336,11 +342,11 @@ module TSOS {
 
         }
 
-        public shellWhereAmI(args) {
+        public shellWhereAmI() {
             _StdOut.putText("Bond, we have your location as approaching an airfield."); //It's a quote from a DANIEL CRAIG Bond movie :D
         }
 
-        public shellOneTrueBond(args) {
+        public shellOneTrueBond() {
             _StdOut.putText("Our Lord Daniel Craig carries the weight of our sins.")  //Praise Craigus
             window.open("https://www.youtube.com/watch?v=i_y7YEIphts", "", "width=1600, height=900");  //This should make you happy
         }
@@ -384,13 +390,16 @@ module TSOS {
                         _StdOut.putText("This isn't an even number of hex characters.");
                     }
 
-                    else {
-                        _StdOut.putText("Me.  Fgt.");                        
+                    else {                       
                         _MemoryManager.loadProg();
                     }
                 }
 
             }
+        }
+
+        public shellRun(args) {
+            _CPU.runProg(args[0]);
         }
     }
 }

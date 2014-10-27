@@ -70,8 +70,11 @@ var onDocumentLoad = function() {
 	TSOS.Control.hostInit();
 };
 
-// I HATE YOU.
+// Memory stuff
 var _MemorySize: number = 256;
 var _Memory: TSOS.Memory;
 var _MemoryManager: TSOS.MemoryManager;
-var _PID;
+
+// PCB stuff
+var _PID = 0;
+var _ProgramList = [];

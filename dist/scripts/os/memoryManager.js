@@ -35,17 +35,25 @@ var TSOS;
         };
 
         MemoryManager.prototype.nextTwoBytes = function () {
-            return this.mem.memArray[++_CPU.PC];
+            var nextTwo = "";
+            nextTwo = this.mem.memArray[++_CPU.PC] + this.mem.memArray[++_CPU.PC];
+            nextTwo = nextTwo.substr(2, 2) + nextTwo.substr(0, 2);
+            return nextTwo;
         };
 
         MemoryManager.prototype.loadProg = function () {
+            _CPU.PC = 0;
             var program = TSOS.Control.getProgramInput();
             var substr = "";
+            var opcode = "";
+            opcode = program.substr(0, 2);
             for (var i = 0; i < program.length; i += 2) {
                 substr = program.substr(i, 2);
-                _CPU.execProg(substr);
+                this.setMem(_CPU.PC, substr);
                 this.nextByte();
             }
+            _StdOut.putText("PID is " + _PID + ".");
+            _ProgramList[_ProgramList.length] = new TSOS.PCB;
         };
 
         MemoryManager.prototype.hexToDecimal = function (hexNum) {
