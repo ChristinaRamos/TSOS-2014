@@ -90,7 +90,21 @@ module TSOS {
                 case "EE":
                     this.incrementByte();
                     break;
-            }
+
+                case "EA":
+                    break; 
+
+                case "00":
+                    this.sysBreak();
+                    break;
+
+                case "D0":
+                    this.branch();
+                    break;
+
+                case "FF":
+                    this.sysCall();
+             }
 
             this.isExecuting = false;
         }
@@ -173,8 +187,31 @@ module TSOS {
             this.printResults();
         }
 
+        public sysBreak(): void {
+            _KernelInterruptQueue.enqueue();
+        }
+
+        public branch(): void {
+            if(this.Zflag === 0) {
+                this.PC += _MemoryManager.hexToDecimal(_MemoryManager.getMem(++this.PC).toString());
+
+                if(this.PC >= _MemorySize) {
+                    this.PC -= _MemorySize;
+                }
+            }
+        }
+
+        public sysCall(): void {
+            if(this.Xreg === 1) {
+                _StdOut.putText = this.Yreg;
+            }
+
+            else if(this.Xreg === 2) {
+                var termString = _MemoryManager.getMem(this.Yreg);
+            }
+        }
+
         public printResults(): void {
-            debugger;
             var acc = "";
             if(this.Acc.toString().length === 1) {
                 acc = "0" + this.Acc.toString();

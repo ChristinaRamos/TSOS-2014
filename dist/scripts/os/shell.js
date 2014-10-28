@@ -369,6 +369,8 @@ var TSOS;
         Shell.prototype.shellRun = function (args) {
             if (typeof args[0] === "undefined") {
                 _StdOut.putText("PID not provided.");
+            } else if (typeof _ProgramList[parseInt(args[0])] === "undefined") {
+                _StdOut.putText("Incorrect PID.");
             } else
                 _CPU.runProg(args[0]);
         };
