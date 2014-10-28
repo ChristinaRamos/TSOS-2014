@@ -9,12 +9,6 @@ module TSOS {
 			this.pid = _PID;
 			_PID++;
 		}
-		public printPCB(): void {
-			_StdOut.putText("PC: " + this.pC + 
-							" | Acc: " + this.acc + 
-							" | X Reg: " + this.xReg + 
-							" | Y Reg: " + this.yReg +
-							" | zFlag: " + this.zFlag);
-		}
+		
 	}
 }

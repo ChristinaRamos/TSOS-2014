@@ -17,9 +17,6 @@ var TSOS;
             this.pid = _PID;
             _PID++;
         }
-        PCB.prototype.printPCB = function () {
-            _StdOut.putText("PC: " + this.pC + " | Acc: " + this.acc + " | X Reg: " + this.xReg + " | Y Reg: " + this.yReg + " | zFlag: " + this.zFlag);
-        };
         return PCB;
     })();
     TSOS.PCB = PCB;

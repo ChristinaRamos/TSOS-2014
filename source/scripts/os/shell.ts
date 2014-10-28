@@ -399,7 +399,11 @@ module TSOS {
         }
 
         public shellRun(args) {
-            _CPU.runProg(args[0]);
+            if(typeof args[0] === "undefined") {
+                _StdOut.putText("PID not provided.");
+            }
+            else
+                _CPU.runProg(args[0]);
         }
     }
 }

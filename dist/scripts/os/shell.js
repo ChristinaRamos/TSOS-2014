@@ -367,7 +367,10 @@ var TSOS;
         };
 
         Shell.prototype.shellRun = function (args) {
-            _CPU.runProg(args[0]);
+            if (typeof args[0] === "undefined") {
+                _StdOut.putText("PID not provided.");
+            } else
+                _CPU.runProg(args[0]);
         };
         return Shell;
     })();

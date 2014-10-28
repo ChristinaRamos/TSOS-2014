@@ -48,7 +48,6 @@ var TSOS;
         };
 
         Cpu.prototype.execProg = function (opcode) {
-            this.PC++;
             switch (opcode) {
                 case "A9":
                     this.loadConstant();
@@ -57,30 +56,139 @@ var TSOS;
                 case "AD":
                     this.loadAcc();
                     break;
+
+                case "8D":
+                    this.storeAcc();
+                    break;
+
+                case "6D":
+                    this.addWithCarry();
+                    break;
+
+                case "A2":
+                    this.loadXConstant();
+                    break;
+
+                case "AE":
+                    this.loadX();
+                    break;
+
+                case "A0":
+                    this.loadYConstant();
+                    break;
+
+                case "AC":
+                    this.loadY();
+                    break;
+
+                case "EC":
+                    this.compareByteToX();
+                    break;
+
+                case "EE":
+                    this.incrementByte();
+                    break;
             }
+
             this.isExecuting = false;
         };
 
         Cpu.prototype.loadConstant = function () {
             //debugger;
-            var nextByte = _MemoryManager.getMem(this.PC).toString();
+            var nextByte = _MemoryManager.nextByte();
             this.Acc = _MemoryManager.hexToDecimal(nextByte);
-            this.PC++;
+
+            //this.PC++;
             this.printResults();
         };
 
         Cpu.prototype.loadAcc = function () {
             var memLocation = _MemoryManager.nextTwoBytes();
-            this.Acc = _MemoryManager.getMem(parseInt(memLocation, 10));
-            this.PC++;
+            this.Acc = _MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation));
+
+            //this.PC++;
+            //this.PC++;
             this.printResults();
         };
 
         Cpu.prototype.storeAcc = function () {
+            var memLocation = _MemoryManager.nextTwoBytes();
+            _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), this.Acc.toString());
+
+            //this.PC++;
+            //this.PC++;
+            this.printResults();
+        };
+
+        Cpu.prototype.addWithCarry = function () {
+            var memLocation = _MemoryManager.nextTwoBytes();
+            this.Acc = this.Acc + _MemoryManager.hexToDecimal(memLocation);
+        };
+
+        Cpu.prototype.loadXConstant = function () {
+            var nextByte = _MemoryManager.getMem(this.PC).toString();
+            this.Xreg = _MemoryManager.hexToDecimal(nextByte);
+
+            //this.PC++;
+            this.printResults();
+        };
+
+        Cpu.prototype.loadYConstant = function () {
+            var nextByte = _MemoryManager.getMem(this.PC).toString();
+            this.Yreg = _MemoryManager.hexToDecimal(nextByte);
+
+            //this.PC++;
+            this.printResults();
+        };
+
+        Cpu.prototype.loadX = function () {
+            var memLocation = _MemoryManager.nextTwoBytes();
+            this.Xreg = _MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation));
+
+            //this.PC++;
+            //this.PC++;
+            this.printResults();
+        };
+
+        Cpu.prototype.loadY = function () {
+            var memLocation = _MemoryManager.nextTwoBytes();
+            this.Yreg = _MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation));
+
+            //this.PC++;
+            //this.PC++;
+            this.printResults();
+        };
+
+        Cpu.prototype.compareByteToX = function () {
+            var memLocation = _MemoryManager.nextTwoBytes();
+            if (this.Xreg === _MemoryManager.hexToDecimal(memLocation)) {
+                this.Zflag = 1;
+            }
+
+            //this.PC++;
+            //this.PC++;
+            this.printResults();
+        };
+
+        Cpu.prototype.incrementByte = function () {
+            var memLocation = _MemoryManager.nextTwoBytes();
+            _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), (_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)) + 1).toString());
+
+            //this.PC++;
+            //this.PC++;
+            this.printResults();
         };
 
         Cpu.prototype.printResults = function () {
-            _StdOut.putText("PC: " + this.PC + " | Acc: " + this.Acc + " | X Reg: " + this.Xreg + " | Y Reg: " + this.Yreg + " | zFlag: " + this.Zflag);
+            debugger;
+            var acc = "";
+            if (this.Acc.toString().length === 1) {
+                acc = "0" + this.Acc.toString();
+            } else {
+                acc = this.Acc.toString();
+            }
+
+            _StdOut.putText("PC: " + this.PC + " | Acc: " + acc + " | X Reg: " + this.Xreg + " | Y Reg: " + this.Yreg + " | zFlag: " + this.Zflag);
         };
         return Cpu;
     })();

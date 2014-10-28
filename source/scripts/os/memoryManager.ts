@@ -27,8 +27,15 @@ module TSOS {
 		}
 
 		public setMem(index: number, value: string): void {
-			this.mem.memArray[index] = value;
-			this.displayMem();
+			if(value.length === 1) {
+				this.mem.memArray[index] = "0" + value;
+				this.displayMem();	
+			}
+			else {
+				this.mem.memArray[index] = value;
+				this.displayMem();
+			}
+
 		}
 
 		public nextByte(): string {
@@ -47,10 +54,8 @@ module TSOS {
 			_CPU.PC = 0;
 			var program = Control.getProgramInput();
 			var substr = "";
-			var opcode = "";
 			var count = 0;
-			opcode = program.substr(0,2);
-			for(var i = 0; i < program.length; i+=2) {
+			for(var i = 0; i < program.length; i += 2) {
 				substr = program.substr(i, 2);
 				this.setMem(count, substr);
 				count++;
