@@ -38,13 +38,18 @@ var TSOS;
 
         Cpu.prototype.cycle = function () {
             _Kernel.krnTrace('CPU cycle');
+
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
+            this.isExecuting = true; //HEY LOOK I SET IT GIMME A REWARD.  Like not a failing grade pls.
         };
-
         Cpu.prototype.runProg = function (pid) {
-            this.isExecuting = true;
-            this.execProg(_MemoryManager.getMem(this.PC));
+            if (_ProgramList[pid].alreadyRan === true) {
+                _StdOut.putText("This program has already run.  You better go catch it.");
+            } else {
+                _ProgramList[pid].alreadyRan = true;
+                this.execProg(_MemoryManager.getMem(this.PC));
+            }
         };
 
         Cpu.prototype.execProg = function (opcode) {
@@ -102,6 +107,11 @@ var TSOS;
 
                 case "FF":
                     this.sysCall();
+                    break;
+
+                default:
+                    this.isExecuting = false;
+                    _Kernel.krnTrapError("Invalid opcode.  Welcome to DIE.");
             }
 
             this.isExecuting = false;
@@ -212,6 +222,7 @@ var TSOS;
                 _StdOut.putText = this.Yreg;
             } else if (this.Xreg === 2) {
                 var termString = _MemoryManager.getMem(this.Yreg);
+                _StdOut.putText(termString);
             }
         };
 

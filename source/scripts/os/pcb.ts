@@ -5,10 +5,10 @@ module TSOS {
 					public xReg: number = 0,
 					public yReg: number = 0,
 					public zFlag: number = 0,
-					public pid: number = 0) {
+					public pid: number = 0,
+					public alreadyRan: boolean = false) {
 			this.pid = _PID;
 			_PID++;
 		}
-		
 	}
 }
