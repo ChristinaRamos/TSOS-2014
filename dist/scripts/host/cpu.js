@@ -172,7 +172,7 @@ var TSOS;
         };
 
         Cpu.prototype.incrementByte = function () {
-            //debugger;
+            debugger;
             var memLocation = _MemoryManager.nextTwoBytes();
             var index = _MemoryManager.hexToDecimal(memLocation);
             var value = parseInt(_MemoryManager.getMem(index), 16);

@@ -114,7 +114,7 @@ module TSOS {
                     this.isExecuting = false;
                     _Kernel.krnTrapError("Invalid opcode.  Welcome to DIE.");
             }
-            
+
             this.printResults();
             this.PC++;
         }
@@ -194,7 +194,7 @@ module TSOS {
         }
 
         public incrementByte(): void {
-            //debugger;
+            debugger;
             var memLocation = _MemoryManager.nextTwoBytes();
             var index = _MemoryManager.hexToDecimal(memLocation);
             var value = parseInt(_MemoryManager.getMem(index), 16);
