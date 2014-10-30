@@ -38,6 +38,7 @@ module TSOS {
         }
 
         public cycle(): void {
+            debugger;
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
@@ -104,6 +105,7 @@ module TSOS {
                     break;
 
                 case "FF":
+                debugger;
                     this.sysCall();
                     break;
 
@@ -111,7 +113,7 @@ module TSOS {
                     this.isExecuting = false;
                     _Kernel.krnTrapError("Invalid opcode.  Welcome to DIE.");
              }
-debugger;
+
              this.PC++;
         }
 
@@ -197,7 +199,7 @@ debugger;
         public sysBreak(): void {
             this.updatePCB();
             _ProgramList[_CurrentProgram].alreadyRan = true;
-            _KernelInterruptQueue.enqueue(new Interrupt(CPU_BREAK_IRQ, "Fuck you Murph"));
+            _KernelInterruptQueue.enqueue(new Interrupt(CPU_BREAK_IRQ, null));
         }
 
         public branch(): void {
@@ -211,7 +213,8 @@ debugger;
         }
 
         public sysCall(): void {
-            _KernelInterruptQueue.enqueue(new Interrupt(SYS_CALL_IRQ, ""));
+            debugger;
+            _KernelInterruptQueue.enqueue(new Interrupt(SYS_CALL_IRQ, null));
         }
 
         public printResults(): void {

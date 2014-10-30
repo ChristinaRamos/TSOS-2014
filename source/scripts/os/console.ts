@@ -260,14 +260,24 @@ module TSOS {
         }
 
         public sysCall(): void {
+            debugger;
             if(_CPU.Xreg === 1) {
-                _StdOut.putText(_CPU.Yreg.toString());
-                _Console.advanceLine();
+                this.putText(_CPU.Yreg.toString());
+                this.advanceLine();
+                _OsShell.putPrompt();
             }
 
             else if(_CPU.Xreg === 2) {
-                var termString = _MemoryManager.getMem(_CPU.Yreg);
-                _StdOut.putText(termString);
+                var termString = "";
+                var position = _CPU.Yreg;
+                var stringPart = _MemoryManager.getMem(position)
+                while(stringPart !== "00") {
+                    termString += String.fromCharCode(_MemoryManager.hexToDecimal(stringPart));
+                    stringPart = _MemoryManager.getMem(++position);
+                }
+                this.putText(termString);
+                this.advanceLine();
+                _OsShell.putPrompt();
             }
         }
     }

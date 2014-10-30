@@ -37,6 +37,7 @@ var TSOS;
         };
 
         Cpu.prototype.cycle = function () {
+            debugger;
             _Kernel.krnTrace('CPU cycle');
 
             // TODO: Accumulate CPU usage and profiling statistics here.
@@ -102,6 +103,7 @@ var TSOS;
                     break;
 
                 case "FF":
+                    debugger;
                     this.sysCall();
                     break;
 
@@ -109,7 +111,7 @@ var TSOS;
                     this.isExecuting = false;
                     _Kernel.krnTrapError("Invalid opcode.  Welcome to DIE.");
             }
-            debugger;
+
             this.PC++;
         };
 
@@ -188,7 +190,7 @@ var TSOS;
         Cpu.prototype.sysBreak = function () {
             this.updatePCB();
             _ProgramList[_CurrentProgram].alreadyRan = true;
-            _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CPU_BREAK_IRQ, "Fuck you Murph"));
+            _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CPU_BREAK_IRQ, null));
         };
 
         Cpu.prototype.branch = function () {
@@ -202,7 +204,8 @@ var TSOS;
         };
 
         Cpu.prototype.sysCall = function () {
-            _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SYS_CALL_IRQ, ""));
+            debugger;
+            _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SYS_CALL_IRQ, null));
         };
 
         Cpu.prototype.printResults = function () {
