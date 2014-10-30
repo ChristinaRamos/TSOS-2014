@@ -52,6 +52,7 @@ module TSOS {
         }
 
         public execProg(opcode): void {
+            //debugger;
             switch(opcode) {
                 case "A9": 
                     this.loadConstant();
@@ -112,16 +113,17 @@ module TSOS {
                 default:
                     this.isExecuting = false;
                     _Kernel.krnTrapError("Invalid opcode.  Welcome to DIE.");
-             }
-
-             this.PC++;
+            }
+            
+            this.printResults();
+            this.PC++;
         }
 
         public loadConstant(): void {
             var nextByte = _MemoryManager.nextByte();
             this.Acc = _MemoryManager.hexToDecimal(nextByte);
                         
-            this.printResults();
+            
 
         }
 
@@ -129,16 +131,17 @@ module TSOS {
             var memLocation = _MemoryManager.nextTwoBytes();
             this.Acc = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
             
-           // this.PC++;           
-            this.printResults();
+            //this.PC++;           
+            
         }
 
         public storeAcc(): void {
+            //debugger;
             var memLocation = _MemoryManager.nextTwoBytes();
             _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), this.Acc.toString());
             
             //this.PC++;
-            this.printResults();
+            
 
         }
 
@@ -147,21 +150,21 @@ module TSOS {
             var num = _MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation));
             this.Acc += parseInt(num, 16);
            // this.PC++;
-            this.printResults();
+            
         }
 
         public loadXConstant(): void {
             var nextByte = _MemoryManager.nextByte();
             this.Xreg = _MemoryManager.hexToDecimal(nextByte);
                         
-            this.printResults();
+            
         }
 
         public loadYConstant(): void {
             var nextByte = _MemoryManager.nextByte();
             this.Yreg = _MemoryManager.hexToDecimal(nextByte);
                         
-            this.printResults();
+            
         }
 
         public loadX(): void {
@@ -169,7 +172,7 @@ module TSOS {
             this.Xreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
             
             //this.PC++;            
-            this.printResults();
+            
         }
 
         public loadY(): void {
@@ -177,7 +180,7 @@ module TSOS {
             this.Yreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
             
             //this.PC++;            
-            this.printResults();
+            
         }
 
         public compareByteToX(): void {
@@ -187,15 +190,17 @@ module TSOS {
             }
             
             //this.PC++;            
-            this.printResults();
+            
         }
 
         public incrementByte(): void {
+            //debugger;
             var memLocation = _MemoryManager.nextTwoBytes();
-            _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), (_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)) + 1).toString());
-            
+            var index = _MemoryManager.hexToDecimal(memLocation);
+            var value = parseInt(_MemoryManager.getMem(index), 16);
+            _MemoryManager.setMem(index, (value + 1).toString());            
             //this.PC++;            
-            this.printResults();
+            
         }
 
         public sysBreak(): void {
@@ -219,26 +224,7 @@ module TSOS {
 
         public sysCall(): void {
             //debugger;
-            //_KernelInterruptQueue.enqueue(new Interrupt(SYS_CALL_IRQ, null));
-
-            if(_CPU.Xreg === 1) {
-                _StdOut.putText(_CPU.Yreg.toString());
-                _Console.advanceLine();
-                _OsShell.putPrompt();
-            }
-
-            else if(_CPU.Xreg === 2) {
-                var termString = "";
-                var position = _CPU.Yreg;
-                var stringPart = _MemoryManager.getMem(position)
-                while(stringPart !== "00") {
-                    termString += String.fromCharCode(_MemoryManager.hexToDecimal(stringPart));
-                    stringPart = _MemoryManager.getMem(++position);
-                }
-                _StdOut.putText(termString);
-                _Console.advanceLine();
-                _OsShell.putPrompt();
-            }
+            _KernelInterruptQueue.enqueue(new Interrupt(SYS_CALL_IRQ, null));
         }
 
         public printResults(): void {

@@ -112,69 +112,55 @@ var TSOS;
                     _Kernel.krnTrapError("Invalid opcode.  Welcome to DIE.");
             }
 
+            this.printResults();
             this.PC++;
         };
 
         Cpu.prototype.loadConstant = function () {
             var nextByte = _MemoryManager.nextByte();
             this.Acc = _MemoryManager.hexToDecimal(nextByte);
-
-            this.printResults();
         };
 
         Cpu.prototype.loadAcc = function () {
             var memLocation = _MemoryManager.nextTwoBytes();
             this.Acc = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
-
-            // this.PC++;
-            this.printResults();
+            //this.PC++;
         };
 
         Cpu.prototype.storeAcc = function () {
+            //debugger;
             var memLocation = _MemoryManager.nextTwoBytes();
             _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), this.Acc.toString());
-
             //this.PC++;
-            this.printResults();
         };
 
         Cpu.prototype.addWithCarry = function () {
             var memLocation = _MemoryManager.nextTwoBytes();
             var num = _MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation));
             this.Acc += parseInt(num, 16);
-
             // this.PC++;
-            this.printResults();
         };
 
         Cpu.prototype.loadXConstant = function () {
             var nextByte = _MemoryManager.nextByte();
             this.Xreg = _MemoryManager.hexToDecimal(nextByte);
-
-            this.printResults();
         };
 
         Cpu.prototype.loadYConstant = function () {
             var nextByte = _MemoryManager.nextByte();
             this.Yreg = _MemoryManager.hexToDecimal(nextByte);
-
-            this.printResults();
         };
 
         Cpu.prototype.loadX = function () {
             var memLocation = _MemoryManager.nextTwoBytes();
             this.Xreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
-
             //this.PC++;
-            this.printResults();
         };
 
         Cpu.prototype.loadY = function () {
             var memLocation = _MemoryManager.nextTwoBytes();
             this.Yreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
-
             //this.PC++;
-            this.printResults();
         };
 
         Cpu.prototype.compareByteToX = function () {
@@ -182,17 +168,16 @@ var TSOS;
             if (this.Xreg === _MemoryManager.hexToDecimal(memLocation)) {
                 this.Zflag = 1;
             }
-
             //this.PC++;
-            this.printResults();
         };
 
         Cpu.prototype.incrementByte = function () {
+            //debugger;
             var memLocation = _MemoryManager.nextTwoBytes();
-            _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), (_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)) + 1).toString());
-
+            var index = _MemoryManager.hexToDecimal(memLocation);
+            var value = parseInt(_MemoryManager.getMem(index), 16);
+            _MemoryManager.setMem(index, (value + 1).toString());
             //this.PC++;
-            this.printResults();
         };
 
         Cpu.prototype.sysBreak = function () {
@@ -214,23 +199,7 @@ var TSOS;
 
         Cpu.prototype.sysCall = function () {
             //debugger;
-            //_KernelInterruptQueue.enqueue(new Interrupt(SYS_CALL_IRQ, null));
-            if (_CPU.Xreg === 1) {
-                _StdOut.putText(_CPU.Yreg.toString());
-                _Console.advanceLine();
-                _OsShell.putPrompt();
-            } else if (_CPU.Xreg === 2) {
-                var termString = "";
-                var position = _CPU.Yreg;
-                var stringPart = _MemoryManager.getMem(position);
-                while (stringPart !== "00") {
-                    termString += String.fromCharCode(_MemoryManager.hexToDecimal(stringPart));
-                    stringPart = _MemoryManager.getMem(++position);
-                }
-                _StdOut.putText(termString);
-                _Console.advanceLine();
-                _OsShell.putPrompt();
-            }
+            _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SYS_CALL_IRQ, null));
         };
 
         Cpu.prototype.printResults = function () {

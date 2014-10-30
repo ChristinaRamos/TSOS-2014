@@ -39,12 +39,12 @@ module TSOS {
 		}
 
 		public nextByte(): string {
-			return this.mem.memArray[++_CPU.PC];
+			return this.getMem(++_CPU.PC);
 		}
 
 		public nextTwoBytes(): string {
 			var nextTwo = "";
-			nextTwo = this.mem.memArray[++_CPU.PC] + this.mem.memArray[++_CPU.PC];
+			nextTwo = this.getMem(++_CPU.PC) + this.getMem(++_CPU.PC);
 			nextTwo = nextTwo.substr(2,2) + nextTwo.substr(0,2);
 			return nextTwo;
 
