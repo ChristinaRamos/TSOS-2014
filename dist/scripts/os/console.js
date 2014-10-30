@@ -129,6 +129,13 @@ var TSOS;
             // decided to write one function and use the term "text" to connote string or char.
             // UPDATE: Even though we are now working in TypeScript, char and string remain undistinguished.
             if (text !== "") {
+                var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
+                if (this.currentXPosition > _Canvas.width) {
+                    this.advanceLine();
+                    this.currentXPosition = STARTING_X_POS;
+                    _LineWrapped = true;
+                }
+
                 // Draw the text at the current X and Y coordinates.
                 _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
 
@@ -187,6 +194,21 @@ var TSOS;
 
                 //get rid of that unwanted character from the buffer
                 this.buffer = this.buffer.substring(0, this.buffer.length - 1);
+            } else {
+                if (_LineWrapped === true) {
+                    this.currentYPosition -= _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin;
+                    this.currentXPosition = _Canvas.width;
+
+                    //put ourselves at x position 1 character backwards.  almost like a real backspace, WHOA.
+                    this.currentXPosition = this.currentXPosition - fSizePop;
+
+                    //cover that ugly, unwanted letter with a rectangle of the canvas's color omg so racist
+                    _DrawingContext.fillStyle = "#DFDBC3";
+                    _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, fSizePop, _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin);
+
+                    //get rid of that unwanted character from the buffer
+                    this.buffer = this.buffer.substring(0, this.buffer.length - 1);
+                }
             }
         };
 

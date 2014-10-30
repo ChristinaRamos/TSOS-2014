@@ -41,16 +41,12 @@ module TSOS {
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
-            this.isExecuting = true; //HEY LOOK I SET IT GIMME A REWARD.  Like not a failing grade pls. 
-        }
-        public runProg(pid:number): void {
-            if(_ProgramList[pid].alreadyRan === true) {
+            if(_ProgramList[_CurrentProgram].alreadyRan === true) {
                 _StdOut.putText("This program has already run.  You better go catch it.");
             }
             
             else {
-            _ProgramList[pid].alreadyRan = true;
-            this.execProg(_MemoryManager.getMem(this.PC));
+                this.execProg(_MemoryManager.getMem(this.PC));
             }
         }
 
@@ -117,11 +113,10 @@ module TSOS {
                     _Kernel.krnTrapError("Invalid opcode.  Welcome to DIE.");
              }
 
-            this.isExecuting = false;
+             this.PC++;
         }
 
         public loadConstant(): void {
-            //debugger;
             var nextByte = _MemoryManager.nextByte();
             this.Acc = _MemoryManager.hexToDecimal(nextByte);
             //this.PC++;            
@@ -130,7 +125,7 @@ module TSOS {
 
         public loadAcc(): void {
             var memLocation = _MemoryManager.nextTwoBytes();
-            this.Acc = _MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation));
+            this.Acc = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
             //this.PC++;
             //this.PC++;            
             this.printResults();
@@ -147,18 +142,20 @@ module TSOS {
 
         public addWithCarry(): void {
             var memLocation = _MemoryManager.nextTwoBytes();
-            this.Acc = this.Acc + _MemoryManager.hexToDecimal(memLocation);
+            var num = _MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation));
+            this.Acc += parseInt(num, 16);
+            this.printResults();
         }
 
         public loadXConstant(): void {
-            var nextByte = _MemoryManager.getMem(this.PC).toString();
+            var nextByte = _MemoryManager.nextByte();
             this.Xreg = _MemoryManager.hexToDecimal(nextByte);
             //this.PC++;            
             this.printResults();
         }
 
         public loadYConstant(): void {
-            var nextByte = _MemoryManager.getMem(this.PC).toString();
+            var nextByte = _MemoryManager.nextByte();
             this.Yreg = _MemoryManager.hexToDecimal(nextByte);
             //this.PC++;            
             this.printResults();
@@ -166,7 +163,7 @@ module TSOS {
 
         public loadX(): void {
             var memLocation = _MemoryManager.nextTwoBytes();
-            this.Xreg = _MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation));
+            this.Xreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
             //this.PC++;
             //this.PC++;            
             this.printResults();
@@ -174,7 +171,7 @@ module TSOS {
 
         public loadY(): void {
             var memLocation = _MemoryManager.nextTwoBytes();
-            this.Yreg = _MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation));
+            this.Yreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
             //this.PC++;
             //this.PC++;            
             this.printResults();
@@ -199,7 +196,9 @@ module TSOS {
         }
 
         public sysBreak(): void {
-            _KernelInterruptQueue.enqueue();
+            this.updatePCB();
+            _ProgramList[_CurrentProgram].alreadyRan = true;
+            _KernelInterruptQueue.enqueue(new Interrupt(CPU_BREAK_IRQ, "Fuck you Murph"));
         }
 
         public branch(): void {
@@ -225,6 +224,9 @@ module TSOS {
 
         public printResults(): void {
             var acc = "";
+            var x = "";
+            var y = "";
+
             if(this.Acc.toString().length === 1) {
                 acc = "0" + this.Acc.toString();
             }
@@ -232,11 +234,32 @@ module TSOS {
                 acc = this.Acc.toString();
             }
 
+            if(this.Xreg.toString().length === 1) {
+                x = "0" + this.Xreg.toString();
+            }
+            else {
+                x = this.Xreg.toString();
+            }
+
+            if(this.Yreg.toString().length === 1) {
+                y = "0" + this.Yreg.toString();
+            }
+            else {
+                y = this.Yreg.toString();
+            }
             _StdOut.putText("PC: " + this.PC + 
                             " | Acc: " + acc + 
-                            " | X Reg: " + this.Xreg + 
-                            " | Y Reg: " + this.Yreg +
+                            " | X Reg: " + x + 
+                            " | Y Reg: " + y +
                             " | zFlag: " + this.Zflag);
+        }
+
+        public updatePCB(): void {
+            _ProgramList[_CurrentProgram].pC = this.PC;
+            _ProgramList[_CurrentProgram].acc = this.Acc;
+            _ProgramList[_CurrentProgram].xReg = this.Xreg;
+            _ProgramList[_CurrentProgram].yReg = this.Yreg;
+            _ProgramList[_CurrentProgram].zFlag = this.Zflag;
         }
     }
 }

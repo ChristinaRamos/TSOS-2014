@@ -80,3 +80,5 @@ var _MemoryManager: TSOS.MemoryManager;
 // PCB stuff
 var _PID = 0;
 var _ProgramList = [];
+var _CurrentProgram: number =  null;
+var _LineWrapped: boolean = false;

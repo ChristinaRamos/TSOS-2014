@@ -22,7 +22,7 @@ module TSOS {
         	output += "</tr>"
         	Control.displayMemory(output);
         }
-        public getMem(index: number): number {
+        public getMem(index: number): string {
 			return this.mem.memArray[index];
 		}
 

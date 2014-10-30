@@ -120,10 +120,19 @@ module TSOS {
             // decided to write one function and use the term "text" to connote string or char.
             // UPDATE: Even though we are now working in TypeScript, char and string remain undistinguished.
             if (text !== "") {
+                var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
+                if(this.currentXPosition > _Canvas.width) {
+                    this.advanceLine(); 
+                    this.currentXPosition = STARTING_X_POS;
+                    _LineWrapped = true;  
+                }
                 // Draw the text at the current X and Y coordinates.
                 _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
                 // Move the current X position.
                 var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
+                
+
+
                 //add the font size to our font size array.  how exciting.
                 this.fSize.push(offset);
                 //Measure the last letter drawn so that we can backspace it if needed
@@ -164,11 +173,11 @@ module TSOS {
         //https://www.youtube.com/watch?v=xUVmvqwyAeg
         public backspace(): void {
             //we gotta use this thing twice which means we can't pop it twice because REMOVALS so here's a var
-            var fSizePop= this.fSize.pop();
+            var fSizePop = this.fSize.pop();
             //Had to round to the nearest single decimal place because otherwise
             //I got 12.47999999999... which wouldn't allow me to backspace my first character after prompt
             //basically we're trying to not eat the prompt with backspace and also not backspace too little
-            if(Math.round((this.currentXPosition - fSizePop) * 10 ) / 10 >= STARTING_X_POS){
+            if (Math.round((this.currentXPosition - fSizePop) * 10 ) / 10 >= STARTING_X_POS){
                 //put ourselves at x position 1 character backwards.  almost like a real backspace, WHOA.
                 this.currentXPosition = this.currentXPosition - fSizePop;
                 //cover that ugly, unwanted letter with a rectangle of the canvas's color omg so racist
@@ -178,6 +187,24 @@ module TSOS {
                                          _FontHeightMargin);
                 //get rid of that unwanted character from the buffer
                 this.buffer = this.buffer.substring(0, this.buffer.length - 1);
+            }
+
+            else {
+                if(_LineWrapped === true) {
+                    this.currentYPosition -= _DefaultFontSize + 
+                                             _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                                             _FontHeightMargin;
+                    this.currentXPosition = _Canvas.width;
+                    //put ourselves at x position 1 character backwards.  almost like a real backspace, WHOA.
+                    this.currentXPosition = this.currentXPosition - fSizePop;
+                    //cover that ugly, unwanted letter with a rectangle of the canvas's color omg so racist
+                    _DrawingContext.fillStyle = "#DFDBC3";
+                    _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - _DefaultFontSize, fSizePop, _DefaultFontSize + 
+                                             _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                                             _FontHeightMargin);
+                    //get rid of that unwanted character from the buffer
+                    this.buffer = this.buffer.substring(0, this.buffer.length - 1);
+                }
             }
         }
 

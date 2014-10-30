@@ -371,8 +371,10 @@ var TSOS;
                 _StdOut.putText("PID not provided.");
             } else if (typeof _ProgramList[parseInt(args[0])] === "undefined") {
                 _StdOut.putText("Incorrect PID.");
-            } else
-                _CPU.runProg(args[0]);
+            } else {
+                _CurrentProgram = args[0];
+                _CPU.isExecuting = true;
+            }
         };
         return Shell;
     })();

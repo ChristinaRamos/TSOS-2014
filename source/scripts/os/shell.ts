@@ -406,8 +406,10 @@ module TSOS {
                 _StdOut.putText("Incorrect PID.");
             }
 
-            else
-                _CPU.runProg(args[0]);
+            else {
+                _CurrentProgram = args[0];
+                _CPU.isExecuting = true;
+            }
         }
     }
 }
