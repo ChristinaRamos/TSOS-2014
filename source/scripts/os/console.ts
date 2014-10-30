@@ -260,7 +260,7 @@ module TSOS {
         }
 
         public sysCall(): void {
-            debugger;
+            //debugger;
             if(_CPU.Xreg === 1) {
                 this.putText(_CPU.Yreg.toString());
                 this.advanceLine();

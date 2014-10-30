@@ -258,7 +258,7 @@ var TSOS;
         };
 
         Console.prototype.sysCall = function () {
-            debugger;
+            //debugger;
             if (_CPU.Xreg === 1) {
                 this.putText(_CPU.Yreg.toString());
                 this.advanceLine();

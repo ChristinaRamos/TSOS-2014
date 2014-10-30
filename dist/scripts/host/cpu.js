@@ -37,7 +37,7 @@ var TSOS;
         };
 
         Cpu.prototype.cycle = function () {
-            debugger;
+            //debugger;
             _Kernel.krnTrace('CPU cycle');
 
             // TODO: Accumulate CPU usage and profiling statistics here.
@@ -103,7 +103,7 @@ var TSOS;
                     break;
 
                 case "FF":
-                    debugger;
+                    //debugger;
                     this.sysCall();
                     break;
 
@@ -126,6 +126,7 @@ var TSOS;
             var memLocation = _MemoryManager.nextTwoBytes();
             this.Acc = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
 
+            // this.PC++;
             this.printResults();
         };
 
@@ -133,6 +134,7 @@ var TSOS;
             var memLocation = _MemoryManager.nextTwoBytes();
             _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), this.Acc.toString());
 
+            //this.PC++;
             this.printResults();
         };
 
@@ -140,6 +142,8 @@ var TSOS;
             var memLocation = _MemoryManager.nextTwoBytes();
             var num = _MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation));
             this.Acc += parseInt(num, 16);
+
+            // this.PC++;
             this.printResults();
         };
 
@@ -161,6 +165,7 @@ var TSOS;
             var memLocation = _MemoryManager.nextTwoBytes();
             this.Xreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
 
+            //this.PC++;
             this.printResults();
         };
 
@@ -168,6 +173,7 @@ var TSOS;
             var memLocation = _MemoryManager.nextTwoBytes();
             this.Yreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
 
+            //this.PC++;
             this.printResults();
         };
 
@@ -177,6 +183,7 @@ var TSOS;
                 this.Zflag = 1;
             }
 
+            //this.PC++;
             this.printResults();
         };
 
@@ -184,6 +191,7 @@ var TSOS;
             var memLocation = _MemoryManager.nextTwoBytes();
             _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), (_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)) + 1).toString());
 
+            //this.PC++;
             this.printResults();
         };
 
@@ -195,17 +203,34 @@ var TSOS;
 
         Cpu.prototype.branch = function () {
             if (this.Zflag === 0) {
-                this.PC += _MemoryManager.hexToDecimal(_MemoryManager.getMem(++this.PC).toString());
+                this.PC += _MemoryManager.hexToDecimal(_MemoryManager.getMem(++this.PC).toString()) + 1;
 
                 if (this.PC >= _MemorySize) {
                     this.PC -= _MemorySize;
                 }
-            }
+            } else
+                this.PC++;
         };
 
         Cpu.prototype.sysCall = function () {
-            debugger;
-            _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SYS_CALL_IRQ, null));
+            //debugger;
+            //_KernelInterruptQueue.enqueue(new Interrupt(SYS_CALL_IRQ, null));
+            if (_CPU.Xreg === 1) {
+                _StdOut.putText(_CPU.Yreg.toString());
+                _Console.advanceLine();
+                _OsShell.putPrompt();
+            } else if (_CPU.Xreg === 2) {
+                var termString = "";
+                var position = _CPU.Yreg;
+                var stringPart = _MemoryManager.getMem(position);
+                while (stringPart !== "00") {
+                    termString += String.fromCharCode(_MemoryManager.hexToDecimal(stringPart));
+                    stringPart = _MemoryManager.getMem(++position);
+                }
+                _StdOut.putText(termString);
+                _Console.advanceLine();
+                _OsShell.putPrompt();
+            }
         };
 
         Cpu.prototype.printResults = function () {

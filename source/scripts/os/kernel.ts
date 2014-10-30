@@ -79,7 +79,7 @@ module TSOS {
             
             // Check for an interrupt, are any. Page 560
             if (_KernelInterruptQueue.getSize() > 0) {
-                debugger;
+                //debugger;
                 // Process the first interrupt on the interrupt queue.
                 // TODO: Implement a priority queue based on the IRQ number/id to enforce interrupt priority.
                 var interrupt = _KernelInterruptQueue.dequeue();
@@ -145,8 +145,8 @@ module TSOS {
                     _CPU.isExecuting = false;
                     break;
                 case SYS_CALL_IRQ:
-                    debugger;
-                    _Console.sysCall();
+                    //debugger;
+                    _StdIn.sysCall();
                     break;
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
