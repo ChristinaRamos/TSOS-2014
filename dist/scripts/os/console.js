@@ -256,6 +256,16 @@ var TSOS;
                 }
             }
         };
+
+        Console.prototype.sysCall = function () {
+            if (_CPU.Xreg === 1) {
+                _StdOut.putText(_CPU.Yreg.toString());
+                _Console.advanceLine();
+            } else if (_CPU.Xreg === 2) {
+                var termString = _MemoryManager.getMem(_CPU.Yreg);
+                _StdOut.putText(termString);
+            }
+        };
         return Console;
     })();
     TSOS.Console = Console;

@@ -23,6 +23,8 @@ var KEYBOARD_IRQ: number = 1;
 
 var CPU_BREAK_IRQ: number = 2;
 
+var SYS_CALL_IRQ: number = 3;
+
 var STARTING_X_POS: number = 12.48;
 //
 // Global Variables

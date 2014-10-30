@@ -21,6 +21,8 @@ var KEYBOARD_IRQ = 1;
 
 var CPU_BREAK_IRQ = 2;
 
+var SYS_CALL_IRQ = 3;
+
 var STARTING_X_POS = 12.48;
 
 //

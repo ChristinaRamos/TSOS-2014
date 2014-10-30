@@ -51,7 +51,6 @@ module TSOS {
         }
 
         public execProg(opcode): void {
-            //this.PC++;
             switch(opcode) {
                 case "A9": 
                     this.loadConstant();
@@ -112,30 +111,30 @@ module TSOS {
                     this.isExecuting = false;
                     _Kernel.krnTrapError("Invalid opcode.  Welcome to DIE.");
              }
-
+debugger;
              this.PC++;
         }
 
         public loadConstant(): void {
             var nextByte = _MemoryManager.nextByte();
             this.Acc = _MemoryManager.hexToDecimal(nextByte);
-            //this.PC++;            
+                        
             this.printResults();
         }
 
         public loadAcc(): void {
             var memLocation = _MemoryManager.nextTwoBytes();
             this.Acc = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
-            //this.PC++;
-            //this.PC++;            
+            
+                        
             this.printResults();
         }
 
         public storeAcc(): void {
             var memLocation = _MemoryManager.nextTwoBytes();
             _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), this.Acc.toString());
-            //this.PC++;
-            //this.PC++;
+            
+            
             this.printResults();
 
         }
@@ -150,30 +149,30 @@ module TSOS {
         public loadXConstant(): void {
             var nextByte = _MemoryManager.nextByte();
             this.Xreg = _MemoryManager.hexToDecimal(nextByte);
-            //this.PC++;            
+                        
             this.printResults();
         }
 
         public loadYConstant(): void {
             var nextByte = _MemoryManager.nextByte();
             this.Yreg = _MemoryManager.hexToDecimal(nextByte);
-            //this.PC++;            
+                        
             this.printResults();
         }
 
         public loadX(): void {
             var memLocation = _MemoryManager.nextTwoBytes();
             this.Xreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
-            //this.PC++;
-            //this.PC++;            
+            
+                        
             this.printResults();
         }
 
         public loadY(): void {
             var memLocation = _MemoryManager.nextTwoBytes();
             this.Yreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
-            //this.PC++;
-            //this.PC++;            
+            
+                        
             this.printResults();
         }
 
@@ -182,16 +181,16 @@ module TSOS {
             if(this.Xreg === _MemoryManager.hexToDecimal(memLocation)) {
                 this.Zflag = 1;
             }
-            //this.PC++;
-            //this.PC++;            
+            
+                        
             this.printResults();
         }
 
         public incrementByte(): void {
             var memLocation = _MemoryManager.nextTwoBytes();
             _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), (_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)) + 1).toString());
-            //this.PC++;
-            //this.PC++;            
+            
+                        
             this.printResults();
         }
 
@@ -212,14 +211,7 @@ module TSOS {
         }
 
         public sysCall(): void {
-            if(this.Xreg === 1) {
-                _StdOut.putText = this.Yreg;
-            }
-
-            else if(this.Xreg === 2) {
-                var termString = _MemoryManager.getMem(this.Yreg);
-                _StdOut.putText(termString);
-            }
+            _KernelInterruptQueue.enqueue(new Interrupt(SYS_CALL_IRQ, ""));
         }
 
         public printResults(): void {
@@ -247,11 +239,13 @@ module TSOS {
             else {
                 y = this.Yreg.toString();
             }
-            _StdOut.putText("PC: " + this.PC + 
+            _StdOut.putText("PC: " + this.PC.toString() + 
                             " | Acc: " + acc + 
                             " | X Reg: " + x + 
                             " | Y Reg: " + y +
-                            " | zFlag: " + this.Zflag);
+                            " | zFlag: " + this.Zflag.toString());
+            _Console.advanceLine();
+            _OsShell.putPrompt();
         }
 
         public updatePCB(): void {

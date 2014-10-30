@@ -109,7 +109,7 @@ var TSOS;
                     this.isExecuting = false;
                     _Kernel.krnTrapError("Invalid opcode.  Welcome to DIE.");
             }
-
+            debugger;
             this.PC++;
         };
 
@@ -117,7 +117,6 @@ var TSOS;
             var nextByte = _MemoryManager.nextByte();
             this.Acc = _MemoryManager.hexToDecimal(nextByte);
 
-            //this.PC++;
             this.printResults();
         };
 
@@ -125,8 +124,6 @@ var TSOS;
             var memLocation = _MemoryManager.nextTwoBytes();
             this.Acc = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
 
-            //this.PC++;
-            //this.PC++;
             this.printResults();
         };
 
@@ -134,8 +131,6 @@ var TSOS;
             var memLocation = _MemoryManager.nextTwoBytes();
             _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), this.Acc.toString());
 
-            //this.PC++;
-            //this.PC++;
             this.printResults();
         };
 
@@ -150,7 +145,6 @@ var TSOS;
             var nextByte = _MemoryManager.nextByte();
             this.Xreg = _MemoryManager.hexToDecimal(nextByte);
 
-            //this.PC++;
             this.printResults();
         };
 
@@ -158,7 +152,6 @@ var TSOS;
             var nextByte = _MemoryManager.nextByte();
             this.Yreg = _MemoryManager.hexToDecimal(nextByte);
 
-            //this.PC++;
             this.printResults();
         };
 
@@ -166,8 +159,6 @@ var TSOS;
             var memLocation = _MemoryManager.nextTwoBytes();
             this.Xreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
 
-            //this.PC++;
-            //this.PC++;
             this.printResults();
         };
 
@@ -175,8 +166,6 @@ var TSOS;
             var memLocation = _MemoryManager.nextTwoBytes();
             this.Yreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
 
-            //this.PC++;
-            //this.PC++;
             this.printResults();
         };
 
@@ -186,8 +175,6 @@ var TSOS;
                 this.Zflag = 1;
             }
 
-            //this.PC++;
-            //this.PC++;
             this.printResults();
         };
 
@@ -195,8 +182,6 @@ var TSOS;
             var memLocation = _MemoryManager.nextTwoBytes();
             _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), (_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)) + 1).toString());
 
-            //this.PC++;
-            //this.PC++;
             this.printResults();
         };
 
@@ -217,12 +202,7 @@ var TSOS;
         };
 
         Cpu.prototype.sysCall = function () {
-            if (this.Xreg === 1) {
-                _StdOut.putText = this.Yreg;
-            } else if (this.Xreg === 2) {
-                var termString = _MemoryManager.getMem(this.Yreg);
-                _StdOut.putText(termString);
-            }
+            _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SYS_CALL_IRQ, ""));
         };
 
         Cpu.prototype.printResults = function () {
@@ -247,7 +227,9 @@ var TSOS;
             } else {
                 y = this.Yreg.toString();
             }
-            _StdOut.putText("PC: " + this.PC + " | Acc: " + acc + " | X Reg: " + x + " | Y Reg: " + y + " | zFlag: " + this.Zflag);
+            _StdOut.putText("PC: " + this.PC.toString() + " | Acc: " + acc + " | X Reg: " + x + " | Y Reg: " + y + " | zFlag: " + this.Zflag.toString());
+            _Console.advanceLine();
+            _OsShell.putPrompt();
         };
 
         Cpu.prototype.updatePCB = function () {
