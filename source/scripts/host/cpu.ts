@@ -36,7 +36,6 @@ module TSOS {
             this.Zflag = 0;
             this.isExecuting = false;
         }
-
         public cycle(): void {
             //debugger;
             _Kernel.krnTrace('CPU cycle');
@@ -44,6 +43,9 @@ module TSOS {
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             if(_ProgramList[_CurrentProgram].alreadyRan === true) {
                 _StdOut.putText("This program has already run.  You better go catch it.");
+                this.isExecuting = false;
+                _StdOut.advanceLine();
+                _OsShell.putPrompt();
             }
             
             else {
@@ -120,7 +122,7 @@ module TSOS {
         }
 
         public loadConstant(): void {
-            var nextByte = _MemoryManager.nextByte(this.PC);
+            var nextByte = _MemoryManager.nextByte();
             this.Acc = _MemoryManager.hexToDecimal(nextByte);
                         
             
@@ -128,8 +130,8 @@ module TSOS {
         }
 
         public loadAcc(): void {
-            var memLocation = _MemoryManager.nextTwoBytes(this.PC);
-            this.Acc = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
+            var memLocation = _MemoryManager.hexToDecimal(_MemoryManager.nextTwoBytes());
+            this.Acc = _MemoryManager.hexToDecimal(_MemoryManager.getMem((memLocation)));
             
             //this.PC++;           
             
@@ -137,8 +139,8 @@ module TSOS {
 
         public storeAcc(): void {
             //debugger;
-            var memLocation = _MemoryManager.nextTwoBytes(this.PC);
-            _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), this.Acc.toString());
+            var memLocation = _MemoryManager.nextTwoBytes();
+            _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), _MemoryManager.decimalToHex(this.Acc));
             
             //this.PC++;
             
@@ -146,7 +148,7 @@ module TSOS {
         }
 
         public addWithCarry(): void {
-            var memLocation = _MemoryManager.nextTwoBytes(this.PC);
+            var memLocation = _MemoryManager.nextTwoBytes();
             var num = _MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation));
             this.Acc += parseInt(num, 16);
            // this.PC++;
@@ -154,21 +156,21 @@ module TSOS {
         }
 
         public loadXConstant(): void {
-            var nextByte = _MemoryManager.nextByte(this.PC);
+            var nextByte = _MemoryManager.nextByte();
             this.Xreg = _MemoryManager.hexToDecimal(nextByte);
                         
             
         }
 
         public loadYConstant(): void {
-            var nextByte = _MemoryManager.nextByte(this.PC);
+            var nextByte = _MemoryManager.nextByte();
             this.Yreg = _MemoryManager.hexToDecimal(nextByte);
                         
             
         }
 
         public loadX(): void {
-            var memLocation = _MemoryManager.nextTwoBytes(this.PC);
+            var memLocation = _MemoryManager.nextTwoBytes();
             this.Xreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
             
             //this.PC++;            
@@ -176,7 +178,7 @@ module TSOS {
         }
 
         public loadY(): void {
-            var memLocation = _MemoryManager.nextTwoBytes(this.PC);
+            var memLocation = _MemoryManager.nextTwoBytes();
             this.Yreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
             
             //this.PC++;            
@@ -184,8 +186,9 @@ module TSOS {
         }
 
         public compareByteToX(): void {
-            var memLocation = _MemoryManager.nextTwoBytes(this.PC);
-            if(this.Xreg === _MemoryManager.hexToDecimal(memLocation)) {
+            debugger;
+            var memLocation = _MemoryManager.nextTwoBytes();
+            if(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)) === this.Xreg.toString()) {
                 this.Zflag = 1;
             }
             
@@ -194,8 +197,8 @@ module TSOS {
         }
 
         public incrementByte(): void {
-            debugger;
-            var memLocation = _MemoryManager.nextTwoBytes(this.PC);
+            //debugger;
+            var memLocation = _MemoryManager.nextTwoBytes();
             var index = _MemoryManager.hexToDecimal(memLocation);
             var value = parseInt(_MemoryManager.getMem(index), 16);
             _MemoryManager.setMem(index, (value + 1).toString());            

@@ -35,7 +35,6 @@ var TSOS;
             this.Zflag = 0;
             this.isExecuting = false;
         };
-
         Cpu.prototype.cycle = function () {
             //debugger;
             _Kernel.krnTrace('CPU cycle');
@@ -44,6 +43,9 @@ var TSOS;
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             if (_ProgramList[_CurrentProgram].alreadyRan === true) {
                 _StdOut.putText("This program has already run.  You better go catch it.");
+                this.isExecuting = false;
+                _StdOut.advanceLine();
+                _OsShell.putPrompt();
             } else {
                 this.execProg(_MemoryManager.getMem(this.PC));
             }
@@ -117,63 +119,64 @@ var TSOS;
         };
 
         Cpu.prototype.loadConstant = function () {
-            var nextByte = _MemoryManager.nextByte(this.PC);
+            var nextByte = _MemoryManager.nextByte();
             this.Acc = _MemoryManager.hexToDecimal(nextByte);
         };
 
         Cpu.prototype.loadAcc = function () {
-            var memLocation = _MemoryManager.nextTwoBytes(this.PC);
-            this.Acc = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
+            var memLocation = _MemoryManager.hexToDecimal(_MemoryManager.nextTwoBytes());
+            this.Acc = _MemoryManager.hexToDecimal(_MemoryManager.getMem((memLocation)));
             //this.PC++;
         };
 
         Cpu.prototype.storeAcc = function () {
             //debugger;
-            var memLocation = _MemoryManager.nextTwoBytes(this.PC);
-            _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), this.Acc.toString());
+            var memLocation = _MemoryManager.nextTwoBytes();
+            _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), _MemoryManager.decimalToHex(this.Acc));
             //this.PC++;
         };
 
         Cpu.prototype.addWithCarry = function () {
-            var memLocation = _MemoryManager.nextTwoBytes(this.PC);
+            var memLocation = _MemoryManager.nextTwoBytes();
             var num = _MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation));
             this.Acc += parseInt(num, 16);
             // this.PC++;
         };
 
         Cpu.prototype.loadXConstant = function () {
-            var nextByte = _MemoryManager.nextByte(this.PC);
+            var nextByte = _MemoryManager.nextByte();
             this.Xreg = _MemoryManager.hexToDecimal(nextByte);
         };
 
         Cpu.prototype.loadYConstant = function () {
-            var nextByte = _MemoryManager.nextByte(this.PC);
+            var nextByte = _MemoryManager.nextByte();
             this.Yreg = _MemoryManager.hexToDecimal(nextByte);
         };
 
         Cpu.prototype.loadX = function () {
-            var memLocation = _MemoryManager.nextTwoBytes(this.PC);
+            var memLocation = _MemoryManager.nextTwoBytes();
             this.Xreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
             //this.PC++;
         };
 
         Cpu.prototype.loadY = function () {
-            var memLocation = _MemoryManager.nextTwoBytes(this.PC);
+            var memLocation = _MemoryManager.nextTwoBytes();
             this.Yreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
             //this.PC++;
         };
 
         Cpu.prototype.compareByteToX = function () {
-            var memLocation = _MemoryManager.nextTwoBytes(this.PC);
-            if (this.Xreg === _MemoryManager.hexToDecimal(memLocation)) {
+            debugger;
+            var memLocation = _MemoryManager.nextTwoBytes();
+            if (_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)) === this.Xreg.toString()) {
                 this.Zflag = 1;
             }
             //this.PC++;
         };
 
         Cpu.prototype.incrementByte = function () {
-            debugger;
-            var memLocation = _MemoryManager.nextTwoBytes(this.PC);
+            //debugger;
+            var memLocation = _MemoryManager.nextTwoBytes();
             var index = _MemoryManager.hexToDecimal(memLocation);
             var value = parseInt(_MemoryManager.getMem(index), 16);
             _MemoryManager.setMem(index, (value + 1).toString());

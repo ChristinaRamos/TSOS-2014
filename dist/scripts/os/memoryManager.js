@@ -35,13 +35,13 @@ var TSOS;
             }
         };
 
-        MemoryManager.prototype.nextByte = function (cpuPC) {
-            return this.getMem(++cpuPC);
+        MemoryManager.prototype.nextByte = function () {
+            return this.getMem(++_CPU.PC);
         };
 
-        MemoryManager.prototype.nextTwoBytes = function (cpuPC) {
+        MemoryManager.prototype.nextTwoBytes = function () {
             var nextTwo = "";
-            nextTwo = this.getMem(++cpuPC) + this.getMem(++cpuPC);
+            nextTwo = this.getMem(++_CPU.PC) + this.getMem(++_CPU.PC);
             nextTwo = nextTwo.substr(2, 2) + nextTwo.substr(0, 2);
             return nextTwo;
         };
