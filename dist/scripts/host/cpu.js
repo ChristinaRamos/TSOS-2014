@@ -52,6 +52,7 @@ var TSOS;
         };
 
         Cpu.prototype.execProg = function (opcode) {
+            debugger;
             switch (opcode) {
                 case "A9":
                     this.loadConstant();
@@ -114,8 +115,8 @@ var TSOS;
                     _Kernel.krnTrapError("Invalid opcode.  Welcome to DIE.");
             }
 
-            this.printResults();
             this.PC++;
+            this.printResults();
         };
 
         Cpu.prototype.loadConstant = function () {
@@ -170,8 +171,8 @@ var TSOS;
             var memLocation = _MemoryManager.nextTwoBytes();
             var memIndex = _MemoryManager.hexToDecimal(memLocation);
             var mem = _MemoryManager.getMem(memIndex);
-            var xRegHex = _MemoryManager.decimalToHex(this.Xreg);
-            if (mem === xRegHex) {
+            var memNum = _MemoryManager.hexToDecimal(mem);
+            if (memNum === this.Xreg) {
                 this.Zflag = 1;
             }
             //this.PC++;
@@ -193,6 +194,7 @@ var TSOS;
         };
 
         Cpu.prototype.branch = function () {
+            debugger;
             if (this.Zflag === 0) {
                 this.PC += _MemoryManager.hexToDecimal(_MemoryManager.getMem(++this.PC).toString()) + 1;
 
