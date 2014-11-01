@@ -168,7 +168,10 @@ var TSOS;
         Cpu.prototype.compareByteToX = function () {
             debugger;
             var memLocation = _MemoryManager.nextTwoBytes();
-            if (_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)) === this.Xreg.toString()) {
+            var memIndex = _MemoryManager.hexToDecimal(memLocation);
+            var mem = _MemoryManager.getMem(memIndex);
+            var xRegHex = _MemoryManager.decimalToHex(this.Xreg);
+            if (mem === xRegHex) {
                 this.Zflag = 1;
             }
             //this.PC++;
