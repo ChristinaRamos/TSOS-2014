@@ -117,54 +117,54 @@ var TSOS;
         };
 
         Cpu.prototype.loadConstant = function () {
-            var nextByte = _MemoryManager.nextByte();
+            var nextByte = _MemoryManager.nextByte(this.PC);
             this.Acc = _MemoryManager.hexToDecimal(nextByte);
         };
 
         Cpu.prototype.loadAcc = function () {
-            var memLocation = _MemoryManager.nextTwoBytes();
+            var memLocation = _MemoryManager.nextTwoBytes(this.PC);
             this.Acc = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
             //this.PC++;
         };
 
         Cpu.prototype.storeAcc = function () {
             //debugger;
-            var memLocation = _MemoryManager.nextTwoBytes();
+            var memLocation = _MemoryManager.nextTwoBytes(this.PC);
             _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), this.Acc.toString());
             //this.PC++;
         };
 
         Cpu.prototype.addWithCarry = function () {
-            var memLocation = _MemoryManager.nextTwoBytes();
+            var memLocation = _MemoryManager.nextTwoBytes(this.PC);
             var num = _MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation));
             this.Acc += parseInt(num, 16);
             // this.PC++;
         };
 
         Cpu.prototype.loadXConstant = function () {
-            var nextByte = _MemoryManager.nextByte();
+            var nextByte = _MemoryManager.nextByte(this.PC);
             this.Xreg = _MemoryManager.hexToDecimal(nextByte);
         };
 
         Cpu.prototype.loadYConstant = function () {
-            var nextByte = _MemoryManager.nextByte();
+            var nextByte = _MemoryManager.nextByte(this.PC);
             this.Yreg = _MemoryManager.hexToDecimal(nextByte);
         };
 
         Cpu.prototype.loadX = function () {
-            var memLocation = _MemoryManager.nextTwoBytes();
+            var memLocation = _MemoryManager.nextTwoBytes(this.PC);
             this.Xreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
             //this.PC++;
         };
 
         Cpu.prototype.loadY = function () {
-            var memLocation = _MemoryManager.nextTwoBytes();
+            var memLocation = _MemoryManager.nextTwoBytes(this.PC);
             this.Yreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
             //this.PC++;
         };
 
         Cpu.prototype.compareByteToX = function () {
-            var memLocation = _MemoryManager.nextTwoBytes();
+            var memLocation = _MemoryManager.nextTwoBytes(this.PC);
             if (this.Xreg === _MemoryManager.hexToDecimal(memLocation)) {
                 this.Zflag = 1;
             }
@@ -173,7 +173,7 @@ var TSOS;
 
         Cpu.prototype.incrementByte = function () {
             debugger;
-            var memLocation = _MemoryManager.nextTwoBytes();
+            var memLocation = _MemoryManager.nextTwoBytes(this.PC);
             var index = _MemoryManager.hexToDecimal(memLocation);
             var value = parseInt(_MemoryManager.getMem(index), 16);
             _MemoryManager.setMem(index, (value + 1).toString());

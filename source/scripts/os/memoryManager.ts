@@ -38,13 +38,13 @@ module TSOS {
 
 		}
 
-		public nextByte(): string {
-			return this.getMem(++_CPU.PC);
+		public nextByte(cpuPC: number): string {
+			return this.getMem(++cpuPC);
 		}
 
-		public nextTwoBytes(): string {
+		public nextTwoBytes(cpuPC: number): string {
 			var nextTwo = "";
-			nextTwo = this.getMem(++_CPU.PC) + this.getMem(++_CPU.PC);
+			nextTwo = this.getMem(++cpuPC) + this.getMem(++cpuPC);
 			nextTwo = nextTwo.substr(2,2) + nextTwo.substr(0,2);
 			return nextTwo;
 
