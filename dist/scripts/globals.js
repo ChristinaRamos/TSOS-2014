@@ -23,6 +23,8 @@ var CPU_BREAK_IRQ = 2;
 
 var SYS_CALL_IRQ = 3;
 
+var MEMORY_EXCEEDED_IRQ = 4;
+
 var STARTING_X_POS = 12.48;
 
 //

@@ -25,6 +25,8 @@ var CPU_BREAK_IRQ: number = 2;
 
 var SYS_CALL_IRQ: number = 3;
 
+var MEMORY_EXCEEDED_IRQ: number = 4;
+
 var STARTING_X_POS: number = 12.48;
 //
 // Global Variables

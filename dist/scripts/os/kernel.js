@@ -137,6 +137,10 @@ var TSOS;
                     //debugger;
                     _StdIn.sysCall();
                     break;
+                case MEMORY_EXCEEDED_IRQ:
+                    _CPU.isExecuting = false;
+                    this.krnTrapError("You are trying to access memory that doesn't exist.  Cease and desist.");
+                    break;
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
             }

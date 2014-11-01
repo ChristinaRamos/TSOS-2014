@@ -167,7 +167,7 @@ var TSOS;
         };
 
         Cpu.prototype.compareByteToX = function () {
-            debugger;
+            //debugger;
             var memLocation = _MemoryManager.nextTwoBytes();
             var memIndex = _MemoryManager.hexToDecimal(memLocation);
             var mem = _MemoryManager.getMem(memIndex);
@@ -182,8 +182,8 @@ var TSOS;
             //debugger;
             var memLocation = _MemoryManager.nextTwoBytes();
             var index = _MemoryManager.hexToDecimal(memLocation);
-            var value = parseInt(_MemoryManager.getMem(index), 16);
-            _MemoryManager.setMem(index, (value + 1).toString());
+            var value = parseInt(_MemoryManager.getMem(index), 16) + 1;
+            _MemoryManager.setMem(index, _MemoryManager.decimalToHex(value));
             //this.PC++;
         };
 
@@ -194,7 +194,7 @@ var TSOS;
         };
 
         Cpu.prototype.branch = function () {
-            debugger;
+            //debugger;
             if (this.Zflag === 0) {
                 this.PC += _MemoryManager.hexToDecimal(_MemoryManager.getMem(++this.PC).toString()) + 1;
 

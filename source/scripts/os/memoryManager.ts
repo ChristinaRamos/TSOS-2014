@@ -15,7 +15,7 @@ module TSOS {
 
         	for(var i = 0; i < _MemorySize; i++) {
         		if(i % 8 === 0) {
-        			output += "</tr><tr><td>" + "</td>";
+        			output += "</tr><tr><td><b>" + "0x" + this.decimalToHex(i) + "</b></td>";
         		}
         		output += "<td id='cell'" + i + "'>" + this.mem.memArray[i] + '</td>';
         	}
@@ -27,6 +27,9 @@ module TSOS {
 		}
 
 		public setMem(index: number, value: string): void {
+			if(index > _MemorySize) {
+				_KernelInterruptQueue.enqueue(new Interrupt(MEMORY_EXCEEDED_IRQ, null));
+			}
 			if(value.length === 1) {
 				this.mem.memArray[index] = "0" + value;
 				this.displayMem();	

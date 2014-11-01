@@ -186,7 +186,7 @@ module TSOS {
         }
 
         public compareByteToX(): void {
-            debugger;
+            //debugger;
             var memLocation = _MemoryManager.nextTwoBytes();
             var memIndex = _MemoryManager.hexToDecimal(memLocation);
             var mem = _MemoryManager.getMem(memIndex);
@@ -203,8 +203,8 @@ module TSOS {
             //debugger;
             var memLocation = _MemoryManager.nextTwoBytes();
             var index = _MemoryManager.hexToDecimal(memLocation);
-            var value = parseInt(_MemoryManager.getMem(index), 16);
-            _MemoryManager.setMem(index, (value + 1).toString());            
+            var value = parseInt(_MemoryManager.getMem(index), 16) + 1;
+            _MemoryManager.setMem(index, _MemoryManager.decimalToHex(value));            
             //this.PC++;            
             
         }
@@ -216,7 +216,7 @@ module TSOS {
         }
 
         public branch(): void {
-            debugger;
+            //debugger;
             if(this.Zflag === 0) {
                 this.PC += _MemoryManager.hexToDecimal(_MemoryManager.getMem(++this.PC).toString()) + 1;
 
