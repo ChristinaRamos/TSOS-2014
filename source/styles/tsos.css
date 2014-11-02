@@ -10,16 +10,6 @@ body {
   font-style: normal;
 }
 
- {
-    width: 300px;
-    height: 200px;
-    border: 1px solid black;
-    background-image: url('smiley.gif');
-    background-position: top left;
-    -webkit-animation: mymove 5s infinite; /* Chrome, Safari, Opera */
-    animation: mymove 5s infinite;
-}
-
 h1 {
   color: black;
   font-size: 24pt;
