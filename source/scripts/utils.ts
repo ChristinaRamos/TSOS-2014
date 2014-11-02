@@ -43,5 +43,15 @@ module TSOS {
             }
             return retVal;
         }
+
+        public static slideBackground(): void {
+            var percent = 330;
+            while(percent>200){
+                percent--;
+                var percentstr = percent + "%";
+                document.getElementById("body").setAttribute("background-position", percentstr);
+
+            }
+        }
     }
 }

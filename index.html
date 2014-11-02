@@ -4,7 +4,6 @@
    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
    <meta name="author"             content="Alan G. Labouseur" />
    <link rel="stylesheet" href="dist/styles/tsos.css" type="text/css" media="screen" />
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
    <title>
       TSOS - a browser-based virtual Operating System in TypeScript
    </title>
@@ -35,13 +34,11 @@
 
    <!-- Other Routines -->
    <script type="text/javascript" src="dist/scripts/utils.js"></script>
-   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
    <!-- Uncomment this line below to enable Glados testing -->
    <!-- <script type="text/javascript" src="http://www.labouseur.com/courses/os/projects/glados.js"></script> -->
 </head>
 
-<body onload="onDocumentLoad();">
+<body id="body" onload="onDocumentLoad();">
 
 <div id="divMain" style="width:100%;">
 
@@ -82,13 +79,15 @@
    </div>    
 
   <div id="memLog">
+    <aside>
       <label>
         Memory Display
           <br>
           <table id="memTable">
           </table>
       </label>
-  </div> 
+     </aside>
+    </div> 
     
    <div id="divLog" style="margin-left:520px;">
       <label>
