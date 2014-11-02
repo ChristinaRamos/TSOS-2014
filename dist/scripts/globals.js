@@ -19,6 +19,12 @@ var TIMER_IRQ = 0;
 // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
 var KEYBOARD_IRQ = 1;
 
+var CPU_BREAK_IRQ = 2;
+
+var SYS_CALL_IRQ = 3;
+
+var MEMORY_EXCEEDED_IRQ = 4;
+
 var STARTING_X_POS = 12.48;
 
 //
@@ -67,3 +73,14 @@ var Glados = null;
 var onDocumentLoad = function () {
     TSOS.Control.hostInit();
 };
+
+// Memory stuff
+var _MemorySize = 256;
+var _Memory;
+var _MemoryManager;
+
+// PCB stuff
+var _PID = 0;
+var _ProgramList = [];
+var _CurrentProgram = null;
+var _LineWrapped = false;

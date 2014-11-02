@@ -87,11 +87,16 @@ module TSOS {
             _CPU = new Cpu();
             _CPU.init();
 
+            _MemoryManager = new MemoryManager();
+            _MemoryManager.init();
+
             // ... then set the host clock pulse ...
             _hardwareClockID = setInterval(Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
             // .. and call the OS Kernel Bootstrap routine.
             _Kernel = new Kernel();
             _Kernel.krnBootstrap();
+
+            this.slideBackground();
         }
 
         public static hostBtnHaltOS_click(btn): void {
@@ -124,5 +129,42 @@ module TSOS {
         public static setInput(input): void {
             document.getElementById("status").innerHTML = input;    //sets input for use in shell.ts-shellStatus
         }
+
+        public static displayMemory(memory): void {
+            document.getElementById("memTable").innerHTML = memory;   
+        }
+
+        public static setMemory(memory): void {
+            document.getElementById("memtable").innerHTML = memory;
+        }
+        public static getProgramInput(): string {
+            return (<HTMLInputElement>document.getElementById("taProgramInput")).value.replace(/\s/g, '').toUpperCase();    //sets input for use in shell.ts-shellStatus
+        }
+
+        public static slideBackground(): void {
+            var percent = 330;
+            var bodyStyle = document.getElementById("body").style;
+             bodyStyle.backgroundImage = "url('http://images5.fanpop.com/image/photos/25400000/Daniel-Craig-3-daniel-craig-25487806-1280-1024.jpg')";
+            var interval = window.setInterval(function(){
+            
+                percent--;
+                var percentstr = percent + "%";
+                bodyStyle.backgroundPosition = percentstr;
+                if (percent==200)
+                    window.clearInterval(interval);
+            },100);
+  
+
+        }
+
+        public static displayPCB(output): void {
+            document.getElementById("pcbTable").innerHTML = output;   
+
+        }
+
+        public static displayCPU(output): void {
+            document.getElementById("cpuTable").innerHTML = output;               
+        }
+
     }
 }

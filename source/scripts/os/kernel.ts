@@ -54,6 +54,7 @@ module TSOS {
             if (_GLaDOS) {
                 _GLaDOS.afterStartup();
             }
+            
         }
 
         public krnShutdown() {
@@ -75,9 +76,10 @@ module TSOS {
                This is NOT the same as a TIMER, which causes an interrupt and is handled like other interrupts.
                This, on the other hand, is the clock pulse from the hardware (or host) that tells the kernel
                that it has to look for interrupts and process them if it finds any.                           */
-
+            
             // Check for an interrupt, are any. Page 560
             if (_KernelInterruptQueue.getSize() > 0) {
+                //debugger;
                 // Process the first interrupt on the interrupt queue.
                 // TODO: Implement a priority queue based on the IRQ number/id to enforce interrupt priority.
                 var interrupt = _KernelInterruptQueue.dequeue();
@@ -138,6 +140,17 @@ module TSOS {
                 case KEYBOARD_IRQ:
                     _krnKeyboardDriver.isr(params);   // Kernel mode device driver
                     _StdIn.handleInput();
+                    break;
+                case CPU_BREAK_IRQ:
+                    _CPU.isExecuting = false;
+                    break;
+                case SYS_CALL_IRQ:
+                    //debugger;
+                    _StdIn.sysCall();
+                    break;
+                case MEMORY_EXCEEDED_IRQ:
+                    _CPU.isExecuting = false;
+                    this.krnTrapError("You are trying to access memory that doesn't exist.  Cease and desist.")
                     break;
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");

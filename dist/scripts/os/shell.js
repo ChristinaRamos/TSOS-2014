@@ -65,7 +65,7 @@ var TSOS;
             // the truth
             this.commandList[this.commandList.length] = sc;
 
-            sc = new TSOS.ShellCommand(this.shellOneTrueBond, "ihatedanielcraig", "- Our Lord and Savior Daniel Craig forgives you.");
+            sc = new TSOS.ShellCommand(this.shellOneTrueBond, "ihatedanielcraig", "Our Lord and Savior Daniel Craig forgives you.");
 
             // status
             this.commandList[this.commandList.length] = sc;
@@ -82,6 +82,9 @@ var TSOS;
 
             sc = new TSOS.ShellCommand(this.shellLoad, "load", "Allows user to load code.  It better be hex.");
 
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new TSOS.ShellCommand(this.shellRun, "run", "Allows user to run a program that has been loaded into memory.");
             this.commandList[this.commandList.length] = sc;
 
             // processes - list the running processes and their IDs
@@ -297,7 +300,7 @@ var TSOS;
             }
         };
 
-        Shell.prototype.shellDate = function (args) {
+        Shell.prototype.shellDate = function () {
             var d = new Date();
             _StdOut.putText("The date is " + (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear());
             _StdOut.advanceLine();
@@ -311,11 +314,11 @@ var TSOS;
                 _StdOut.putText("AM");
         };
 
-        Shell.prototype.shellWhereAmI = function (args) {
+        Shell.prototype.shellWhereAmI = function () {
             _StdOut.putText("Bond, we have your location as approaching an airfield."); //It's a quote from a DANIEL CRAIG Bond movie :D
         };
 
-        Shell.prototype.shellOneTrueBond = function (args) {
+        Shell.prototype.shellOneTrueBond = function () {
             _StdOut.putText("Our Lord Daniel Craig carries the weight of our sins.");
             window.open("https://www.youtube.com/watch?v=i_y7YEIphts", "", "width=1600, height=900"); //This should make you happy
         };
@@ -335,11 +338,11 @@ var TSOS;
             var isHex = true;
 
             //all those valid hex characters.  what a bunch of kool kidz
-            var hexCharacters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", " "];
+            var hexCharacters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", " "];
 
             //the stuff in the damn user program box casted because typescript is silly
             //and made lower case because I don't want to check for capitals
-            input = document.getElementById("taProgramInput").value.trim().toLowerCase();
+            input = TSOS.Control.getProgramInput();
 
             if (input === "") {
                 _StdOut.putText("Have you tried actually typing something?"); //well, have you?
@@ -353,8 +356,24 @@ var TSOS;
                 if (isHex === false) {
                     _StdOut.putText("This isn't hex.  Are you even trying?"); //well, are you?
                 } else {
-                    _StdOut.putText("This is hex.  Fanfuckintastic."); //I was frustrated by this point...
+                    //_StdOut.putText("This is hex.  Fanfuckintastic.");        //I was frustrated by this point...
+                    if (input.length % 2 != 0) {
+                        _StdOut.putText("This isn't an even number of hex characters.");
+                    } else {
+                        _MemoryManager.loadProg();
+                    }
                 }
+            }
+        };
+
+        Shell.prototype.shellRun = function (args) {
+            if (typeof args[0] === "undefined") {
+                _StdOut.putText("PID not provided.");
+            } else if (typeof _ProgramList[parseInt(args[0])] === "undefined") {
+                _StdOut.putText("Incorrect PID.");
+            } else {
+                _CurrentProgram = args[0];
+                _CPU.isExecuting = true;
             }
         };
         return Shell;

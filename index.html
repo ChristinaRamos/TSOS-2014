@@ -15,6 +15,8 @@
    <script type="text/javascript" src="dist/scripts/host/control.js"></script>
    <script type="text/javascript" src="dist/scripts/host/devices.js"></script>
    <script type="text/javascript" src="dist/scripts/host/cpu.js"></script>
+   <script type="text/javascript" src="dist/scripts/host/memory.js"></script>
+   
 
    <!-- Virtual OS Routines: Make sure Kernel code is last, since it needs those above it. -->
    <script type="text/javascript" src="dist/scripts/os/interrupt.js"></script>
@@ -26,6 +28,8 @@
    <script type="text/javascript" src="dist/scripts/os/shell.js"></script>
    <script type="text/javascript" src="dist/scripts/os/shellCommand.js"></script>
    <script type="text/javascript" src="dist/scripts/os/userCommand.js"></script>
+   <script type="text/javascript" src="dist/scripts/os/memoryManager.js"></script>
+   <script type="text/javascript" src="dist/scripts/os/pcb.js"></script>
    <script type="text/javascript" src="dist/scripts/os/kernel.js"></script>
 
    <!-- Other Routines -->
@@ -34,7 +38,7 @@
    <!-- <script type="text/javascript" src="http://www.labouseur.com/courses/os/projects/glados.js"></script> -->
 </head>
 
-<body onload="onDocumentLoad();">
+<body id="body" onload="onDocumentLoad();">
 
 <div id="divMain" style="width:100%;">
 
@@ -72,8 +76,17 @@
               height="500px"
               tabindex="3">
       </canvas>
-   </div>      
+   </div>   
 
+  <div id="memLog">
+      <label>
+        Memory Display
+          <br>
+          <table id="memTable">
+          </table>
+      </label>
+  </div> 
+    
    <div id="divLog" style="margin-left:520px;">
       <label>
          Host Log
@@ -93,19 +106,41 @@
          ></textarea>
       </label>
    </div>
- 
 
    <div id="divUserProgramInput" style="margin-left:520px;">
-      <label>
-         User Program Input
-         <br>
-         <textarea name="taProgramInput"
-                   id  ="taProgramInput"
-                   rows="8"
-                   cols="48"
-         ></textarea>
-      </label>
+      <aside>
+        <label>
+           User Program Input
+           <br>
+           <textarea name="taProgramInput"
+                     id  ="taProgramInput"
+                     rows="8"
+                     cols="48"
+           ></textarea>
+        </label>
+      </aside>
    </div>
+
+  <div id="PCB"> 
+   <label>
+     PCB Display
+       <br>
+         <table id="pcbTable">
+         </table>
+   </label>
+  </div>
+
+<br>
+<br>
+
+  <div id="CPU"> 
+   <label>
+     CPU Display
+       <br>
+         <table id="cpuTable">
+         </table>
+   </label>
+  </div>
 
 </div>
 

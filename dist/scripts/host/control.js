@@ -82,12 +82,17 @@ var TSOS;
             _CPU = new TSOS.Cpu();
             _CPU.init();
 
+            _MemoryManager = new TSOS.MemoryManager();
+            _MemoryManager.init();
+
             // ... then set the host clock pulse ...
             _hardwareClockID = setInterval(TSOS.Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
 
             // .. and call the OS Kernel Bootstrap routine.
             _Kernel = new TSOS.Kernel();
             _Kernel.krnBootstrap();
+
+            this.slideBackground();
         };
 
         Control.hostBtnHaltOS_click = function (btn) {
@@ -120,6 +125,38 @@ var TSOS;
 
         Control.setInput = function (input) {
             document.getElementById("status").innerHTML = input; //sets input for use in shell.ts-shellStatus
+        };
+
+        Control.displayMemory = function (memory) {
+            document.getElementById("memTable").innerHTML = memory;
+        };
+
+        Control.setMemory = function (memory) {
+            document.getElementById("memtable").innerHTML = memory;
+        };
+        Control.getProgramInput = function () {
+            return document.getElementById("taProgramInput").value.replace(/\s/g, '').toUpperCase();
+        };
+
+        Control.slideBackground = function () {
+            var percent = 330;
+            var bodyStyle = document.getElementById("body").style;
+            bodyStyle.backgroundImage = "url('http://images5.fanpop.com/image/photos/25400000/Daniel-Craig-3-daniel-craig-25487806-1280-1024.jpg')";
+            var interval = window.setInterval(function () {
+                percent--;
+                var percentstr = percent + "%";
+                bodyStyle.backgroundPosition = percentstr;
+                if (percent == 200)
+                    window.clearInterval(interval);
+            }, 100);
+        };
+
+        Control.displayPCB = function (output) {
+            document.getElementById("pcbTable").innerHTML = output;
+        };
+
+        Control.displayCPU = function (output) {
+            document.getElementById("cpuTable").innerHTML = output;
         };
         return Control;
     })();
