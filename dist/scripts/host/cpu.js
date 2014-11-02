@@ -36,7 +36,6 @@ var TSOS;
             this.isExecuting = false;
         };
         Cpu.prototype.cycle = function () {
-            //debugger;
             _Kernel.krnTrace('CPU cycle');
 
             // TODO: Accumulate CPU usage and profiling statistics here.
@@ -106,7 +105,6 @@ var TSOS;
                     break;
 
                 case "FF":
-                    //debugger;
                     this.sysCall();
                     break;
 
@@ -116,6 +114,7 @@ var TSOS;
             }
 
             this.PC++;
+            _MemoryManager.displayMem();
 
             //this.printResults();
             this.displayPCB();
@@ -130,11 +129,9 @@ var TSOS;
         Cpu.prototype.loadAcc = function () {
             var memLocation = _MemoryManager.hexToDecimal(_MemoryManager.nextTwoBytes());
             this.Acc = _MemoryManager.hexToDecimal(_MemoryManager.getMem((memLocation)));
-            //this.PC++;
         };
 
         Cpu.prototype.storeAcc = function () {
-            //debugger;
             var memLocation = _MemoryManager.nextTwoBytes();
             _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), _MemoryManager.decimalToHex(this.Acc));
             //this.PC++;
@@ -170,19 +167,18 @@ var TSOS;
         };
 
         Cpu.prototype.compareByteToX = function () {
-            //debugger;
             var memLocation = _MemoryManager.nextTwoBytes();
             var memIndex = _MemoryManager.hexToDecimal(memLocation);
             var mem = _MemoryManager.getMem(memIndex);
             var memNum = _MemoryManager.hexToDecimal(mem);
             if (memNum === this.Xreg) {
                 this.Zflag = 1;
-            }
+            } else
+                this.Zflag = 0;
             //this.PC++;
         };
 
         Cpu.prototype.incrementByte = function () {
-            //debugger;
             var memLocation = _MemoryManager.nextTwoBytes();
             var index = _MemoryManager.hexToDecimal(memLocation);
             var value = parseInt(_MemoryManager.getMem(index), 16) + 1;
@@ -197,7 +193,6 @@ var TSOS;
         };
 
         Cpu.prototype.branch = function () {
-            //debugger;
             if (this.Zflag === 0) {
                 this.PC += _MemoryManager.hexToDecimal(_MemoryManager.getMem(++this.PC).toString()) + 1;
 
@@ -209,7 +204,6 @@ var TSOS;
         };
 
         Cpu.prototype.sysCall = function () {
-            //debugger;
             _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SYS_CALL_IRQ, null));
         };
 
