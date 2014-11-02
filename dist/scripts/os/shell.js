@@ -360,6 +360,7 @@ var TSOS;
                     if (input.length % 2 != 0) {
                         _StdOut.putText("This isn't an even number of hex characters.");
                     } else {
+                        //Go load the program for realsies.
                         _MemoryManager.loadProg();
                     }
                 }

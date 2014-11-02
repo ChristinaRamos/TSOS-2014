@@ -21,13 +21,13 @@ var TIMER_IRQ: number = 0;  // Pages 23 (timer), 9 (interrupts), and 561 (interr
                             // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
 var KEYBOARD_IRQ: number = 1;
 
-var CPU_BREAK_IRQ: number = 2;
+var CPU_BREAK_IRQ: number = 2;	//IRQ for stopping the CPU from executing
 
-var SYS_CALL_IRQ: number = 3;
+var SYS_CALL_IRQ: number = 3;	//IRQ for opcode FF
 
-var MEMORY_EXCEEDED_IRQ: number = 4;
-
-var STARTING_X_POS: number = 12.48;
+var MEMORY_EXCEEDED_IRQ: number = 4;	//IRQ for someone screwed up bad
+	
+var STARTING_X_POS: number = 12.48;		//Magic numbers are bad so here's a global for the x position right after the prompt.
 //
 // Global Variables
 //

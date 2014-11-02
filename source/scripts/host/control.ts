@@ -131,22 +131,22 @@ module TSOS {
         }
 
         public static displayMemory(memory): void {
-            document.getElementById("memTable").innerHTML = memory;   
+            document.getElementById("memTable").innerHTML = memory;   //displays memory.  Surprise.
         }
 
-        public static setMemory(memory): void {
-            document.getElementById("memtable").innerHTML = memory;
-        }
         public static getProgramInput(): string {
+            //Get the crap from the user program input box and rip the spaces out of its body
+            //leaving gaping holes where hope used to be
             return (<HTMLInputElement>document.getElementById("taProgramInput")).value.replace(/\s/g, '').toUpperCase();    //sets input for use in shell.ts-shellStatus
         }
 
         public static slideBackground(): void {
+            //Max x position of background
             var percent = 330;
             var bodyStyle = document.getElementById("body").style;
              bodyStyle.backgroundImage = "url('http://images5.fanpop.com/image/photos/25400000/Daniel-Craig-3-daniel-craig-25487806-1280-1024.jpg')";
             var interval = window.setInterval(function(){
-            
+                //Move our lovely image of our lord and savior Daniel Craig over by 1% every 1/10 second
                 percent--;
                 var percentstr = percent + "%";
                 bodyStyle.backgroundPosition = percentstr;
@@ -158,11 +158,13 @@ module TSOS {
         }
 
         public static displayPCB(output): void {
+            //Self explanatory
             document.getElementById("pcbTable").innerHTML = output;   
 
         }
 
         public static displayCPU(output): void {
+            //Self explanatory
             document.getElementById("cpuTable").innerHTML = output;               
         }
 

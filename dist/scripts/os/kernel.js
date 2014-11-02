@@ -135,7 +135,7 @@ var TSOS;
                     break;
                 case SYS_CALL_IRQ:
                     //debugger;
-                    _StdIn.sysCall();
+                    _StdIn.sysCall(); //Go to print Y register stuff
                     break;
                 case MEMORY_EXCEEDED_IRQ:
                     _CPU.isExecuting = false;
