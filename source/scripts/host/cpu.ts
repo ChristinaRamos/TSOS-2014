@@ -39,7 +39,6 @@ module TSOS {
             this.memory.init();
         }
         public cycle(): void {
-            //debugger;
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
@@ -110,7 +109,7 @@ module TSOS {
                     break;
 
                 case "FF":
-                //debugger;
+
                     this.sysCall();
                     break;
 
@@ -120,6 +119,7 @@ module TSOS {
             }
 
             this.PC++;
+            _MemoryManager.displayMem();
             //this.printResults();
             this.displayPCB();
             this.displayCPU();
@@ -128,21 +128,14 @@ module TSOS {
         public loadConstant(): void {
             var nextByte = _MemoryManager.nextByte();
             this.Acc = _MemoryManager.hexToDecimal(nextByte);
-                        
-            
-
         }
 
         public loadAcc(): void {
             var memLocation = _MemoryManager.hexToDecimal(_MemoryManager.nextTwoBytes());
             this.Acc = _MemoryManager.hexToDecimal(_MemoryManager.getMem((memLocation)));
-            
-            //this.PC++;           
-            
         }
 
         public storeAcc(): void {
-            //debugger;
             var memLocation = _MemoryManager.nextTwoBytes();
             _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), _MemoryManager.decimalToHex(this.Acc));
             
@@ -190,7 +183,6 @@ module TSOS {
         }
 
         public compareByteToX(): void {
-            //debugger;
             var memLocation = _MemoryManager.nextTwoBytes();
             var memIndex = _MemoryManager.hexToDecimal(memLocation);
             var mem = _MemoryManager.getMem(memIndex);
@@ -198,13 +190,14 @@ module TSOS {
             if(memNum === this.Xreg) {
                 this.Zflag = 1;
             }
+            else
+                this.Zflag = 0;
             
             //this.PC++;            
             
         }
 
         public incrementByte(): void {
-            //debugger;
             var memLocation = _MemoryManager.nextTwoBytes();
             var index = _MemoryManager.hexToDecimal(memLocation);
             var value = parseInt(_MemoryManager.getMem(index), 16) + 1;
@@ -220,7 +213,6 @@ module TSOS {
         }
 
         public branch(): void {
-            //debugger;
             if(this.Zflag === 0) {
                 this.PC += _MemoryManager.hexToDecimal(_MemoryManager.getMem(++this.PC).toString()) + 1;
 
@@ -234,7 +226,6 @@ module TSOS {
         }
 
         public sysCall(): void {
-            //debugger;
             _KernelInterruptQueue.enqueue(new Interrupt(SYS_CALL_IRQ, null));
         }
 

@@ -16,7 +16,10 @@ var TSOS;
                 if (i % 8 === 0) {
                     output += "</tr><tr><td><b>" + "0x" + this.decimalToHex(i) + "</b></td>";
                 }
-                output += "<td id='cell'" + i + "'>" + this.mem.memArray[i] + '</td>';
+                if (i === _CPU.PC) {
+                    output += "<td id='cell' bgcolor='#FFB585'" + i + "'>" + this.mem.memArray[i] + '</td>';
+                } else
+                    output += "<td id='cell'" + i + "'>" + this.mem.memArray[i] + '</td>';
             }
             output += "</tr>";
             TSOS.Control.displayMemory(output);
