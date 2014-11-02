@@ -150,6 +150,14 @@ var TSOS;
                     window.clearInterval(interval);
             }, 100);
         };
+
+        Control.displayPCB = function (output) {
+            document.getElementById("pcbTable").innerHTML = output;
+        };
+
+        Control.displayCPU = function (output) {
+            document.getElementById("cpuTable").innerHTML = output;
+        };
         return Control;
     })();
     TSOS.Control = Control;

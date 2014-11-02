@@ -157,5 +157,14 @@ module TSOS {
 
         }
 
+        public static displayPCB(output): void {
+            document.getElementById("pcbTable").innerHTML = output;   
+
+        }
+
+        public static displayCPU(output): void {
+            document.getElementById("cpuTable").innerHTML = output;               
+        }
+
     }
 }

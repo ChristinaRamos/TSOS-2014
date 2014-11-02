@@ -116,7 +116,10 @@ var TSOS;
             }
 
             this.PC++;
-            this.printResults();
+
+            //this.printResults();
+            this.displayPCB();
+            this.displayCPU();
         };
 
         Cpu.prototype.loadConstant = function () {
@@ -243,6 +246,30 @@ var TSOS;
             _ProgramList[_CurrentProgram].xReg = this.Xreg;
             _ProgramList[_CurrentProgram].yReg = this.Yreg;
             _ProgramList[_CurrentProgram].zFlag = this.Zflag;
+        };
+
+        Cpu.prototype.displayPCB = function () {
+            var output = "<tr>";
+            output += "<td id='cell'" + 0 + "'>" + "PC: " + this.PC.toString() + '</td>';
+            output += "<td id='cell'" + 1 + "'>" + "Acc: " + this.Acc.toString() + '</td>';
+            output += "<td id='cell'" + 2 + "'>" + "Xreg: " + this.Xreg.toString() + '</td>';
+            output += "<td id='cell'" + 3 + "'>" + "Yreg: " + this.Yreg.toString() + '</td>';
+            output += "<td id='cell'" + 4 + "'>" + "Zflag: " + this.Zflag.toString() + '</td>';
+            output += "</tr>";
+
+            TSOS.Control.displayPCB(output);
+        };
+
+        Cpu.prototype.displayCPU = function () {
+            var output = "<tr>";
+            output += "<td id='cell'" + 0 + "'>" + "PC: " + this.PC.toString() + '</td>';
+            output += "<td id='cell'" + 1 + "'>" + "Acc: " + this.Acc.toString() + '</td>';
+            output += "<td id='cell'" + 2 + "'>" + "Xreg: " + this.Xreg.toString() + '</td>';
+            output += "<td id='cell'" + 3 + "'>" + "Yreg: " + this.Yreg.toString() + '</td>';
+            output += "<td id='cell'" + 4 + "'>" + "Zflag: " + this.Zflag.toString() + '</td>';
+            output += "</tr>";
+
+            TSOS.Control.displayCPU(output);
         };
         return Cpu;
     })();

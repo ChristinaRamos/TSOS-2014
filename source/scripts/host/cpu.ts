@@ -118,7 +118,9 @@ module TSOS {
             }
 
             this.PC++;
-            this.printResults();
+            //this.printResults();
+            this.displayPCB();
+            this.displayCPU();
         }
 
         public loadConstant(): void {
@@ -274,6 +276,30 @@ module TSOS {
             _ProgramList[_CurrentProgram].xReg = this.Xreg;
             _ProgramList[_CurrentProgram].yReg = this.Yreg;
             _ProgramList[_CurrentProgram].zFlag = this.Zflag;
+        }
+
+        public displayPCB(): void {
+            var output = "<tr>";
+            output += "<td id='cell'" + 0 + "'>" + "PC: " + this.PC.toString() + '</td>';
+            output += "<td id='cell'" + 1 + "'>" + "Acc: " + this.Acc.toString() + '</td>';
+            output += "<td id='cell'" + 2 + "'>" + "Xreg: " + this.Xreg.toString() + '</td>';
+            output += "<td id='cell'" + 3 + "'>" + "Yreg: " + this.Yreg.toString() + '</td>';
+            output += "<td id='cell'" + 4 + "'>" + "Zflag: " + this.Zflag.toString() + '</td>';
+            output += "</tr>"
+
+            Control.displayPCB(output);
+        }
+
+        public displayCPU(): void {
+            var output = "<tr>";
+            output += "<td id='cell'" + 0 + "'>" + "PC: " + this.PC.toString() + '</td>';
+            output += "<td id='cell'" + 1 + "'>" + "Acc: " + this.Acc.toString() + '</td>';
+            output += "<td id='cell'" + 2 + "'>" + "Xreg: " + this.Xreg.toString() + '</td>';
+            output += "<td id='cell'" + 3 + "'>" + "Yreg: " + this.Yreg.toString() + '</td>';
+            output += "<td id='cell'" + 4 + "'>" + "Zflag: " + this.Zflag.toString() + '</td>';
+            output += "</tr>"
+
+            Control.displayCPU(output);
         }
     }
 }
