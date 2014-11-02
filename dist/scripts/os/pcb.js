@@ -1,3 +1,4 @@
+//PCB class
 var TSOS;
 (function (TSOS) {
     var PCB = (function () {
@@ -16,6 +17,8 @@ var TSOS;
             this.zFlag = zFlag;
             this.pid = pid;
             this.alreadyRan = alreadyRan;
+            //Every time a PCB is created, it's a new program
+            //so increment dat PID
             this.pid = _PID;
             _PID++;
         }

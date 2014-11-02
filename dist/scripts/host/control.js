@@ -128,21 +128,22 @@ var TSOS;
         };
 
         Control.displayMemory = function (memory) {
-            document.getElementById("memTable").innerHTML = memory;
+            document.getElementById("memTable").innerHTML = memory; //displays memory.  Surprise.
         };
 
-        Control.setMemory = function (memory) {
-            document.getElementById("memtable").innerHTML = memory;
-        };
         Control.getProgramInput = function () {
+            //Get the crap from the user program input box and rip the spaces out of its body
+            //leaving gaping holes where hope used to be
             return document.getElementById("taProgramInput").value.replace(/\s/g, '').toUpperCase();
         };
 
         Control.slideBackground = function () {
+            //Max x position of background
             var percent = 330;
             var bodyStyle = document.getElementById("body").style;
             bodyStyle.backgroundImage = "url('http://images5.fanpop.com/image/photos/25400000/Daniel-Craig-3-daniel-craig-25487806-1280-1024.jpg')";
             var interval = window.setInterval(function () {
+                //Move our lovely image of our lord and savior Daniel Craig over by 1% every 1/10 second
                 percent--;
                 var percentstr = percent + "%";
                 bodyStyle.backgroundPosition = percentstr;
@@ -152,10 +153,12 @@ var TSOS;
         };
 
         Control.displayPCB = function (output) {
+            //Self explanatory
             document.getElementById("pcbTable").innerHTML = output;
         };
 
         Control.displayCPU = function (output) {
+            //Self explanatory
             document.getElementById("cpuTable").innerHTML = output;
         };
         return Control;

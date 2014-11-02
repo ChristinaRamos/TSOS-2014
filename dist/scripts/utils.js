@@ -42,15 +42,6 @@ var TSOS;
             }
             return retVal;
         };
-
-        Utils.slideBackground = function () {
-            var percent = 330;
-            while (percent > 200) {
-                percent--;
-                var percentstr = percent + "%";
-                document.getElementById("body").setAttribute("background-position", percentstr);
-            }
-        };
         return Utils;
     })();
     TSOS.Utils = Utils;

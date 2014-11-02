@@ -42,20 +42,21 @@ module TSOS {
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
+            // If the program already ran, print a thing and stop executing.
             if(_ProgramList[_CurrentProgram].alreadyRan === true) {
                 _StdOut.putText("This program has already run.  You better go catch it.");
                 this.isExecuting = false;
                 _StdOut.advanceLine();
                 _OsShell.putPrompt();
             }
-            
+            //Otherwise, let's do this thing.
             else {
                 this.execProg(_MemoryManager.getMem(this.PC));
             }
         }
 
         public execProg(opcode): void {
-            debugger;
+            //Call a function based on the opcode
             switch(opcode) {
                 case "A9": 
                     this.loadConstant();
@@ -109,7 +110,6 @@ module TSOS {
                     break;
 
                 case "FF":
-
                     this.sysCall();
                     break;
 
@@ -117,8 +117,9 @@ module TSOS {
                     this.isExecuting = false;
                     _Kernel.krnTrapError("Invalid opcode.  Welcome to DIE.");
             }
-
+            //increment the PC after executing the instruction
             this.PC++;
+            //display errythang
             _MemoryManager.displayMem();
             //this.printResults();
             this.displayPCB();
@@ -126,63 +127,58 @@ module TSOS {
         }
 
         public loadConstant(): void {
+            //Set the accumulator to the value in the next memory byte
             var nextByte = _MemoryManager.nextByte();
             this.Acc = _MemoryManager.hexToDecimal(nextByte);
         }
 
         public loadAcc(): void {
+            //Set the accumulator to the value stored in the specified memory byte
             var memLocation = _MemoryManager.hexToDecimal(_MemoryManager.nextTwoBytes());
             this.Acc = _MemoryManager.hexToDecimal(_MemoryManager.getMem((memLocation)));
         }
 
         public storeAcc(): void {
+            //Store the accumulator at the specified memory location
             var memLocation = _MemoryManager.nextTwoBytes();
             _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), _MemoryManager.decimalToHex(this.Acc));
-            
-            //this.PC++;
-            
-
         }
 
         public addWithCarry(): void {
+            //Add the accumulator and the value at the specified memory location
+            //Store result in accumulator
             var memLocation = _MemoryManager.nextTwoBytes();
             var num = _MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation));
             this.Acc += parseInt(num, 16);
-           // this.PC++;
-            
         }
 
         public loadXConstant(): void {
+            //Load x with the constant in the next byte
             var nextByte = _MemoryManager.nextByte();
-            this.Xreg = _MemoryManager.hexToDecimal(nextByte);
-                        
-            
+            this.Xreg = _MemoryManager.hexToDecimal(nextByte);           
         }
 
         public loadYConstant(): void {
+            //Load y with the constant in the next byte
             var nextByte = _MemoryManager.nextByte();
-            this.Yreg = _MemoryManager.hexToDecimal(nextByte);
-                        
-            
+            this.Yreg = _MemoryManager.hexToDecimal(nextByte);    
         }
 
         public loadX(): void {
+            //Load x with the value at the specified byte in memory
             var memLocation = _MemoryManager.nextTwoBytes();
-            this.Xreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
-            
-            //this.PC++;            
-            
+            this.Xreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);    
         }
 
         public loadY(): void {
+            //Load y with the value at the specified byte in memory
             var memLocation = _MemoryManager.nextTwoBytes();
-            this.Yreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
-            
-            //this.PC++;            
-            
+            this.Yreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);    
         }
 
         public compareByteToX(): void {
+            //Compare the contents of the x register with the value at the specified byte in memory
+            //If they're equal, set the Z flag to 1, otherwise set it to 0
             var memLocation = _MemoryManager.nextTwoBytes();
             var memIndex = _MemoryManager.hexToDecimal(memLocation);
             var mem = _MemoryManager.getMem(memIndex);
@@ -192,44 +188,46 @@ module TSOS {
             }
             else
                 this.Zflag = 0;
-            
-            //this.PC++;            
-            
         }
 
         public incrementByte(): void {
+            //Increment the value at the specified memory byte by 1
             var memLocation = _MemoryManager.nextTwoBytes();
             var index = _MemoryManager.hexToDecimal(memLocation);
             var value = parseInt(_MemoryManager.getMem(index), 16) + 1;
             _MemoryManager.setMem(index, _MemoryManager.decimalToHex(value));            
-            //this.PC++;            
-            
         }
 
         public sysBreak(): void {
+            //Store the CPU's current state in the PCB.
             this.updatePCB();
             _ProgramList[_CurrentProgram].alreadyRan = true;
             _KernelInterruptQueue.enqueue(new Interrupt(CPU_BREAK_IRQ, null));
         }
 
         public branch(): void {
+            //If Z flag is 0, branch by the number stored in the specified memory byte
             if(this.Zflag === 0) {
                 this.PC += _MemoryManager.hexToDecimal(_MemoryManager.getMem(++this.PC).toString()) + 1;
-
+                //If the PC exceeds memory, wrap it around
                 if(this.PC >= _MemorySize) {
                     this.PC -= _MemorySize;
                 }
             }
-
+            //If we don't do anything, advance the PC so we don't die
             else
                 this.PC++;
         }
 
         public sysCall(): void {
+            //Put another pancake on the Kernel
+            //Wait, it's a queue not a stack
+            //Starve then
             _KernelInterruptQueue.enqueue(new Interrupt(SYS_CALL_IRQ, null));
         }
 
         public printResults(): void {
+            //Make sure we print stuff with leading zeroes if needed
             var acc = "";
             var x = "";
             var y = "";
@@ -264,6 +262,7 @@ module TSOS {
         }
 
         public updatePCB(): void {
+            //Store CPU's current state in PCB
             _ProgramList[_CurrentProgram].pC = this.PC;
             _ProgramList[_CurrentProgram].acc = this.Acc;
             _ProgramList[_CurrentProgram].xReg = this.Xreg;
@@ -272,6 +271,7 @@ module TSOS {
         }
 
         public displayPCB(): void {
+            //Kind of self explanatory
             var output = "<tr>";
             output += "<td id='cell'" + 0 + "'>" + "PC: " + this.PC.toString() + '</td>';
             output += "<td id='cell'" + 1 + "'>" + "Acc: " + this.Acc.toString() + '</td>';
@@ -284,6 +284,7 @@ module TSOS {
         }
 
         public displayCPU(): void {
+            //For this project's purposes, display CPU and display PCB do the same thing.
             var output = "<tr>";
             output += "<td id='cell'" + 0 + "'>" + "PC: " + this.PC.toString() + '</td>';
             output += "<td id='cell'" + 1 + "'>" + "Acc: " + this.Acc.toString() + '</td>';
