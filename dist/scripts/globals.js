@@ -75,7 +75,8 @@ var onDocumentLoad = function () {
 };
 
 // Memory stuff
-var _MemorySize = 256;
+var _MemoryBlocks = 3;
+var _MemorySize = 256 * _MemoryBlocks;
 var _Memory;
 var _MemoryManager;
 

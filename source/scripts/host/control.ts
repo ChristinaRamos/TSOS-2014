@@ -152,7 +152,7 @@ module TSOS {
                 bodyStyle.backgroundPosition = percentstr;
                 if (percent==200)
                     window.clearInterval(interval);
-            },100);
+        },100);
   
 
         }

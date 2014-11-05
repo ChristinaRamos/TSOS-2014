@@ -117,6 +117,10 @@ module TSOS {
                                   "Allows user to run a program that has been loaded into memory.");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new ShellCommand(this.shellClearMem,
+                                  "clearmem",
+                                  "Wipes all blocks of memory.  Clean slate.  New beginnings.");
+            this.commandList[this.commandList.length] = sc;
 
 
             // processes - list the running processes and their IDs
@@ -411,6 +415,12 @@ module TSOS {
                 _CurrentProgram = args[0];
                 _CPU.isExecuting = true;
             }
+        }
+
+        public shellClearMem() {
+            _MemoryManager.memoryWipe();
+            _StdOut.putText("Memory has been cleared.");
+            _Console.advanceLine();
         }
     }
 }

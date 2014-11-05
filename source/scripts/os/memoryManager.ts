@@ -102,5 +102,10 @@ module TSOS {
 			//Lower case hex looks stupid.
 			return decNum.toString(16).toUpperCase();
 		}
+
+		public memoryWipe(): void {
+			this.mem.init();
+			this.displayMem();
+		}
 	}
 }

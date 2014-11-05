@@ -141,7 +141,7 @@ var TSOS;
             //Max x position of background
             var percent = 330;
             var bodyStyle = document.getElementById("body").style;
-            bodyStyle.backgroundImage = "url('http://images5.fanpop.com/image/photos/25400000/Daniel-Craig-3-daniel-craig-25487806-1280-1024.jpg')";
+            bodyStyle.backgroundImage = "url('http://i.imgur.com/GeCLCIB.jpg')";
             var interval = window.setInterval(function () {
                 //Move our lovely image of our lord and savior Daniel Craig over by 1% every 1/10 second
                 percent--;

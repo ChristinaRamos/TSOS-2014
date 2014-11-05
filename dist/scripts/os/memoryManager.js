@@ -103,6 +103,11 @@ var TSOS;
             //Lower case hex looks stupid.
             return decNum.toString(16).toUpperCase();
         };
+
+        MemoryManager.prototype.memoryWipe = function () {
+            this.mem.init();
+            this.displayMem();
+        };
         return MemoryManager;
     })();
     TSOS.MemoryManager = MemoryManager;

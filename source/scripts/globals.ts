@@ -77,7 +77,8 @@ var onDocumentLoad = function() {
 };
 
 // Memory stuff
-var _MemorySize: number = 256;
+var _MemoryBlocks: number = 3;
+var _MemorySize: number = 256 * _MemoryBlocks;
 var _Memory: TSOS.Memory;
 var _MemoryManager: TSOS.MemoryManager;
 
