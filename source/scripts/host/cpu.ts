@@ -35,9 +35,12 @@ module TSOS {
             this.Yreg = 0;
             this.Zflag = 0;
             this.isExecuting = false;
+            this.displayCPU();
         }
         public cycle(): void {
             _Kernel.krnTrace('CPU cycle');
+            this.displayPCB();
+            this.displayCPU();
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             // If the program already ran, print a thing and stop executing.
@@ -120,8 +123,7 @@ module TSOS {
             //display errythang
             _MemoryManager.displayMem();
             //this.printResults();
-            this.displayPCB();
-            this.displayCPU();
+            
         }
 
         public loadConstant(): void {

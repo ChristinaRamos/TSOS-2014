@@ -90,6 +90,9 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellClearMem, "clearmem", "Wipes all blocks of memory.  Clean slate.  New beginnings.");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new TSOS.ShellCommand(this.shellQuantum, "quantum", "Allows user to set Round Robin quantum.  Tweet.");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -385,6 +388,11 @@ var TSOS;
             _MemoryManager.memoryWipe();
             _StdOut.putText("Memory has been cleared.");
             _Console.advanceLine();
+        };
+
+        Shell.prototype.shellQuantum = function (args) {
+            _Quantum = args[0];
+            _StdOut.putText("Quantum has been set to " + args[0] + ".");
         };
         return Shell;
     })();

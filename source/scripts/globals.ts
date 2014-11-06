@@ -87,3 +87,6 @@ var _PID = 0;
 var _ProgramList = [];
 var _CurrentProgram: number =  null;
 var _LineWrapped: boolean = false;
+
+//Scheduling stuff
+var _Quantum: number = 6;

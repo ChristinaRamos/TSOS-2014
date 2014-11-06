@@ -34,9 +34,12 @@ var TSOS;
             this.Yreg = 0;
             this.Zflag = 0;
             this.isExecuting = false;
+            this.displayCPU();
         };
         Cpu.prototype.cycle = function () {
             _Kernel.krnTrace('CPU cycle');
+            this.displayPCB();
+            this.displayCPU();
 
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
@@ -118,10 +121,7 @@ var TSOS;
 
             //display errythang
             _MemoryManager.displayMem();
-
             //this.printResults();
-            this.displayPCB();
-            this.displayCPU();
         };
 
         Cpu.prototype.loadConstant = function () {

@@ -73,12 +73,12 @@ module TSOS {
 		}
 
 		public loadProg(): void {
-			//Reset the PC to 0 
-			_CPU.PC = 0;
+			//Set the PC to the correct block in memory 
+			_CPU.PC = (_ProgramList.length % 3) * (_MemorySize/_MemoryBlocks);
 			//Get the whole string of input from user program input box
 			var program = Control.getProgramInput();
 			var substr = "";
-			var count = 0;
+			var count = _CPU.PC;
 			//Split the program into two's. A9 07 8D 40 00.
 			for(var i = 0; i < program.length; i += 2) {
 				//Set each cell in memory to the pairs of hex things

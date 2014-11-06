@@ -122,6 +122,11 @@ module TSOS {
                                   "Wipes all blocks of memory.  Clean slate.  New beginnings.");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new ShellCommand(this.shellQuantum,
+                                  "quantum",
+                                  "Allows user to set Round Robin quantum.  Tweet.");
+            this.commandList[this.commandList.length] = sc;
+
 
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
@@ -421,6 +426,11 @@ module TSOS {
             _MemoryManager.memoryWipe();
             _StdOut.putText("Memory has been cleared.");
             _Console.advanceLine();
+        }
+
+        public shellQuantum(args): void {
+            _Quantum = args[0];
+            _StdOut.putText("Quantum has been set to " + args[0] + ".");
         }
     }
 }
