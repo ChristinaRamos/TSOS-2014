@@ -82,7 +82,8 @@ var _MemoryManager;
 
 // PCB stuff
 var _PID = 0;
-var _ProgramList = [];
+var _ResidentQueue = [];
+var _ReadyQueue = [];
 var _CurrentProgram = null;
 var _LineWrapped = false;
 

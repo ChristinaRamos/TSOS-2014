@@ -72,7 +72,7 @@ var TSOS;
 
         MemoryManager.prototype.loadProg = function () {
             //Set the PC to the correct block in memory
-            _CPU.PC = (_ProgramList.length % 3) * (_MemorySize / _MemoryBlocks);
+            _CPU.PC = (_ResidentQueue.length % 3) * (_MemorySize / _MemoryBlocks);
 
             //Get the whole string of input from user program input box
             var program = TSOS.Control.getProgramInput();
@@ -90,7 +90,7 @@ var TSOS;
             _StdOut.putText("PID is " + _PID + ".");
 
             //Assign a PCB to the program
-            _ProgramList[_ProgramList.length] = new TSOS.PCB;
+            _ResidentQueue[_ResidentQueue.length] = new TSOS.PCB;
         };
 
         MemoryManager.prototype.hexToDecimal = function (hexNum) {

@@ -44,7 +44,7 @@ var TSOS;
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             // If the program already ran, print a thing and stop executing.
-            if (_ProgramList[_CurrentProgram].alreadyRan === true) {
+            if (_ResidentQueue[_CurrentProgram].alreadyRan === true) {
                 _StdOut.putText("This program has already run.  You better go catch it.");
                 this.isExecuting = false;
                 _StdOut.advanceLine();
@@ -198,7 +198,7 @@ var TSOS;
         Cpu.prototype.sysBreak = function () {
             //Store the CPU's current state in the PCB.
             this.updatePCB();
-            _ProgramList[_CurrentProgram].alreadyRan = true;
+            _ResidentQueue[_CurrentProgram].alreadyRan = true;
             _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CPU_BREAK_IRQ, null));
         };
 
@@ -252,11 +252,11 @@ var TSOS;
 
         Cpu.prototype.updatePCB = function () {
             //Store CPU's current state in PCB
-            _ProgramList[_CurrentProgram].pC = this.PC;
-            _ProgramList[_CurrentProgram].acc = this.Acc;
-            _ProgramList[_CurrentProgram].xReg = this.Xreg;
-            _ProgramList[_CurrentProgram].yReg = this.Yreg;
-            _ProgramList[_CurrentProgram].zFlag = this.Zflag;
+            _ResidentQueue[_CurrentProgram].pC = this.PC;
+            _ResidentQueue[_CurrentProgram].acc = this.Acc;
+            _ResidentQueue[_CurrentProgram].xReg = this.Xreg;
+            _ResidentQueue[_CurrentProgram].yReg = this.Yreg;
+            _ResidentQueue[_CurrentProgram].zFlag = this.Zflag;
         };
 
         Cpu.prototype.displayPCB = function () {

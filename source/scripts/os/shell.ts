@@ -127,6 +127,20 @@ module TSOS {
                                   "Allows user to set Round Robin quantum.  Tweet.");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new ShellCommand(this.runAll,
+                                  "runall",
+                                  "Allows user to run all loaded programs at once.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.ps,
+                                  "ps",
+                                  "Allows user to display PIDs of all active processes.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.kill,
+                                  "kill",
+                                  "Allows user to kill an active process.");
+
 
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
@@ -412,7 +426,7 @@ module TSOS {
             if(typeof args[0] === "undefined") {
                 _StdOut.putText("PID not provided.");
             }
-            else if(typeof _ProgramList[parseInt(args[0])] === "undefined") {
+            else if(typeof _ResidentQueue[parseInt(args[0])] === "undefined") {
                 _StdOut.putText("Incorrect PID.");
             }
 
@@ -431,6 +445,18 @@ module TSOS {
         public shellQuantum(args): void {
             _Quantum = args[0];
             _StdOut.putText("Quantum has been set to " + args[0] + ".");
+        }
+
+        public runAll(): void {
+
+        }
+
+        public ps(): void {
+
+        }
+
+        public kill(): void {
+
         }
     }
 }

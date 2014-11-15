@@ -74,7 +74,7 @@ module TSOS {
 
 		public loadProg(): void {
 			//Set the PC to the correct block in memory 
-			_CPU.PC = (_ProgramList.length % 3) * (_MemorySize/_MemoryBlocks);
+			_CPU.PC = (_ResidentQueue.length % 3) * (_MemorySize/_MemoryBlocks);
 			//Get the whole string of input from user program input box
 			var program = Control.getProgramInput();
 			var substr = "";
@@ -89,7 +89,7 @@ module TSOS {
 			//Announce the PID to console.
 			_StdOut.putText("PID is " + _PID + ".");
 			//Assign a PCB to the program
-			_ProgramList[_ProgramList.length] = new PCB;
+			_ResidentQueue[_ResidentQueue.length] = new PCB;
 		}
 
 		public hexToDecimal(hexNum: string) {
