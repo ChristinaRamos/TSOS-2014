@@ -81,11 +81,11 @@ var _Memory;
 var _MemoryManager;
 
 // PCB stuff
-var _PID = 0;
+var _PID = -1;
 var _ResidentQueue = [];
-var _ReadyQueue = [];
 var _CurrentProgram = null;
 var _LineWrapped = false;
 
 //Scheduling stuff
-var _Quantum = 6;
+var _QuantumOfSolace = 6;
+var _CPUScheduler;

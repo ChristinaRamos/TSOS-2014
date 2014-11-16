@@ -16,5 +16,13 @@ module TSOS {
 			this.pid = _PID;
 			_PID++;
 		}
+
+		public setBase(num: number): void {
+			this.base = num;
+		}
+
+		public setLimit(num: number): void {
+			this.limit = num;
+		}
 	}
 }

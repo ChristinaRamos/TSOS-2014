@@ -1,7 +1,7 @@
 module TSOS {
 
     export class MemoryManager {
-
+    	public nextBlock;
         constructor(public mem: Memory = new Memory(_MemorySize)) {
         	//It's just a stupid array.
         }
@@ -74,11 +74,16 @@ module TSOS {
 
 		public loadProg(): void {
 			//Set the PC to the correct block in memory 
-			_CPU.PC = (_ResidentQueue.length % 3) * (_MemorySize/_MemoryBlocks);
+			this.nextBlock = this.nextEmptyBlock();
+			//Assign a PCB to the program
+			_ResidentQueue[_ResidentQueue.length] = new PCB();
+			_ResidentQueue[_ResidentQueue.length - 1].setBase(this.nextEmptyBlock());
+			_ResidentQueue[_ResidentQueue.length - 1].setLimit( _ResidentQueue[_ResidentQueue.length - 1].base + 255);
+			
 			//Get the whole string of input from user program input box
 			var program = Control.getProgramInput();
 			var substr = "";
-			var count = _CPU.PC;
+			var count = this.nextBlock;
 			//Split the program into two's. A9 07 8D 40 00.
 			for(var i = 0; i < program.length; i += 2) {
 				//Set each cell in memory to the pairs of hex things
@@ -88,8 +93,6 @@ module TSOS {
 			}
 			//Announce the PID to console.
 			_StdOut.putText("PID is " + _PID + ".");
-			//Assign a PCB to the program
-			_ResidentQueue[_ResidentQueue.length] = new PCB;
 		}
 
 		public hexToDecimal(hexNum: string) {
@@ -104,8 +107,29 @@ module TSOS {
 		}
 
 		public memoryWipe(): void {
+			_CPU.isExecuting = false;
+			_ResidentQueue = [];
 			this.mem.init();
 			this.displayMem();
+		}
+
+		public nextEmptyBlock() {
+			var firstBlock = 0;
+			var secondBlock = 256;
+			var thirdBlock = 512;
+
+			if(this.getMem(firstBlock) === "00") {
+				return firstBlock;
+			}
+			else if(this.getMem(secondBlock) === "00") {
+				return secondBlock;
+			}
+			else if(this.getMem(thirdBlock) === "00") {
+				return thirdBlock;
+			}
+			else
+				_KernelInterruptQueue.enqueue(new Interrupt(MEMORY_EXCEEDED_IRQ, null));
+				return;
 		}
 	}
 }

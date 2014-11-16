@@ -72,12 +72,17 @@ var TSOS;
 
         MemoryManager.prototype.loadProg = function () {
             //Set the PC to the correct block in memory
-            _CPU.PC = (_ResidentQueue.length % 3) * (_MemorySize / _MemoryBlocks);
+            this.nextBlock = this.nextEmptyBlock();
+
+            //Assign a PCB to the program
+            _ResidentQueue[_ResidentQueue.length] = new TSOS.PCB();
+            _ResidentQueue[_ResidentQueue.length - 1].setBase(this.nextEmptyBlock());
+            _ResidentQueue[_ResidentQueue.length - 1].setLimit(_ResidentQueue[_ResidentQueue.length - 1].base + 255);
 
             //Get the whole string of input from user program input box
             var program = TSOS.Control.getProgramInput();
             var substr = "";
-            var count = _CPU.PC;
+            var count = this.nextBlock;
 
             for (var i = 0; i < program.length; i += 2) {
                 //Set each cell in memory to the pairs of hex things
@@ -88,9 +93,6 @@ var TSOS;
 
             //Announce the PID to console.
             _StdOut.putText("PID is " + _PID + ".");
-
-            //Assign a PCB to the program
-            _ResidentQueue[_ResidentQueue.length] = new TSOS.PCB;
         };
 
         MemoryManager.prototype.hexToDecimal = function (hexNum) {
@@ -105,8 +107,26 @@ var TSOS;
         };
 
         MemoryManager.prototype.memoryWipe = function () {
+            _CPU.isExecuting = false;
+            _ResidentQueue = [];
             this.mem.init();
             this.displayMem();
+        };
+
+        MemoryManager.prototype.nextEmptyBlock = function () {
+            var firstBlock = 0;
+            var secondBlock = 256;
+            var thirdBlock = 512;
+
+            if (this.getMem(firstBlock) === "00") {
+                return firstBlock;
+            } else if (this.getMem(secondBlock) === "00") {
+                return secondBlock;
+            } else if (this.getMem(thirdBlock) === "00") {
+                return thirdBlock;
+            } else
+                _KernelInterruptQueue.enqueue(new TSOS.Interrupt(MEMORY_EXCEEDED_IRQ, null));
+            return;
         };
         return MemoryManager;
     })();

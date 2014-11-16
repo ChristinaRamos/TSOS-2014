@@ -93,6 +93,14 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellQuantum, "quantum", "Allows user to set Round Robin quantum.  Tweet.");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new TSOS.ShellCommand(this.runAll, "runall", "Allows user to run all loaded programs at once.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new TSOS.ShellCommand(this.ps, "ps", "Allows user to display PIDs of all active processes.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new TSOS.ShellCommand(this.kill, "kill", "Allows user to kill an active process.");
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -391,8 +399,17 @@ var TSOS;
         };
 
         Shell.prototype.shellQuantum = function (args) {
-            _Quantum = args[0];
+            _QuantumOfSolace = args[0];
             _StdOut.putText("Quantum has been set to " + args[0] + ".");
+        };
+
+        Shell.prototype.runAll = function () {
+        };
+
+        Shell.prototype.ps = function () {
+        };
+
+        Shell.prototype.kill = function () {
         };
         return Shell;
     })();
