@@ -16,5 +16,11 @@ module TSOS {
     			this.readyQueue.push(this.residentQueue.shift());
     		}
     	}
+
+    	public roundRobinSwitch(): void {
+    		while(this.ticks !== 6) {
+    			
+    		}
+    	}
     }
 }
