@@ -11,16 +11,11 @@ module TSOS {
     	}
 
     	public runAll(): void {
-    		var residentLength = this.residentList.getSize();
-    		for(var i = 0; i < residentLength; i++) {
-    			this.readyQueue.enqueue(this.residentList.dequeue());
-    		}
+    		
     	}
 
     	public rockinRobin(): void {
-    		while(this.ticks !== 6) {
-    			
-    		}
+    		
     	}
     }
 }

@@ -81,10 +81,10 @@ var TSOS;
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             } else if (_CPU.isExecuting) {
-                //    if(_CPUScheduler.ticks < _QuantumOfSolace)
-                _CPU.cycle();
-                /*    else
-                _CPUScheduler.rockinRobin();*/
+                if (_CPUScheduler.ticks < _QuantumOfSolace)
+                    _CPU.cycle();
+                else
+                    _CPUScheduler.rockinRobin();
             } else {
                 this.krnTrace("Idle");
             }

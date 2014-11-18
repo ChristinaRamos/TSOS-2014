@@ -36,15 +36,32 @@ module TSOS {
         }
 
         public getMem(index: number): string {
-        	//Gets the memory value at the specified index.
-			return this.mem.memArray[index];
+        	if(index > _CurrentProgram.limit || index < _CurrentProgram.base) {
+				_KernelInterruptQueue.enqueue(new Interrupt(MEMORY_EXCEEDED_IRQ, null));
+			}
+			else
+				return this.mem.memArray[index];
+		}
+
+		public setMemBoundsCheck(index: number, value: string): void {
+			//Don't exceed memory's limit or we all die.
+			if(index > _CurrentProgram.limit || index < _CurrentProgram.base) {
+				_KernelInterruptQueue.enqueue(new Interrupt(MEMORY_EXCEEDED_IRQ, null));
+			}
+			//Add a leading 0 if the value is only 1 digit.  Otherwise, it looks freakin' weird.
+			if(value.length === 1) {
+				this.mem.memArray[index] = "0" + value;
+				this.displayMem();	
+			}
+			//Otherwise, set memory with the given value
+			else {
+				this.mem.memArray[index] = value;
+				this.displayMem();
+			}
+
 		}
 
 		public setMem(index: number, value: string): void {
-			//Don't exceed memory's limit or we all die.
-			if(index > _MemorySize) {
-				_KernelInterruptQueue.enqueue(new Interrupt(MEMORY_EXCEEDED_IRQ, null));
-			}
 			//Add a leading 0 if the value is only 1 digit.  Otherwise, it looks freakin' weird.
 			if(value.length === 1) {
 				this.mem.memArray[index] = "0" + value;

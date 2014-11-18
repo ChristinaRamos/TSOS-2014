@@ -37,16 +37,29 @@ var TSOS;
         };
 
         MemoryManager.prototype.getMem = function (index) {
-            //Gets the memory value at the specified index.
-            return this.mem.memArray[index];
+            if (index > _CurrentProgram.limit || index < _CurrentProgram.base) {
+                _KernelInterruptQueue.enqueue(new TSOS.Interrupt(MEMORY_EXCEEDED_IRQ, null));
+            } else
+                return this.mem.memArray[index];
         };
 
-        MemoryManager.prototype.setMem = function (index, value) {
+        MemoryManager.prototype.setMemBoundsCheck = function (index, value) {
             //Don't exceed memory's limit or we all die.
-            if (index > _MemorySize) {
+            if (index > _CurrentProgram.limit || index < _CurrentProgram.base) {
                 _KernelInterruptQueue.enqueue(new TSOS.Interrupt(MEMORY_EXCEEDED_IRQ, null));
             }
 
+            //Add a leading 0 if the value is only 1 digit.  Otherwise, it looks freakin' weird.
+            if (value.length === 1) {
+                this.mem.memArray[index] = "0" + value;
+                this.displayMem();
+            } else {
+                this.mem.memArray[index] = value;
+                this.displayMem();
+            }
+        };
+
+        MemoryManager.prototype.setMem = function (index, value) {
             //Add a leading 0 if the value is only 1 digit.  Otherwise, it looks freakin' weird.
             if (value.length === 1) {
                 this.mem.memArray[index] = "0" + value;

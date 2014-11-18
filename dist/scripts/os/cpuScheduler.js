@@ -14,15 +14,9 @@ var TSOS;
         };
 
         CPUScheduler.prototype.runAll = function () {
-            var residentLength = this.residentList.getSize();
-            for (var i = 0; i < residentLength; i++) {
-                this.readyQueue.enqueue(this.residentList.dequeue());
-            }
         };
 
         CPUScheduler.prototype.rockinRobin = function () {
-            while (this.ticks !== 6) {
-            }
         };
         return CPUScheduler;
     })();

@@ -142,7 +142,7 @@ module TSOS {
         public storeAcc(): void {
             //Store the Accumulator at the specified memory location
             var memLocation = _MemoryManager.nextTwoBytes();
-            _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), _MemoryManager.decimalToHex(this.Acc));
+            _MemoryManager.setMemBoundsCheck(_MemoryManager.hexToDecimal(memLocation), _MemoryManager.decimalToHex(this.Acc));
         }
 
         public addWithCarry(): void {
@@ -196,7 +196,7 @@ module TSOS {
             var memLocation = _MemoryManager.nextTwoBytes();
             var index = _MemoryManager.hexToDecimal(memLocation);
             var value = parseInt(_MemoryManager.getMem(index), 16) + 1;
-            _MemoryManager.setMem(index, _MemoryManager.decimalToHex(value));            
+            _MemoryManager.setMemBoundsCheck(index, _MemoryManager.decimalToHex(value));            
         }
 
         public sysBreak(): void {
@@ -303,6 +303,7 @@ module TSOS {
             this.Xreg = _CurrentProgram.Xreg;
             this.Yreg = _CurrentProgram.Yreg;
             this.Zflag = _CurrentProgram.Zflag;
+            this.displayCPU();
         }
     }
 }
