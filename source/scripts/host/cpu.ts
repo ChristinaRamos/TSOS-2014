@@ -214,6 +214,7 @@ module TSOS {
                 //If the PC exceeds memory, wrap it around
                 if(this.PC >= _CurrentProgram.limit) {
                     this.PC -= _CurrentProgram.limit + 1;
+                    this.PC += _CurrentProgram.base;
                 }
             }
             //If we don't do anything, advance the PC so we don't die
