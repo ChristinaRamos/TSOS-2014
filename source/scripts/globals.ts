@@ -83,9 +83,9 @@ var _Memory: TSOS.Memory;
 var _MemoryManager: TSOS.MemoryManager;
 
 // PCB stuff
-var _PID = -1;
-var _ResidentQueue = [];
-var _CurrentProgram: number =  null;
+var _PID = 0;
+var _CurrentPID: number =  null;
+var _CurrentProgram;
 var _LineWrapped: boolean = false;
 
 //Scheduling stuff

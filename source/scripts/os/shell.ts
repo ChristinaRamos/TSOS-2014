@@ -414,7 +414,7 @@ module TSOS {
                     }
 
                     else {                  
-                    //Go load the program for realsies.     
+                    //Go load the program for realsies.   
                         _MemoryManager.loadProg();
                     }
                 }
@@ -423,16 +423,31 @@ module TSOS {
         }
 
         public shellRun(args) {
+            debugger;
             if(typeof args[0] === "undefined") {
                 _StdOut.putText("PID not provided.");
             }
-            else if(typeof _ResidentQueue[parseInt(args[0])] === "undefined") {
+            else if (_CPUScheduler.residentList.get(parseInt(args[0])) ===false){
                 _StdOut.putText("Incorrect PID.");
             }
-
             else {
-                _CurrentProgram = args[0];
+                _CurrentPID = parseInt(args[0]);
+                if(_CPUScheduler.readyQueue.isEmpty()) {
+                    _CurrentProgram = _CPUScheduler.residentList.getRemove(_CurrentPID);
+                    _CPU.updateCPU();
+                    _CPU.isExecuting = true;
+                }
+
+                else
+                    _CPUScheduler.readyQueue.enqueue(_CPUScheduler.residentList.getRemove(_CurrentPID));
+                
+
+                // Remove current PID from resident queue and put it in ready queue
+                // If current program pcb === null, or if the cpu is NOT executing
+                // that means no program is currently running, so dequeue that program
+                // from the ready queue and set it to the current pcb
                 _CPU.isExecuting = true;
+                
             }
         }
 
@@ -460,4 +475,3 @@ module TSOS {
         }
     }
 }
-

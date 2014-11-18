@@ -1,23 +1,23 @@
 module TSOS {
     export class CPUScheduler {
-    	constructor(public readyQueue = [],
-    				public residentQueue = _ResidentQueue,
+    	constructor(public readyQueue: Queue = new Queue(),
+    				public residentList: Queue = new Queue(),
     				public ticks: number = 0) {
 
     	}
 
-    	public load(program: PCB): void {
-    		this.residentQueue.push(program);
+    	public loadProg(program: PCB): void {
+    		this.residentList.enqueue(program);
     	}
 
     	public runAll(): void {
-    		var residentLength = this.residentQueue.length;
+    		var residentLength = this.residentList.getSize();
     		for(var i = 0; i < residentLength; i++) {
-    			this.readyQueue.push(this.residentQueue.shift());
+    			this.readyQueue.enqueue(this.residentList.dequeue());
     		}
     	}
 
-    	public roundRobinSwitch(): void {
+    	public rockinRobin(): void {
     		while(this.ticks !== 6) {
     			
     		}

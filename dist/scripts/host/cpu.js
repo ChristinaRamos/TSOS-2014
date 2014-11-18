@@ -44,7 +44,7 @@ var TSOS;
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             // If the program already ran, print a thing and stop executing.
-            if (_ResidentQueue[_CurrentProgram].alreadyRan === true) {
+            if (_CurrentProgram.state === "Ran") {
                 _StdOut.putText("This program has already run.  You better go catch it.");
                 this.isExecuting = false;
                 _StdOut.advanceLine();
@@ -125,26 +125,26 @@ var TSOS;
         };
 
         Cpu.prototype.loadConstant = function () {
-            //Set the accumulator to the value in the next memory byte
+            //Set the Accumulator to the value in the next memory byte
             var nextByte = _MemoryManager.nextByte();
             this.Acc = _MemoryManager.hexToDecimal(nextByte);
         };
 
         Cpu.prototype.loadAcc = function () {
-            //Set the accumulator to the value stored in the specified memory byte
+            //Set the Accumulator to the value stored in the specified memory byte
             var memLocation = _MemoryManager.hexToDecimal(_MemoryManager.nextTwoBytes());
             this.Acc = _MemoryManager.hexToDecimal(_MemoryManager.getMem((memLocation)));
         };
 
         Cpu.prototype.storeAcc = function () {
-            //Store the accumulator at the specified memory location
+            //Store the Accumulator at the specified memory location
             var memLocation = _MemoryManager.nextTwoBytes();
             _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), _MemoryManager.decimalToHex(this.Acc));
         };
 
         Cpu.prototype.addWithCarry = function () {
-            //Add the accumulator and the value at the specified memory location
-            //Store result in accumulator
+            //Add the Accumulator and the value at the specified memory location
+            //Store result in Accumulator
             var memLocation = _MemoryManager.nextTwoBytes();
             var num = _MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation));
             this.Acc += parseInt(num, 16);
@@ -198,7 +198,7 @@ var TSOS;
         Cpu.prototype.sysBreak = function () {
             //Store the CPU's current state in the PCB.
             this.updatePCB();
-            _ResidentQueue[_CurrentProgram].alreadyRan = true;
+            _CurrentProgram.state = "Ran";
             _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CPU_BREAK_IRQ, null));
         };
 
@@ -224,14 +224,14 @@ var TSOS;
 
         Cpu.prototype.printResults = function () {
             //Make sure we print stuff with leading zeroes if needed
-            var acc = "";
+            var Acc = "";
             var x = "";
             var y = "";
 
             if (this.Acc.toString().length === 1) {
-                acc = "0" + this.Acc.toString();
+                Acc = "0" + this.Acc.toString();
             } else {
-                acc = this.Acc.toString();
+                Acc = this.Acc.toString();
             }
 
             if (this.Xreg.toString().length === 1) {
@@ -245,28 +245,28 @@ var TSOS;
             } else {
                 y = this.Yreg.toString();
             }
-            _StdOut.putText("PC: " + this.PC.toString() + " | Acc: " + acc + " | X Reg: " + x + " | Y Reg: " + y + " | zFlag: " + this.Zflag.toString());
+            _StdOut.putText("PC: " + this.PC.toString() + " | Acc: " + Acc + " | X Reg: " + x + " | Y Reg: " + y + " | Zflag: " + this.Zflag.toString());
             _Console.advanceLine();
             _OsShell.putPrompt();
         };
 
         Cpu.prototype.updatePCB = function () {
             //Store CPU's current state in PCB
-            _ResidentQueue[_CurrentProgram].pC = this.PC;
-            _ResidentQueue[_CurrentProgram].acc = this.Acc;
-            _ResidentQueue[_CurrentProgram].xReg = this.Xreg;
-            _ResidentQueue[_CurrentProgram].yReg = this.Yreg;
-            _ResidentQueue[_CurrentProgram].zFlag = this.Zflag;
+            _CPUScheduler.residentList[_CurrentPID].PC = this.PC;
+            _CPUScheduler.residentList[_CurrentPID].Acc = this.Acc;
+            _CPUScheduler.residentList[_CurrentPID].Xreg = this.Xreg;
+            _CPUScheduler.residentList[_CurrentPID].Yreg = this.Yreg;
+            _CPUScheduler.residentList[_CurrentPID].Zflag = this.Zflag;
         };
 
         Cpu.prototype.displayPCB = function () {
-            //Kind of self explanatory
+            debugger;
             var output = "<tr>";
-            output += "<td id='cell'" + 0 + "'>" + "PC: " + this.PC.toString() + '</td>';
-            output += "<td id='cell'" + 1 + "'>" + "Acc: " + this.Acc.toString() + '</td>';
-            output += "<td id='cell'" + 2 + "'>" + "Xreg: " + this.Xreg.toString() + '</td>';
-            output += "<td id='cell'" + 3 + "'>" + "Yreg: " + this.Yreg.toString() + '</td>';
-            output += "<td id='cell'" + 4 + "'>" + "Zflag: " + this.Zflag.toString() + '</td>';
+            output += "<td id='cell'" + 0 + "'>" + "PC: " + _CurrentProgram.PC.toString() + '</td>';
+            output += "<td id='cell'" + 1 + "'>" + "Acc: " + _CurrentProgram.Acc.toString() + '</td>';
+            output += "<td id='cell'" + 2 + "'>" + "Xreg: " + _CurrentProgram.Xreg.toString() + '</td>';
+            output += "<td id='cell'" + 3 + "'>" + "Yreg: " + _CurrentProgram.Yreg.toString() + '</td>';
+            output += "<td id='cell'" + 4 + "'>" + "Zflag: " + _CurrentProgram.Zflag.toString() + '</td>';
             output += "</tr>";
 
             TSOS.Control.displayPCB(output);
@@ -283,6 +283,14 @@ var TSOS;
             output += "</tr>";
 
             TSOS.Control.displayCPU(output);
+        };
+
+        Cpu.prototype.updateCPU = function () {
+            this.PC = _CurrentProgram.PC;
+            this.Acc = _CurrentProgram.Acc;
+            this.Xreg = _CurrentProgram.Xreg;
+            this.Yreg = _CurrentProgram.Yreg;
+            this.Zflag = _CurrentProgram.Zflag;
         };
         return Cpu;
     })();

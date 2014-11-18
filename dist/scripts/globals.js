@@ -81,9 +81,9 @@ var _Memory;
 var _MemoryManager;
 
 // PCB stuff
-var _PID = -1;
-var _ResidentQueue = [];
-var _CurrentProgram = null;
+var _PID = 0;
+var _CurrentPID = null;
+var _CurrentProgram;
 var _LineWrapped = false;
 
 //Scheduling stuff

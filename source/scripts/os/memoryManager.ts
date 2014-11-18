@@ -76,9 +76,12 @@ module TSOS {
 			//Set the PC to the correct block in memory 
 			this.nextBlock = this.nextEmptyBlock();
 			//Assign a PCB to the program
-			_ResidentQueue[_ResidentQueue.length] = new PCB();
-			_ResidentQueue[_ResidentQueue.length - 1].setBase(this.nextEmptyBlock());
-			_ResidentQueue[_ResidentQueue.length - 1].setLimit( _ResidentQueue[_ResidentQueue.length - 1].base + 255);
+			_CPUScheduler.loadProg(new PCB());
+			var residentSize = _CPUScheduler.residentList.getSize();
+			//set base to next empty block
+			_CPUScheduler.residentList.setBase(residentSize - 1, this.nextBlock);
+			//set limit to next empty block's end point
+			_CPUScheduler.residentList.setLimit(residentSize - 1, this.nextBlock + 255);
 			
 			//Get the whole string of input from user program input box
 			var program = Control.getProgramInput();
@@ -92,7 +95,7 @@ module TSOS {
 				count++;
 			}
 			//Announce the PID to console.
-			_StdOut.putText("PID is " + _PID + ".");
+			_StdOut.putText("PID is " + (_PID-1) + ".");
 		}
 
 		public hexToDecimal(hexNum: string) {
@@ -108,7 +111,7 @@ module TSOS {
 
 		public memoryWipe(): void {
 			_CPU.isExecuting = false;
-			_ResidentQueue = [];
+			_CPUScheduler.residentList = new Queue();
 			this.mem.init();
 			this.displayMem();
 		}

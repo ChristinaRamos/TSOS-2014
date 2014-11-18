@@ -96,6 +96,8 @@ module TSOS {
             _Kernel = new Kernel();
             _Kernel.krnBootstrap();
 
+            _CPUScheduler = new CPUScheduler();
+
             this.slideBackground();
         }
 

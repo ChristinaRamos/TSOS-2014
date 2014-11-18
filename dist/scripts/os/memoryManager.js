@@ -75,9 +75,14 @@ var TSOS;
             this.nextBlock = this.nextEmptyBlock();
 
             //Assign a PCB to the program
-            _ResidentQueue[_ResidentQueue.length] = new TSOS.PCB();
-            _ResidentQueue[_ResidentQueue.length - 1].setBase(this.nextEmptyBlock());
-            _ResidentQueue[_ResidentQueue.length - 1].setLimit(_ResidentQueue[_ResidentQueue.length - 1].base + 255);
+            _CPUScheduler.loadProg(new TSOS.PCB());
+            var residentSize = _CPUScheduler.residentList.getSize();
+
+            //set base to next empty block
+            _CPUScheduler.residentList.setBase(residentSize - 1, this.nextBlock);
+
+            //set limit to next empty block's end point
+            _CPUScheduler.residentList.setLimit(residentSize - 1, this.nextBlock + 255);
 
             //Get the whole string of input from user program input box
             var program = TSOS.Control.getProgramInput();
@@ -92,7 +97,7 @@ var TSOS;
             }
 
             //Announce the PID to console.
-            _StdOut.putText("PID is " + _PID + ".");
+            _StdOut.putText("PID is " + (_PID - 1) + ".");
         };
 
         MemoryManager.prototype.hexToDecimal = function (hexNum) {
@@ -108,7 +113,7 @@ var TSOS;
 
         MemoryManager.prototype.memoryWipe = function () {
             _CPU.isExecuting = false;
-            _ResidentQueue = [];
+            _CPUScheduler.residentList = new TSOS.Queue();
             this.mem.init();
             this.displayMem();
         };

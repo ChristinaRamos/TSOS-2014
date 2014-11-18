@@ -92,6 +92,8 @@ var TSOS;
             _Kernel = new TSOS.Kernel();
             _Kernel.krnBootstrap();
 
+            _CPUScheduler = new TSOS.CPUScheduler();
+
             this.slideBackground();
         };
 
