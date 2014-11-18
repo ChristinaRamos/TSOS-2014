@@ -414,7 +414,7 @@ module TSOS {
                     }
 
                     else {                  
-                    //Go load the program for realsies.   
+                    //Go load the program for realsies.
                         _MemoryManager.loadProg();
                     }
                 }
@@ -423,7 +423,6 @@ module TSOS {
         }
 
         public shellRun(args) {
-            debugger;
             if(typeof args[0] === "undefined") {
                 _StdOut.putText("PID not provided.");
             }

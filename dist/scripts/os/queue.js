@@ -62,6 +62,9 @@ var TSOS;
         Queue.prototype.setBase = function (index, value) {
             this.q[index].setBase(value);
         };
+        Queue.prototype.setPC = function (index, value) {
+            this.q[index].PC = value;
+        };
 
         Queue.prototype.setLimit = function (index, value) {
             this.q[index].setLimit(value);

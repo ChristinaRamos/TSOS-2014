@@ -55,6 +55,8 @@ var TSOS;
         };
 
         Cpu.prototype.execProg = function (opcode) {
+            debugger;
+
             switch (opcode) {
                 case "A9":
                     this.loadConstant();
@@ -208,8 +210,8 @@ var TSOS;
                 this.PC += _MemoryManager.hexToDecimal(_MemoryManager.getMem(++this.PC).toString()) + 1;
 
                 //If the PC exceeds memory, wrap it around
-                if (this.PC >= _MemorySize) {
-                    this.PC -= _MemorySize;
+                if (this.PC >= _CurrentProgram.limit) {
+                    this.PC -= _CurrentProgram.limit + 1;
                 }
             } else
                 this.PC++;
@@ -252,15 +254,15 @@ var TSOS;
 
         Cpu.prototype.updatePCB = function () {
             //Store CPU's current state in PCB
-            _CPUScheduler.residentList[_CurrentPID].PC = this.PC;
-            _CPUScheduler.residentList[_CurrentPID].Acc = this.Acc;
-            _CPUScheduler.residentList[_CurrentPID].Xreg = this.Xreg;
-            _CPUScheduler.residentList[_CurrentPID].Yreg = this.Yreg;
-            _CPUScheduler.residentList[_CurrentPID].Zflag = this.Zflag;
+            _CurrentProgram.PC = this.PC;
+            _CurrentProgram.Acc = this.Acc;
+            _CurrentProgram.Xreg = this.Xreg;
+            _CurrentProgram.Yreg = this.Yreg;
+            _CurrentProgram.Zflag = this.Zflag;
         };
 
         Cpu.prototype.displayPCB = function () {
-            debugger;
+            //Kind of self explanatory
             var output = "<tr>";
             output += "<td id='cell'" + 0 + "'>" + "PC: " + _CurrentProgram.PC.toString() + '</td>';
             output += "<td id='cell'" + 1 + "'>" + "Acc: " + _CurrentProgram.Acc.toString() + '</td>';

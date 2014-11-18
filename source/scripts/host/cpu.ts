@@ -57,6 +57,7 @@ module TSOS {
         }
 
         public execProg(opcode): void {
+            debugger;
             //Call a function based on the opcode
             switch(opcode) {
                 case "A9": 
@@ -210,8 +211,8 @@ module TSOS {
             if(this.Zflag === 0) {
                 this.PC += _MemoryManager.hexToDecimal(_MemoryManager.getMem(++this.PC).toString()) + 1;
                 //If the PC exceeds memory, wrap it around
-                if(this.PC >= _MemorySize) {
-                    this.PC -= _MemorySize;
+                if(this.PC >= _CurrentProgram.limit) {
+                    this.PC -= _CurrentProgram.limit + 1;
                 }
             }
             //If we don't do anything, advance the PC so we don't die
@@ -263,16 +264,15 @@ module TSOS {
 
         public updatePCB(): void {
             //Store CPU's current state in PCB
-            _CPUScheduler.residentList[_CurrentPID].PC = this.PC;
-            _CPUScheduler.residentList[_CurrentPID].Acc = this.Acc;
-            _CPUScheduler.residentList[_CurrentPID].Xreg = this.Xreg;
-            _CPUScheduler.residentList[_CurrentPID].Yreg = this.Yreg;
-            _CPUScheduler.residentList[_CurrentPID].Zflag = this.Zflag;
+            _CurrentProgram.PC = this.PC;
+            _CurrentProgram.Acc = this.Acc;
+            _CurrentProgram.Xreg = this.Xreg;
+            _CurrentProgram.Yreg = this.Yreg;
+            _CurrentProgram.Zflag = this.Zflag;
         }
 
         public displayPCB(): void {
             //Kind of self explanatory
-            debugger;
             var output = "<tr>";
             output += "<td id='cell'" + 0 + "'>" + "PC: " + _CurrentProgram.PC.toString() + '</td>';
             output += "<td id='cell'" + 1 + "'>" + "Acc: " + _CurrentProgram.Acc.toString() + '</td>';

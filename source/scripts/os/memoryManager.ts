@@ -82,6 +82,8 @@ module TSOS {
 			_CPUScheduler.residentList.setBase(residentSize - 1, this.nextBlock);
 			//set limit to next empty block's end point
 			_CPUScheduler.residentList.setLimit(residentSize - 1, this.nextBlock + 255);
+			// set pc to the proper start place
+			_CPUScheduler.residentList.setPC(residentSize - 1, this.nextBlock);
 			
 			//Get the whole string of input from user program input box
 			var program = Control.getProgramInput();
@@ -121,13 +123,13 @@ module TSOS {
 			var secondBlock = 256;
 			var thirdBlock = 512;
 
-			if(this.getMem(firstBlock) === "00") {
+			if(this.mem.memArray[firstBlock] === "00") {
 				return firstBlock;
 			}
-			else if(this.getMem(secondBlock) === "00") {
+			else if(this.mem.memArray[secondBlock] === "00") {
 				return secondBlock;
 			}
-			else if(this.getMem(thirdBlock) === "00") {
+			else if(this.mem.memArray[thirdBlock] === "00") {
 				return thirdBlock;
 			}
 			else

@@ -64,6 +64,9 @@ module TSOS {
         public setBase(index: number, value: number): void {
             this.q[index].setBase(value); 
         }
+        public setPC(index:number, value:number):void{
+            this.q[index].PC = value;
+        }
 
         public setLimit(index: number, value: number): void {
             this.q[index].setLimit(value);

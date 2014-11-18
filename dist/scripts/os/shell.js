@@ -382,7 +382,6 @@ var TSOS;
         };
 
         Shell.prototype.shellRun = function (args) {
-            debugger;
             if (typeof args[0] === "undefined") {
                 _StdOut.putText("PID not provided.");
             } else if (_CPUScheduler.residentList.get(parseInt(args[0])) === false) {
