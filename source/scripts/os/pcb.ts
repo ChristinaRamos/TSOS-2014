@@ -8,7 +8,6 @@ module TSOS {
 					public Yreg: number = 0,
 					public Zflag: number = 0,
 					public pid: number = 0,
-					public alreadyRan: boolean = false,
 					public base: number = 0,
 					public limit: number = 0,
 					public state: string = "New") {

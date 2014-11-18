@@ -45,7 +45,6 @@ var TSOS;
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             // If the program already ran, print a thing and stop executing.
             if (_CurrentProgram.state === "Ran") {
-                _StdOut.putText("This program has already run.  You better go catch it.");
                 this.isExecuting = false;
                 _StdOut.advanceLine();
                 _OsShell.putPrompt();
@@ -56,8 +55,6 @@ var TSOS;
         };
 
         Cpu.prototype.execProg = function (opcode) {
-            debugger;
-
             switch (opcode) {
                 case "A9":
                     this.loadConstant();
@@ -202,7 +199,10 @@ var TSOS;
             //Store the CPU's current state in the PCB.
             this.updatePCB();
             _CurrentProgram.state = "Ran";
-            _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CPU_BREAK_IRQ, null));
+            if (_CPUScheduler.readyQueue.getSize() < 1) {
+                _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CPU_BREAK_IRQ, null));
+            } else
+                _CPUScheduler.rockinRobin();
         };
 
         Cpu.prototype.branch = function () {

@@ -26,6 +26,7 @@ module TSOS {
     		_CurrentPID = _CurrentProgram.pid;
     		_CPU.updateCPU();
     		_CPU.isExecuting = true;
+    		_CurrentProgram.state = "Running";
     		_CPU.cycle();
     	}
 
