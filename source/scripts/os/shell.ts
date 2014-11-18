@@ -462,7 +462,7 @@ module TSOS {
         }
 
         public runAll(): void {
-            
+            _CPUScheduler.runAll();
         }
 
         public ps(): void {

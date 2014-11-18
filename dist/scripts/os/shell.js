@@ -415,6 +415,7 @@ var TSOS;
         };
 
         Shell.prototype.runAll = function () {
+            _CPUScheduler.runAll();
         };
 
         Shell.prototype.ps = function () {

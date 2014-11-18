@@ -51,6 +51,7 @@ var TSOS;
                 _OsShell.putPrompt();
             } else {
                 this.execProg(_MemoryManager.getMem(this.PC));
+                _CPUScheduler.ticks++;
             }
         };
 
@@ -134,21 +135,21 @@ var TSOS;
 
         Cpu.prototype.loadAcc = function () {
             //Set the Accumulator to the value stored in the specified memory byte
-            var memLocation = _MemoryManager.hexToDecimal(_MemoryManager.nextTwoBytes());
+            var memLocation = _MemoryManager.hexToDecimal(_MemoryManager.nextTwoBytes()) + _CurrentProgram.base;
             this.Acc = _MemoryManager.hexToDecimal(_MemoryManager.getMem((memLocation)));
         };
 
         Cpu.prototype.storeAcc = function () {
             //Store the Accumulator at the specified memory location
-            var memLocation = _MemoryManager.nextTwoBytes();
-            _MemoryManager.setMemBoundsCheck(_MemoryManager.hexToDecimal(memLocation), _MemoryManager.decimalToHex(this.Acc));
+            var memLocation = _MemoryManager.hexToDecimal(_MemoryManager.nextTwoBytes()) + _CurrentProgram.base;
+            _MemoryManager.setMemBoundsCheck(memLocation, _MemoryManager.decimalToHex(this.Acc));
         };
 
         Cpu.prototype.addWithCarry = function () {
             //Add the Accumulator and the value at the specified memory location
             //Store result in Accumulator
-            var memLocation = _MemoryManager.nextTwoBytes();
-            var num = _MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation));
+            var memLocation = _MemoryManager.hexToDecimal(_MemoryManager.nextTwoBytes()) + _CurrentProgram.base;
+            var num = _MemoryManager.getMem(memLocation);
             this.Acc += parseInt(num, 16);
         };
 
@@ -166,13 +167,13 @@ var TSOS;
 
         Cpu.prototype.loadX = function () {
             //Load x with the value at the specified byte in memory
-            var memLocation = _MemoryManager.nextTwoBytes();
-            this.Xreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
+            var memLocation = _MemoryManager.hexToDecimal(_MemoryManager.nextTwoBytes()) + _CurrentProgram.base;
+            this.Xreg = parseInt(_MemoryManager.getMem(memLocation), 16);
         };
 
         Cpu.prototype.loadY = function () {
             //Load y with the value at the specified byte in memory
-            var memLocation = _MemoryManager.nextTwoBytes();
+            var memLocation = _MemoryManager.hexToDecimal(_MemoryManager.nextTwoBytes()) + _CurrentProgram.base;
             this.Yreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);
         };
 
@@ -180,7 +181,7 @@ var TSOS;
             //Compare the contents of the x register with the value at the specified byte in memory
             //If they're equal, set the Z flag to 1, otherwise set it to 0
             var memLocation = _MemoryManager.nextTwoBytes();
-            var memIndex = _MemoryManager.hexToDecimal(memLocation);
+            var memIndex = _MemoryManager.hexToDecimal(memLocation) + _CurrentProgram.base;
             var mem = _MemoryManager.getMem(memIndex);
             var memNum = _MemoryManager.hexToDecimal(mem);
             if (memNum === this.Xreg) {
@@ -192,7 +193,7 @@ var TSOS;
         Cpu.prototype.incrementByte = function () {
             //Increment the value at the specified memory byte by 1
             var memLocation = _MemoryManager.nextTwoBytes();
-            var index = _MemoryManager.hexToDecimal(memLocation);
+            var index = _MemoryManager.hexToDecimal(memLocation) + _CurrentProgram.base;
             var value = parseInt(_MemoryManager.getMem(index), 16) + 1;
             _MemoryManager.setMemBoundsCheck(index, _MemoryManager.decimalToHex(value));
         };
@@ -275,7 +276,6 @@ var TSOS;
         };
 
         Cpu.prototype.displayCPU = function () {
-            //For this project's purposes, display CPU and display PCB do the same thing.
             var output = "<tr>";
             output += "<td id='cell'" + 0 + "'>" + "PC: " + this.PC.toString() + '</td>';
             output += "<td id='cell'" + 1 + "'>" + "Acc: " + this.Acc.toString() + '</td>';
