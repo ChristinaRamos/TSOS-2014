@@ -14,12 +14,7 @@ var TSOS;
         };
 
         CPUScheduler.prototype.runAll = function () {
-            debugger;
-
-            //I need to throw everything from the residentList onto the readyQueue
-            //I then need to make sure that I set the current program and current pid properly
-            //I then need to update the CPU to match the PCB of the current program
-            //and then start executing
+            //debugger;
             var residentLength = this.residentList.getSize();
             for (var i = 0; i < residentLength; i++) {
                 this.readyQueue.enqueue(this.residentList.dequeue());
@@ -35,7 +30,7 @@ var TSOS;
         };
 
         CPUScheduler.prototype.rockinRobin = function () {
-            debugger;
+            //debugger;
             if (this.readyQueue.getSize() < 1) {
                 this.ticks = 0;
                 _CPU.cycle();

@@ -11,11 +11,7 @@ module TSOS {
     	}
 
     	public runAll(): void {
-    		debugger;
-    		//I need to throw everything from the residentList onto the readyQueue
-    		//I then need to make sure that I set the current program and current pid properly
-    		//I then need to update the CPU to match the PCB of the current program
-    		//and then start executing
+    		//debugger;
     		var residentLength = this.residentList.getSize();
     		for(var i = 0; i < residentLength; i++) {
     			this.readyQueue.enqueue(this.residentList.dequeue());
@@ -31,12 +27,7 @@ module TSOS {
     	}
 
     	public rockinRobin(): void {
-    		//As soon as my tick reaches 6 or whatever the quantum is
-    		//I need to put the program that's running back into the back of the readyQueue
-    		//I need to set the current program and current PID to the next program in the ready queue
-    		//I then need to update the CPU
-    		//and continue executing again
-    		debugger;
+    		//debugger;
     		if(this.readyQueue.getSize() < 1) {
     			this.ticks = 0;
     			_CPU.cycle();
