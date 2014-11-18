@@ -50,12 +50,12 @@ module TSOS {
 			}
 			//Add a leading 0 if the value is only 1 digit.  Otherwise, it looks freakin' weird.
 			if(value.length === 1) {
-				this.mem.memArray[index + _CurrentProgram.base] = "0" + value;
+				this.mem.memArray[index] = "0" + value;
 				this.displayMem();	
 			}
 			//Otherwise, set memory with the given value
 			else {
-				this.mem.memArray[index + _CurrentProgram.base] = value;
+				this.mem.memArray[index] = value;
 				this.displayMem();
 			}
 

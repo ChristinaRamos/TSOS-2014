@@ -269,7 +269,7 @@ module TSOS {
 
             else if(_CPU.Xreg === 2) {
                 var termString = "";
-                var position = _CPU.Yreg;
+                var position = _CPU.Yreg + _CurrentProgram.base;
                 var stringPart = _MemoryManager.getMem(position)
                 while(stringPart !== "00") {
                     termString += String.fromCharCode(_MemoryManager.hexToDecimal(stringPart));

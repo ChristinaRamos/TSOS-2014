@@ -175,7 +175,7 @@ module TSOS {
         public loadY(): void {
             //Load y with the value at the specified byte in memory
             var memLocation = _MemoryManager.hexToDecimal(_MemoryManager.nextTwoBytes()) + _CurrentProgram.base;
-            this.Yreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);    
+            this.Yreg = parseInt(_MemoryManager.getMem(memLocation), 16);    
         }
 
         public compareByteToX(): void {
@@ -194,8 +194,8 @@ module TSOS {
 
         public incrementByte(): void {
             //Increment the value at the specified memory byte by 1
-            var memLocation = _MemoryManager.nextTwoBytes();
-            var index = _MemoryManager.hexToDecimal(memLocation) + _CurrentProgram.base;
+            var memLocation = _MemoryManager.hexToDecimal(_MemoryManager.nextTwoBytes());
+            var index = memLocation + _CurrentProgram.base;
             var value = parseInt(_MemoryManager.getMem(index), 16) + 1;
             _MemoryManager.setMemBoundsCheck(index, _MemoryManager.decimalToHex(value));            
         }
