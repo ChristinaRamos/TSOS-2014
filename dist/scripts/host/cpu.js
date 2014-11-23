@@ -37,6 +37,7 @@ var TSOS;
             this.displayCPU();
         };
         Cpu.prototype.cycle = function () {
+            debugger;
             _Kernel.krnTrace('CPU cycle');
             this.displayPCB();
             this.displayCPU();
@@ -55,6 +56,8 @@ var TSOS;
         };
 
         Cpu.prototype.execProg = function (opcode) {
+            debugger;
+
             switch (opcode) {
                 case "A9":
                     this.loadConstant();
@@ -204,10 +207,9 @@ var TSOS;
             _CurrentProgram.state = "Ran";
             _MemoryManager.memoryWipeOneBlock(_CurrentProgram);
             _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CPU_BREAK_IRQ, null));
-
-            if (!_CPUScheduler.readyQueue.isEmpty()) {
-                _CPUScheduler.rockinRobin();
-            }
+            //if(!_CPUScheduler.readyQueue.isEmpty()) {
+            //    _CPUScheduler.rockinRobin();
+            //}
         };
 
         Cpu.prototype.branch = function () {

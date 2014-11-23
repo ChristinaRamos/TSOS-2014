@@ -149,8 +149,11 @@ module TSOS {
                     if(_CPUScheduler.readyQueue.isEmpty()) {
                         _CPU.isExecuting = false;
                     }
+                    else
+                        _CPUScheduler.rockinRobin();
                     break;
                 case SYS_CALL_IRQ:
+                    debugger;
                     _StdIn.sysCall();   //Go to print Y register stuff
                     break;
                 case MEMORY_EXCEEDED_IRQ:

@@ -89,3 +89,4 @@ var _LineWrapped = false;
 //Scheduling stuff
 var _QuantumOfSolace = 6;
 var _CPUScheduler;
+var _ProgramFinished = false;

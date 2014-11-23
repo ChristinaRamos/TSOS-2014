@@ -26,14 +26,14 @@ var TSOS;
             _CPU.updateCPU();
             _CPU.isExecuting = true;
             _CurrentProgram.state = "Running";
-            _CPU.cycle();
+            //_CPU.cycle();
         };
 
         CPUScheduler.prototype.rockinRobin = function () {
-            //debugger;
+            debugger;
             if (this.readyQueue.getSize() < 1) {
                 this.ticks = 0;
-                _CPU.cycle();
+                //_CPU.cycle();
             } else {
                 this.ticks = 0;
                 _CPU.updatePCB();
@@ -44,7 +44,7 @@ var TSOS;
                 _CurrentPID = _CurrentProgram.pid;
                 _CPU.updateCPU();
                 _MemoryManager.displayMem();
-                _CPU.cycle();
+                //_CPU.cycle();
             }
         };
         return CPUScheduler;

@@ -38,6 +38,7 @@ module TSOS {
             this.displayCPU();
         }
         public cycle(): void {
+            debugger;
             _Kernel.krnTrace('CPU cycle');
             this.displayPCB();
             this.displayCPU();
@@ -57,7 +58,7 @@ module TSOS {
         }
 
         public execProg(opcode): void {
-            //debugger;
+            debugger;
             //Call a function based on the opcode
             switch(opcode) {
                 case "A9": 
@@ -208,9 +209,9 @@ module TSOS {
             _MemoryManager.memoryWipeOneBlock(_CurrentProgram);
             _KernelInterruptQueue.enqueue(new Interrupt(CPU_BREAK_IRQ, null));
             
-            if(!_CPUScheduler.readyQueue.isEmpty()) {
-                _CPUScheduler.rockinRobin();
-            }
+            //if(!_CPUScheduler.readyQueue.isEmpty()) {
+            //    _CPUScheduler.rockinRobin();
+            //}
         }
 
         public branch(): void {
