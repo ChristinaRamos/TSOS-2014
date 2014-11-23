@@ -140,6 +140,7 @@ module TSOS {
             sc = new ShellCommand(this.kill,
                                   "kill",
                                   "Allows user to kill an active process.");
+            this.commandList[this.commandList.length] = sc;
 
 
             // processes - list the running processes and their IDs
@@ -476,7 +477,23 @@ module TSOS {
         }
 
         public kill(args): void {
+            debugger;
             var pid = args[0];
+            if(pid === _CurrentPID) {
+                _CurrentProgram.state = "Killed";
+                _StdOut.putText("Program " + _CurrentPID + " successfully killed.");
+                _CPUScheduler.rockinRobin();
+            }
+
+            else {
+                for(var i = 0; i < _CPUScheduler.readyQueue.getSize(); i++) {
+                    if(pid === _CPUScheduler.readyQueue.get(i).pid) {
+                        _MemoryManager.memoryWipeOneBlock(_CPUScheduler.readyQueue.get(i));
+                        _CPUScheduler.readyQueue.getRemove(i);
+                        _StdOut.putText("Program " + i + " successfully removed.");
+                    }
+                }
+            }
         }
     }
 }

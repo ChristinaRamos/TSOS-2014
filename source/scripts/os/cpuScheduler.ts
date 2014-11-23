@@ -35,7 +35,7 @@ module TSOS {
     		else {
 	    		this.ticks = 0;
 	    		_CPU.updatePCB();
-	    		if(_CurrentProgram.state !== "Ran") {
+	    		if(_CurrentProgram.state !== "Ran" || _CurrentProgram.state !== "Killed") {
 	    			this.readyQueue.enqueue(_CurrentProgram);
     			}
 	    		_CurrentProgram = this.readyQueue.dequeue();
