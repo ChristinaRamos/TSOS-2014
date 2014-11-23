@@ -475,8 +475,8 @@ module TSOS {
             }
         }
 
-        public kill(): void {
-
+        public kill(args): void {
+            var pid = args[0];
         }
     }
 }

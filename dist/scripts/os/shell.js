@@ -428,7 +428,8 @@ var TSOS;
             }
         };
 
-        Shell.prototype.kill = function () {
+        Shell.prototype.kill = function (args) {
+            var pid = args[0];
         };
         return Shell;
     })();
