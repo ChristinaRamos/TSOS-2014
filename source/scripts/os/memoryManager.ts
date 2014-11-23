@@ -113,6 +113,10 @@ module TSOS {
 				this.setMem(count, substr);
 				count++;
 			}
+			for(var i = 0; i < 255 - program.length; i += 2){
+				this.setMem(count, "00");
+				count++;
+			}
 			//Announce the PID to console.
 			_StdOut.putText("PID is " + (_PID-1) + ".");
 		}
@@ -132,6 +136,13 @@ module TSOS {
 			_CPU.isExecuting = false;
 			_CPUScheduler.residentList = new Queue();
 			this.mem.init();
+			this.displayMem();
+		}
+
+		public memoryWipeOneBlock(program: PCB): void {
+			for(var i = program.base; i < program.limit; i++) {
+				this.mem.memArray[i] = "00";
+			}
 			this.displayMem();
 		}
 

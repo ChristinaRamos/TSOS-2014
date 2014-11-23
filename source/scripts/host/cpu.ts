@@ -202,11 +202,13 @@ module TSOS {
             //Store the CPU's current state in the PCB.
             this.updatePCB();
             _CurrentProgram.state = "Ran";
-            if(_CPUScheduler.readyQueue.getSize() < 1) {
-                _KernelInterruptQueue.enqueue(new Interrupt(CPU_BREAK_IRQ, null));
-            }
-            else
+            _CurrentProgram = null;
+            _KernelInterruptQueue.enqueue(new Interrupt(CPU_BREAK_IRQ, null));
+            _MemoryManager.memoryWipeOneBlock(_CurrentProgram);
+
+            if(!_CPUScheduler.readyQueue.isEmpty()) {
                 _CPUScheduler.rockinRobin();
+            }
         }
 
         public branch(): void {

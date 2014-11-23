@@ -382,24 +382,25 @@ var TSOS;
         };
 
         Shell.prototype.shellRun = function (args) {
+            debugger;
             if (typeof args[0] === "undefined") {
                 _StdOut.putText("PID not provided.");
             } else if (_CPUScheduler.residentList.get(parseInt(args[0])) === false) {
                 _StdOut.putText("Incorrect PID.");
             } else {
                 _CurrentPID = parseInt(args[0]);
-                if (_CPUScheduler.readyQueue.isEmpty()) {
+
+                if (_CPUScheduler.readyQueue.isEmpty() && !_CPU.isExecuting) {
                     _CurrentProgram = _CPUScheduler.residentList.getRemove(_CurrentPID);
                     _CPU.updateCPU();
                     _CPU.isExecuting = true;
                 } else
                     _CPUScheduler.readyQueue.enqueue(_CPUScheduler.residentList.getRemove(_CurrentPID));
-
                 // Remove current PID from resident queue and put it in ready queue
                 // If current program pcb === null, or if the cpu is NOT executing
                 // that means no program is currently running, so dequeue that program
                 // from the ready queue and set it to the current pcb
-                _CPU.isExecuting = true;
+                //_CPU.isExecuting = true;
             }
         };
 

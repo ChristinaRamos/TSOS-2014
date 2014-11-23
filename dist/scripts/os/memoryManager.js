@@ -111,6 +111,10 @@ var TSOS;
                 this.setMem(count, substr);
                 count++;
             }
+            for (var i = 0; i < 255 - program.length; i += 2) {
+                this.setMem(count, "00");
+                count++;
+            }
 
             //Announce the PID to console.
             _StdOut.putText("PID is " + (_PID - 1) + ".");
@@ -131,6 +135,13 @@ var TSOS;
             _CPU.isExecuting = false;
             _CPUScheduler.residentList = new TSOS.Queue();
             this.mem.init();
+            this.displayMem();
+        };
+
+        MemoryManager.prototype.memoryWipeOneBlock = function (program) {
+            for (var i = program.base; i < program.limit; i++) {
+                this.mem.memArray[i] = "00";
+            }
             this.displayMem();
         };
 

@@ -145,7 +145,9 @@ module TSOS {
                     _StdIn.handleInput();
                     break;
                 case CPU_BREAK_IRQ:
-                    _CPU.isExecuting = false;
+                    if(_CPUScheduler.readyQueue.isEmpty()) {
+                        _CPU.isExecuting = false;
+                    }
                     break;
                 case SYS_CALL_IRQ:
                     _StdIn.sysCall();   //Go to print Y register stuff

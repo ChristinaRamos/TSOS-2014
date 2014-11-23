@@ -35,7 +35,9 @@ module TSOS {
     		else {
 	    		this.ticks = 0;
 	    		_CPU.updatePCB();
-	    		this.readyQueue.enqueue(_CurrentProgram);
+	    		if(!_CurrentProgram === null) {
+	    			this.readyQueue.enqueue(_CurrentProgram);
+    			}
 	    		_CurrentProgram = this.readyQueue.dequeue();
 	    		_CurrentPID = _CurrentProgram.pid;
 	    		_CPU.updateCPU();
