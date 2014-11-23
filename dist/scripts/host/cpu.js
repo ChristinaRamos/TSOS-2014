@@ -55,8 +55,6 @@ var TSOS;
         };
 
         Cpu.prototype.execProg = function (opcode) {
-            debugger;
-
             switch (opcode) {
                 case "A9":
                     this.loadConstant();
@@ -102,6 +100,7 @@ var TSOS;
                     break;
 
                 case "00":
+                    debugger;
                     this.sysBreak();
                     break;
 
@@ -198,6 +197,8 @@ var TSOS;
         };
 
         Cpu.prototype.sysBreak = function () {
+            debugger;
+
             //Store the CPU's current state in the PCB.
             this.updatePCB();
             _CurrentProgram.state = "Ran";

@@ -145,6 +145,7 @@ module TSOS {
                     _StdIn.handleInput();
                     break;
                 case CPU_BREAK_IRQ:
+                    debugger;
                     if(_CPUScheduler.readyQueue.isEmpty()) {
                         _CPU.isExecuting = false;
                     }

@@ -57,7 +57,7 @@ module TSOS {
         }
 
         public execProg(opcode): void {
-            debugger;
+            //debugger;
             //Call a function based on the opcode
             switch(opcode) {
                 case "A9": 
@@ -104,6 +104,7 @@ module TSOS {
                     break; 
 
                 case "00":
+                    debugger;
                     this.sysBreak();
                     break;
 
@@ -200,6 +201,7 @@ module TSOS {
         }
 
         public sysBreak(): void {
+            debugger;
             //Store the CPU's current state in the PCB.
             this.updatePCB();
             _CurrentProgram.state = "Ran";

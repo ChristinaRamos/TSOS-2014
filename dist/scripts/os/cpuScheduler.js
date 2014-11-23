@@ -30,7 +30,7 @@ var TSOS;
         };
 
         CPUScheduler.prototype.rockinRobin = function () {
-            debugger;
+            //debugger;
             if (this.readyQueue.getSize() < 1) {
                 this.ticks = 0;
                 _CPU.cycle();
