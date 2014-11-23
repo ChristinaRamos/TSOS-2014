@@ -57,6 +57,7 @@ module TSOS {
         }
 
         public execProg(opcode): void {
+            debugger;
             //Call a function based on the opcode
             switch(opcode) {
                 case "A9": 
@@ -202,10 +203,9 @@ module TSOS {
             //Store the CPU's current state in the PCB.
             this.updatePCB();
             _CurrentProgram.state = "Ran";
-            _CurrentProgram = null;
-            _KernelInterruptQueue.enqueue(new Interrupt(CPU_BREAK_IRQ, null));
             _MemoryManager.memoryWipeOneBlock(_CurrentProgram);
-
+            _KernelInterruptQueue.enqueue(new Interrupt(CPU_BREAK_IRQ, null));
+            
             if(!_CPUScheduler.readyQueue.isEmpty()) {
                 _CPUScheduler.rockinRobin();
             }

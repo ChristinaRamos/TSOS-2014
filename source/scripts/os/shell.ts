@@ -423,7 +423,6 @@ module TSOS {
         }
 
         public shellRun(args) {
-            debugger;
             if(typeof args[0] === "undefined") {
                 _StdOut.putText("PID not provided.");
             }

@@ -55,6 +55,8 @@ var TSOS;
         };
 
         Cpu.prototype.execProg = function (opcode) {
+            debugger;
+
             switch (opcode) {
                 case "A9":
                     this.loadConstant();
@@ -199,9 +201,8 @@ var TSOS;
             //Store the CPU's current state in the PCB.
             this.updatePCB();
             _CurrentProgram.state = "Ran";
-            _CurrentProgram = null;
-            _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CPU_BREAK_IRQ, null));
             _MemoryManager.memoryWipeOneBlock(_CurrentProgram);
+            _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CPU_BREAK_IRQ, null));
 
             if (!_CPUScheduler.readyQueue.isEmpty()) {
                 _CPUScheduler.rockinRobin();

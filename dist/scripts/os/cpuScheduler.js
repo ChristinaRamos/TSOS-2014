@@ -30,19 +30,20 @@ var TSOS;
         };
 
         CPUScheduler.prototype.rockinRobin = function () {
-            //debugger;
+            debugger;
             if (this.readyQueue.getSize() < 1) {
                 this.ticks = 0;
                 _CPU.cycle();
             } else {
                 this.ticks = 0;
                 _CPU.updatePCB();
-                if (!_CurrentProgram === null) {
+                if (_CurrentProgram.state !== "Ran") {
                     this.readyQueue.enqueue(_CurrentProgram);
                 }
                 _CurrentProgram = this.readyQueue.dequeue();
                 _CurrentPID = _CurrentProgram.pid;
                 _CPU.updateCPU();
+                _MemoryManager.displayMem();
                 _CPU.cycle();
             }
         };
