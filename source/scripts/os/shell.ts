@@ -466,7 +466,13 @@ module TSOS {
         }
 
         public ps(): void {
+            _StdOut.putText("Current Program PID: " + _CurrentPID);
+            _StdOut.advanceLine();
 
+            _StdOut.putText("Ready Queue PIDs: ");
+            for(var i = 0; i < _CPUScheduler.readyQueue.getSize(); i++) {
+                _StdOut.putText(_CPUScheduler.readyQueue.q[i].pid + "  ");
+            }
         }
 
         public kill(): void {

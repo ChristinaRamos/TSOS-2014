@@ -419,6 +419,13 @@ var TSOS;
         };
 
         Shell.prototype.ps = function () {
+            _StdOut.putText("Current Program PID: " + _CurrentPID);
+            _StdOut.advanceLine();
+
+            _StdOut.putText("Ready Queue PIDs: ");
+            for (var i = 0; i < _CPUScheduler.readyQueue.getSize(); i++) {
+                _StdOut.putText(_CPUScheduler.readyQueue.q[i].pid + "  ");
+            }
         };
 
         Shell.prototype.kill = function () {
