@@ -38,12 +38,14 @@ var TSOS;
                 _CPU.updatePCB();
                 if (_CurrentProgram.state !== "Ran" && _CurrentProgram.state !== "Killed") {
                     this.readyQueue.enqueue(_CurrentProgram);
+                    _CurrentProgram.state = "Ready";
                 }
 
                 _CurrentProgram = this.readyQueue.dequeue();
                 _CurrentPID = _CurrentProgram.pid;
                 _CPU.updateCPU();
                 _MemoryManager.displayMem();
+                _CPU.displayPCB();
                 //_CPU.cycle();
             }
         };

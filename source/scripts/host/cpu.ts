@@ -51,6 +51,7 @@ module TSOS {
             }
             //Otherwise, let's do this thing.
             else {
+                _CurrentProgram.state = "Running";
                 this.execProg(_MemoryManager.getMem(this.PC));
                 _CPUScheduler.ticks++;
             }
@@ -116,7 +117,7 @@ module TSOS {
 
                 default:
                     this.isExecuting = false;
-                    _Kernel.krnTrace("Invalid opcode.  Welcome to DIE.");
+                    _Kernel.krnTrapError("Invalid opcode.  Welcome to DIE.");
             }
             //increment the PC after executing the instruction
             this.PC++;
@@ -200,8 +201,9 @@ module TSOS {
 
         public sysBreak(): void {
             //Store the CPU's current state in the PCB.
-            this.updatePCB();
             _CurrentProgram.state = "Ran";
+            this.updatePCB();
+            this.displayPCB();
             _MemoryManager.memoryWipeOneBlock(_CurrentProgram);
             _KernelInterruptQueue.enqueue(new Interrupt(CPU_BREAK_IRQ, null));
             
@@ -277,14 +279,32 @@ module TSOS {
         }
 
         public displayPCB(): void {
-            //Kind of self explanatory
             var output = "<tr>";
-            output += "<td id='cell'" + 0 + "'>" + "PC: " + _CurrentProgram.PC.toString() + '</td>';
-            output += "<td id='cell'" + 1 + "'>" + "Acc: " + _CurrentProgram.Acc.toString() + '</td>';
-            output += "<td id='cell'" + 2 + "'>" + "Xreg: " + _CurrentProgram.Xreg.toString() + '</td>';
-            output += "<td id='cell'" + 3 + "'>" + "Yreg: " + _CurrentProgram.Yreg.toString() + '</td>';
-            output += "<td id='cell'" + 4 + "'>" + "Zflag: " + _CurrentProgram.Zflag.toString() + '</td>';
-            output += "</tr>"
+                output += "<td id='cell'" + 0 + "'>" + "PID: " + _CurrentProgram.pid.toString() + '</td>';
+                output += "<td id='cell'" + 1 + "'>" + "PC: " + _CurrentProgram.PC.toString() + '</td>';
+                output += "<td id='cell'" + 2 + "'>" + "Acc: " + _CurrentProgram.Acc.toString() + '</td>';
+                output += "<td id='cell'" + 3 + "'>" + "Xreg: " + _CurrentProgram.Xreg.toString() + '</td>';
+                output += "<td id='cell'" + 4 + "'>" + "Yreg: " + _CurrentProgram.Yreg.toString() + '</td>';
+                output += "<td id='cell'" + 5 + "'>" + "Zflag: " + _CurrentProgram.Zflag.toString() + '</td>';
+                output += "<td id='cell'" + 6 + "'>" + "State: " + _CurrentProgram.state + '</td>';
+                output += "<td id='cell'" + 7 + "'>" + "Base: " + _CurrentProgram.base.toString() + '</td>';
+                output += "<td id='cell'" + 8 + "'>" + "Limit: " + _CurrentProgram.limit.toString() + '</td>';
+                output += "</tr>";
+            if(typeof _CPUScheduler.readyQueue !== "undefined"){ 
+                for(var i = 0; i < _CPUScheduler.readyQueue.getSize(); i++) {
+                    output += "<tr>";
+                    output += "<td id='cell'" + 0 + "'>" + "PID: " + _CPUScheduler.readyQueue.q[i].pid.toString() + '</td>';
+                    output += "<td id='cell'" + 1 + "'>" + "PC: " + _CPUScheduler.readyQueue.q[i].PC.toString() + '</td>';
+                    output += "<td id='cell'" + 2 + "'>" + "Acc: " + _CPUScheduler.readyQueue.q[i].Acc.toString() + '</td>';
+                    output += "<td id='cell'" + 3 + "'>" + "Xreg: " + _CPUScheduler.readyQueue.q[i].Xreg.toString() + '</td>';
+                    output += "<td id='cell'" + 4 + "'>" + "Yreg: " + _CPUScheduler.readyQueue.q[i].Yreg.toString() + '</td>';
+                    output += "<td id='cell'" + 5 + "'>" + "Zflag: " + _CPUScheduler.readyQueue.q[i].Zflag.toString() + '</td>';
+                    output += "<td id='cell'" + 6 + "'>" + "State: " + _CPUScheduler.readyQueue.q[i].state + '</td>';
+                    output += "<td id='cell'" + 7 + "'>" + "Base: " + _CPUScheduler.readyQueue.q[i].base.toString() + '</td>';
+                    output += "<td id='cell'" + 8 + "'>" + "Limit: " + _CPUScheduler.readyQueue.q[i].limit.toString() + '</td>';
+                    output += "</tr>";
+                }
+            }
 
             Control.displayPCB(output);
         }
