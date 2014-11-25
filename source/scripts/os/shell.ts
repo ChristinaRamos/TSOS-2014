@@ -117,6 +117,30 @@ module TSOS {
                                   "Allows user to run a program that has been loaded into memory.");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new ShellCommand(this.shellClearMem,
+                                  "clearmem",
+                                  "Wipes all blocks of memory.  Clean slate.  New beginnings.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellQuantum,
+                                  "quantum",
+                                  "Allows user to set Round Robin quantum.  Tweet.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.runAll,
+                                  "runall",
+                                  "Allows user to run all loaded programs at once.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.ps,
+                                  "ps",
+                                  "Allows user to display PIDs of all active processes.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.kill,
+                                  "kill",
+                                  "Allows user to kill an active process.");
+            this.commandList[this.commandList.length] = sc;
 
 
             // processes - list the running processes and their IDs
@@ -391,7 +415,7 @@ module TSOS {
                     }
 
                     else {                  
-                    //Go load the program for realsies.     
+                    //Go load the program for realsies.
                         _MemoryManager.loadProg();
                     }
                 }
@@ -403,15 +427,57 @@ module TSOS {
             if(typeof args[0] === "undefined") {
                 _StdOut.putText("PID not provided.");
             }
-            else if(typeof _ProgramList[parseInt(args[0])] === "undefined") {
+            else if (_CPUScheduler.residentList.get(parseInt(args[0])) === false){
                 _StdOut.putText("Incorrect PID.");
             }
-
             else {
-                _CurrentProgram = args[0];
-                _CPU.isExecuting = true;
+                _CurrentPID = parseInt(args[0]);
+
+                if(_CPUScheduler.readyQueue.isEmpty() && !_CPU.isExecuting) {
+                    _CurrentProgram = _CPUScheduler.residentList.getRemove(_CurrentPID);
+                    _CPU.updateCPU();
+                    _CPU.isExecuting = true;
+                }
+                else
+                    _CPUScheduler.readyQueue.enqueue(_CPUScheduler.residentList.getRemove(_CurrentPID));
+                
+
+                // Remove current PID from resident queue and put it in ready queue
+                // If current program pcb === null, or if the cpu is NOT executing
+                // that means no program is currently running, so dequeue that program
+                // from the ready queue and set it to the current pcb
+                //_CPU.isExecuting = true;
+                
             }
+        }
+
+        public shellClearMem() {
+            _MemoryManager.memoryWipe();
+            _StdOut.putText("Memory has been cleared.");
+            _Console.advanceLine();
+        }
+
+        public shellQuantum(args): void {
+            _QuantumOfSolace = args[0];
+            _StdOut.putText("Quantum has been set to " + args[0] + ".");
+        }
+
+        public runAll(): void {
+            _CPUScheduler.runAll();
+        }
+
+        public ps(): void {
+            _StdOut.putText("Current Program PID: " + _CurrentPID);
+            _StdOut.advanceLine();
+
+            _StdOut.putText("Ready Queue PIDs: ");
+            for(var i = 0; i < _CPUScheduler.readyQueue.getSize(); i++) {
+                _StdOut.putText(_CPUScheduler.readyQueue.q[i].pid + "  ");
+            }
+        }
+
+        public kill(args): void {
+            _KernelInterruptQueue.enqueue(new Interrupt(KILL_IRQ, args[0]));
         }
     }
 }
-

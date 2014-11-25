@@ -41,5 +41,35 @@ module TSOS {
             }
             return retVal;
         }
+
+        public get(index: number) {
+            for(var i = 0; i < this.q.length; i++) {
+                if(this.q[i].pid === index) {
+                    return this.q[i];
+                }
+            }
+            return false;
+        }
+
+        public getRemove(index: number) {
+            for(var i = 0; i < this.q.length; i++) {
+                if(this.q[i].pid === index) {
+                    var result = this.q[i];
+                    this.q.splice(i, 1);
+                    return result;
+                }
+            }
+        }
+
+        public setBase(index: number, value: number): void {
+            this.q[index].setBase(value); 
+        }
+        public setPC(index:number, value:number):void{
+            this.q[index].PC = value;
+        }
+
+        public setLimit(index: number, value: number): void {
+            this.q[index].setLimit(value);
+        }
     }
 }

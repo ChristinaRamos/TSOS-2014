@@ -1,23 +1,12 @@
 /* TSOS.css */
 
 body {
-  /*background-image: url("http://images5.fanpop.com/image/photos/25400000/Daniel-Craig-3-daniel-craig-25487806-1280-1024.jpg");*/
   background-position: 330%;
   background-repeat: no-repeat;
   font-family: Helvetica, Verdana, Arial, sans-serif;
   font-size: 12pt;
   font-weight: normal;
   font-style: normal;
-}
-
- {
-    width: 300px;
-    height: 200px;
-    border: 1px solid black;
-    background-image: url('smiley.gif');
-    background-position: top left;
-    -webkit-animation: mymove 5s infinite; /* Chrome, Safari, Opera */
-    animation: mymove 5s infinite;
 }
 
 h1 {
@@ -63,10 +52,12 @@ h3 {
   float: right; 
   background: white;
   border: 1px solid black;
+  overflow: scroll;
+  height: 500px;
 }
 
 #PCB {
-  width: 250px;
+  width: 500px;
   background: white;
   border: 1px solid black;
 }

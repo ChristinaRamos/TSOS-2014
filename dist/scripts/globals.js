@@ -25,6 +25,8 @@ var SYS_CALL_IRQ = 3;
 
 var MEMORY_EXCEEDED_IRQ = 4;
 
+var KILL_IRQ = 5;
+
 var STARTING_X_POS = 12.48;
 
 //
@@ -75,12 +77,18 @@ var onDocumentLoad = function () {
 };
 
 // Memory stuff
-var _MemorySize = 256;
+var _MemoryBlocks = 3;
+var _MemorySize = 256 * _MemoryBlocks;
 var _Memory;
 var _MemoryManager;
 
 // PCB stuff
 var _PID = 0;
-var _ProgramList = [];
-var _CurrentProgram = null;
+var _CurrentPID = null;
+var _CurrentProgram;
 var _LineWrapped = false;
+
+//Scheduling stuff
+var _QuantumOfSolace = 6;
+var _CPUScheduler;
+var _ProgramFinished = false;

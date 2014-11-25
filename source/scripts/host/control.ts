@@ -96,6 +96,8 @@ module TSOS {
             _Kernel = new Kernel();
             _Kernel.krnBootstrap();
 
+            _CPUScheduler = new CPUScheduler();
+
             this.slideBackground();
         }
 
@@ -152,7 +154,7 @@ module TSOS {
                 bodyStyle.backgroundPosition = percentstr;
                 if (percent==200)
                     window.clearInterval(interval);
-            },100);
+        },100);
   
 
         }
@@ -168,5 +170,25 @@ module TSOS {
             document.getElementById("cpuTable").innerHTML = output;               
         }
 
+        public static kill(pidparam): void {
+            var pid = parseInt(pidparam);
+            if(pid === _CurrentPID) {
+                _CurrentProgram.state = "Killed";
+                _StdOut.putText("Program " + _CurrentPID + " successfully killed.");
+                _StdOut.advanceLine();
+                _CPUScheduler.rockinRobin();
+            }
+
+            else {
+                for(var i = 0; i < _CPUScheduler.readyQueue.getSize(); i++) {
+                    if(pid === _CPUScheduler.readyQueue.get(i).pid) {
+                        _MemoryManager.memoryWipeOneBlock(_CPUScheduler.readyQueue.get(i));
+                        _CPUScheduler.readyQueue.getRemove(i);
+                        _StdOut.putText("Program " + i + " successfully removed.");
+                        _StdOut.advanceLine();
+                    }
+                }
+            }
+        }
     }
 }

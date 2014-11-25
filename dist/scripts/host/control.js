@@ -92,6 +92,8 @@ var TSOS;
             _Kernel = new TSOS.Kernel();
             _Kernel.krnBootstrap();
 
+            _CPUScheduler = new TSOS.CPUScheduler();
+
             this.slideBackground();
         };
 
@@ -141,7 +143,7 @@ var TSOS;
             //Max x position of background
             var percent = 330;
             var bodyStyle = document.getElementById("body").style;
-            bodyStyle.backgroundImage = "url('http://images5.fanpop.com/image/photos/25400000/Daniel-Craig-3-daniel-craig-25487806-1280-1024.jpg')";
+            bodyStyle.backgroundImage = "url('http://i.imgur.com/GeCLCIB.jpg')";
             var interval = window.setInterval(function () {
                 //Move our lovely image of our lord and savior Daniel Craig over by 1% every 1/10 second
                 percent--;
@@ -160,6 +162,25 @@ var TSOS;
         Control.displayCPU = function (output) {
             //Self explanatory
             document.getElementById("cpuTable").innerHTML = output;
+        };
+
+        Control.kill = function (pidparam) {
+            var pid = parseInt(pidparam);
+            if (pid === _CurrentPID) {
+                _CurrentProgram.state = "Killed";
+                _StdOut.putText("Program " + _CurrentPID + " successfully killed.");
+                _StdOut.advanceLine();
+                _CPUScheduler.rockinRobin();
+            } else {
+                for (var i = 0; i < _CPUScheduler.readyQueue.getSize(); i++) {
+                    if (pid === _CPUScheduler.readyQueue.get(i).pid) {
+                        _MemoryManager.memoryWipeOneBlock(_CPUScheduler.readyQueue.get(i));
+                        _CPUScheduler.readyQueue.getRemove(i);
+                        _StdOut.putText("Program " + i + " successfully removed.");
+                        _StdOut.advanceLine();
+                    }
+                }
+            }
         };
         return Control;
     })();

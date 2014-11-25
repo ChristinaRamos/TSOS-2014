@@ -26,6 +26,8 @@ var CPU_BREAK_IRQ: number = 2;	//IRQ for stopping the CPU from executing
 var SYS_CALL_IRQ: number = 3;	//IRQ for opcode FF
 
 var MEMORY_EXCEEDED_IRQ: number = 4;	//IRQ for someone screwed up bad
+
+var KILL_IRQ: number = 5;
 	
 var STARTING_X_POS: number = 12.48;		//Magic numbers are bad so here's a global for the x position right after the prompt.
 //
@@ -77,12 +79,18 @@ var onDocumentLoad = function() {
 };
 
 // Memory stuff
-var _MemorySize: number = 256;
+var _MemoryBlocks: number = 3;
+var _MemorySize: number = 256 * _MemoryBlocks;
 var _Memory: TSOS.Memory;
 var _MemoryManager: TSOS.MemoryManager;
 
 // PCB stuff
 var _PID = 0;
-var _ProgramList = [];
-var _CurrentProgram: number =  null;
+var _CurrentPID: number =  null;
+var _CurrentProgram;
 var _LineWrapped: boolean = false;
+
+//Scheduling stuff
+var _QuantumOfSolace: number = 6;
+var _CPUScheduler: TSOS.CPUScheduler;
+var _ProgramFinished: boolean = false;

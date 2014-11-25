@@ -85,7 +85,10 @@ module TSOS {
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             } else if (_CPU.isExecuting) { // If there are no interrupts then run one CPU cycle if there is anything being processed. {
-                _CPU.cycle();
+                if(_CPUScheduler.ticks < _QuantumOfSolace) 
+                    _CPU.cycle();
+                else
+                    _CPUScheduler.rockinRobin();  
             } else {                      // If there are no interrupts and there is nothing being executed then just be idle. {
                 this.krnTrace("Idle");
             }
@@ -142,15 +145,22 @@ module TSOS {
                     _StdIn.handleInput();
                     break;
                 case CPU_BREAK_IRQ:
-                    _CPU.isExecuting = false;
+                    if(_CPUScheduler.readyQueue.isEmpty()) {
+                        _CPU.isExecuting = false;
+                    }
+                    else
+                        _CPUScheduler.rockinRobin();
                     break;
                 case SYS_CALL_IRQ:
-                    //debugger;
                     _StdIn.sysCall();   //Go to print Y register stuff
                     break;
                 case MEMORY_EXCEEDED_IRQ:
                     _CPU.isExecuting = false;
-                    this.krnTrapError("You are trying to access memory that doesn't exist.  Cease and desist.")
+                    this.krnTrapError("You are trying to Access memory that doesn't exist.  Cease and desist.")
+                    break;
+                case KILL_IRQ:
+                    debugger;
+                    Control.kill(params);
                     break;
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
@@ -189,7 +199,7 @@ module TSOS {
                     // We can't log every idle clock pulse because it would lag the browser very quickly.
                     if (_OSclock % 10 == 0) {
                         // Check the CPU_CLOCK_INTERVAL in globals.ts for an
-                        // idea of the tick rate and adjust this line accordingly.
+                        // idea of the tick rate and adjust this line Accordingly.
                         Control.hostLog(msg, "OS");
                     }
                 } else {

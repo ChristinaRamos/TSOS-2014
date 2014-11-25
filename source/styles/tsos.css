@@ -52,10 +52,12 @@ h3 {
   float: right; 
   background: white;
   border: 1px solid black;
+  overflow: scroll;
+  height: 500px;
 }
 
 #PCB {
-  width: 250px;
+  width: 500px;
   background: white;
   border: 1px solid black;
 }

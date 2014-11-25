@@ -36,22 +36,29 @@ module TSOS {
             this.Yreg = 0;
             this.Zflag = 0;
             this.isExecuting = false;
+<<<<<<< HEAD
             this.memory.init();
+=======
+            this.displayCPU();
+>>>>>>> typescript
         }
         public cycle(): void {
             _Kernel.krnTrace('CPU cycle');
+            this.displayPCB();
+            this.displayCPU();
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             // If the program already ran, print a thing and stop executing.
-            if(_ProgramList[_CurrentProgram].alreadyRan === true) {
-                _StdOut.putText("This program has already run.  You better go catch it.");
+            if(_CurrentProgram.state === "Ran") {
                 this.isExecuting = false;
                 _StdOut.advanceLine();
                 _OsShell.putPrompt();
             }
             //Otherwise, let's do this thing.
             else {
+                _CurrentProgram.state = "Running";
                 this.execProg(_MemoryManager.getMem(this.PC));
+                _CPUScheduler.ticks++;
             }
         }
 
@@ -122,33 +129,32 @@ module TSOS {
             //display errythang
             _MemoryManager.displayMem();
             //this.printResults();
-            this.displayPCB();
-            this.displayCPU();
+            
         }
 
         public loadConstant(): void {
-            //Set the accumulator to the value in the next memory byte
+            //Set the Accumulator to the value in the next memory byte
             var nextByte = _MemoryManager.nextByte();
             this.Acc = _MemoryManager.hexToDecimal(nextByte);
         }
 
         public loadAcc(): void {
-            //Set the accumulator to the value stored in the specified memory byte
-            var memLocation = _MemoryManager.hexToDecimal(_MemoryManager.nextTwoBytes());
+            //Set the Accumulator to the value stored in the specified memory byte
+            var memLocation = _MemoryManager.hexToDecimal(_MemoryManager.nextTwoBytes()) + _CurrentProgram.base;
             this.Acc = _MemoryManager.hexToDecimal(_MemoryManager.getMem((memLocation)));
         }
 
         public storeAcc(): void {
-            //Store the accumulator at the specified memory location
-            var memLocation = _MemoryManager.nextTwoBytes();
-            _MemoryManager.setMem(_MemoryManager.hexToDecimal(memLocation), _MemoryManager.decimalToHex(this.Acc));
+            //Store the Accumulator at the specified memory location
+            var memLocation = _MemoryManager.hexToDecimal(_MemoryManager.nextTwoBytes()) + _CurrentProgram.base;
+            _MemoryManager.setMemBoundsCheck(memLocation, _MemoryManager.decimalToHex(this.Acc));
         }
 
         public addWithCarry(): void {
-            //Add the accumulator and the value at the specified memory location
-            //Store result in accumulator
-            var memLocation = _MemoryManager.nextTwoBytes();
-            var num = _MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation));
+            //Add the Accumulator and the value at the specified memory location
+            //Store result in Accumulator
+            var memLocation = _MemoryManager.hexToDecimal(_MemoryManager.nextTwoBytes()) + _CurrentProgram.base;
+            var num = _MemoryManager.getMem(memLocation);
             this.Acc += parseInt(num, 16);
         }
 
@@ -166,21 +172,21 @@ module TSOS {
 
         public loadX(): void {
             //Load x with the value at the specified byte in memory
-            var memLocation = _MemoryManager.nextTwoBytes();
-            this.Xreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);    
+            var memLocation = _MemoryManager.hexToDecimal(_MemoryManager.nextTwoBytes()) + _CurrentProgram.base;
+            this.Xreg = parseInt(_MemoryManager.getMem(memLocation), 16);    
         }
 
         public loadY(): void {
             //Load y with the value at the specified byte in memory
-            var memLocation = _MemoryManager.nextTwoBytes();
-            this.Yreg = parseInt(_MemoryManager.getMem(_MemoryManager.hexToDecimal(memLocation)), 16);    
+            var memLocation = _MemoryManager.hexToDecimal(_MemoryManager.nextTwoBytes()) + _CurrentProgram.base;
+            this.Yreg = parseInt(_MemoryManager.getMem(memLocation), 16);    
         }
 
         public compareByteToX(): void {
             //Compare the contents of the x register with the value at the specified byte in memory
             //If they're equal, set the Z flag to 1, otherwise set it to 0
             var memLocation = _MemoryManager.nextTwoBytes();
-            var memIndex = _MemoryManager.hexToDecimal(memLocation);
+            var memIndex = _MemoryManager.hexToDecimal(memLocation) + _CurrentProgram.base;
             var mem = _MemoryManager.getMem(memIndex);
             var memNum = _MemoryManager.hexToDecimal(mem);
             if(memNum === this.Xreg) {
@@ -192,17 +198,23 @@ module TSOS {
 
         public incrementByte(): void {
             //Increment the value at the specified memory byte by 1
-            var memLocation = _MemoryManager.nextTwoBytes();
-            var index = _MemoryManager.hexToDecimal(memLocation);
+            var memLocation = _MemoryManager.hexToDecimal(_MemoryManager.nextTwoBytes());
+            var index = memLocation + _CurrentProgram.base;
             var value = parseInt(_MemoryManager.getMem(index), 16) + 1;
-            _MemoryManager.setMem(index, _MemoryManager.decimalToHex(value));            
+            _MemoryManager.setMemBoundsCheck(index, _MemoryManager.decimalToHex(value));            
         }
 
         public sysBreak(): void {
             //Store the CPU's current state in the PCB.
+            _CurrentProgram.state = "Ran";
             this.updatePCB();
-            _ProgramList[_CurrentProgram].alreadyRan = true;
+            this.displayPCB();
+            _MemoryManager.memoryWipeOneBlock(_CurrentProgram);
             _KernelInterruptQueue.enqueue(new Interrupt(CPU_BREAK_IRQ, null));
+            
+            //if(!_CPUScheduler.readyQueue.isEmpty()) {
+            //    _CPUScheduler.rockinRobin();
+            //}
         }
 
         public branch(): void {
@@ -210,8 +222,9 @@ module TSOS {
             if(this.Zflag === 0) {
                 this.PC += _MemoryManager.hexToDecimal(_MemoryManager.getMem(++this.PC).toString()) + 1;
                 //If the PC exceeds memory, wrap it around
-                if(this.PC >= _MemorySize) {
-                    this.PC -= _MemorySize;
+                if(this.PC >= _CurrentProgram.limit) {
+                    this.PC -= _CurrentProgram.limit + 1;
+                    this.PC += _CurrentProgram.base;
                 }
             }
             //If we don't do anything, advance the PC so we don't die
@@ -228,15 +241,15 @@ module TSOS {
 
         public printResults(): void {
             //Make sure we print stuff with leading zeroes if needed
-            var acc = "";
+            var Acc = "";
             var x = "";
             var y = "";
 
             if(this.Acc.toString().length === 1) {
-                acc = "0" + this.Acc.toString();
+                Acc = "0" + this.Acc.toString();
             }
             else {
-                acc = this.Acc.toString();
+                Acc = this.Acc.toString();
             }
 
             if(this.Xreg.toString().length === 1) {
@@ -253,38 +266,55 @@ module TSOS {
                 y = this.Yreg.toString();
             }
             _StdOut.putText("PC: " + this.PC.toString() + 
-                            " | Acc: " + acc + 
+                            " | Acc: " + Acc + 
                             " | X Reg: " + x + 
                             " | Y Reg: " + y +
-                            " | zFlag: " + this.Zflag.toString());
+                            " | Zflag: " + this.Zflag.toString());
             _Console.advanceLine();
             _OsShell.putPrompt();
         }
 
         public updatePCB(): void {
             //Store CPU's current state in PCB
-            _ProgramList[_CurrentProgram].pC = this.PC;
-            _ProgramList[_CurrentProgram].acc = this.Acc;
-            _ProgramList[_CurrentProgram].xReg = this.Xreg;
-            _ProgramList[_CurrentProgram].yReg = this.Yreg;
-            _ProgramList[_CurrentProgram].zFlag = this.Zflag;
+            _CurrentProgram.PC = this.PC;
+            _CurrentProgram.Acc = this.Acc;
+            _CurrentProgram.Xreg = this.Xreg;
+            _CurrentProgram.Yreg = this.Yreg;
+            _CurrentProgram.Zflag = this.Zflag;
         }
 
         public displayPCB(): void {
-            //Kind of self explanatory
             var output = "<tr>";
-            output += "<td id='cell'" + 0 + "'>" + "PC: " + this.PC.toString() + '</td>';
-            output += "<td id='cell'" + 1 + "'>" + "Acc: " + this.Acc.toString() + '</td>';
-            output += "<td id='cell'" + 2 + "'>" + "Xreg: " + this.Xreg.toString() + '</td>';
-            output += "<td id='cell'" + 3 + "'>" + "Yreg: " + this.Yreg.toString() + '</td>';
-            output += "<td id='cell'" + 4 + "'>" + "Zflag: " + this.Zflag.toString() + '</td>';
-            output += "</tr>"
+                output += "<td id='cell'" + 0 + "'>" + "PID: " + _CurrentProgram.pid.toString() + '</td>';
+                output += "<td id='cell'" + 1 + "'>" + "PC: " + _CurrentProgram.PC.toString() + '</td>';
+                output += "<td id='cell'" + 2 + "'>" + "Acc: " + _CurrentProgram.Acc.toString() + '</td>';
+                output += "<td id='cell'" + 3 + "'>" + "Xreg: " + _CurrentProgram.Xreg.toString() + '</td>';
+                output += "<td id='cell'" + 4 + "'>" + "Yreg: " + _CurrentProgram.Yreg.toString() + '</td>';
+                output += "<td id='cell'" + 5 + "'>" + "Zflag: " + _CurrentProgram.Zflag.toString() + '</td>';
+                output += "<td id='cell'" + 6 + "'>" + "State: " + _CurrentProgram.state + '</td>';
+                output += "<td id='cell'" + 7 + "'>" + "Base: " + _CurrentProgram.base.toString() + '</td>';
+                output += "<td id='cell'" + 8 + "'>" + "Limit: " + _CurrentProgram.limit.toString() + '</td>';
+                output += "</tr>";
+            if(typeof _CPUScheduler.readyQueue !== "undefined"){ 
+                for(var i = 0; i < _CPUScheduler.readyQueue.getSize(); i++) {
+                    output += "<tr>";
+                    output += "<td id='cell'" + 0 + "'>" + "PID: " + _CPUScheduler.readyQueue.q[i].pid.toString() + '</td>';
+                    output += "<td id='cell'" + 1 + "'>" + "PC: " + _CPUScheduler.readyQueue.q[i].PC.toString() + '</td>';
+                    output += "<td id='cell'" + 2 + "'>" + "Acc: " + _CPUScheduler.readyQueue.q[i].Acc.toString() + '</td>';
+                    output += "<td id='cell'" + 3 + "'>" + "Xreg: " + _CPUScheduler.readyQueue.q[i].Xreg.toString() + '</td>';
+                    output += "<td id='cell'" + 4 + "'>" + "Yreg: " + _CPUScheduler.readyQueue.q[i].Yreg.toString() + '</td>';
+                    output += "<td id='cell'" + 5 + "'>" + "Zflag: " + _CPUScheduler.readyQueue.q[i].Zflag.toString() + '</td>';
+                    output += "<td id='cell'" + 6 + "'>" + "State: " + _CPUScheduler.readyQueue.q[i].state + '</td>';
+                    output += "<td id='cell'" + 7 + "'>" + "Base: " + _CPUScheduler.readyQueue.q[i].base.toString() + '</td>';
+                    output += "<td id='cell'" + 8 + "'>" + "Limit: " + _CPUScheduler.readyQueue.q[i].limit.toString() + '</td>';
+                    output += "</tr>";
+                }
+            }
 
             Control.displayPCB(output);
         }
 
         public displayCPU(): void {
-            //For this project's purposes, display CPU and display PCB do the same thing.
             var output = "<tr>";
             output += "<td id='cell'" + 0 + "'>" + "PC: " + this.PC.toString() + '</td>';
             output += "<td id='cell'" + 1 + "'>" + "Acc: " + this.Acc.toString() + '</td>';
@@ -296,6 +326,17 @@ module TSOS {
             Control.displayCPU(output);
         }
 
+<<<<<<< HEAD
         
+=======
+        public updateCPU(): void {
+            this.PC = _CurrentProgram.PC;
+            this.Acc = _CurrentProgram.Acc;
+            this.Xreg = _CurrentProgram.Xreg;
+            this.Yreg = _CurrentProgram.Yreg;
+            this.Zflag = _CurrentProgram.Zflag;
+            this.displayCPU();
+        }
+>>>>>>> typescript
     }
 }

@@ -39,6 +39,36 @@ var TSOS;
             }
             return retVal;
         };
+
+        Queue.prototype.get = function (index) {
+            for (var i = 0; i < this.q.length; i++) {
+                if (this.q[i].pid === index) {
+                    return this.q[i];
+                }
+            }
+            return false;
+        };
+
+        Queue.prototype.getRemove = function (index) {
+            for (var i = 0; i < this.q.length; i++) {
+                if (this.q[i].pid === index) {
+                    var result = this.q[i];
+                    this.q.splice(i, 1);
+                    return result;
+                }
+            }
+        };
+
+        Queue.prototype.setBase = function (index, value) {
+            this.q[index].setBase(value);
+        };
+        Queue.prototype.setPC = function (index, value) {
+            this.q[index].PC = value;
+        };
+
+        Queue.prototype.setLimit = function (index, value) {
+            this.q[index].setLimit(value);
+        };
         return Queue;
     })();
     TSOS.Queue = Queue;
