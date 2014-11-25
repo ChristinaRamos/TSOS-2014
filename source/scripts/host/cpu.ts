@@ -24,8 +24,7 @@ module TSOS {
                     public Xreg: number = 0,
                     public Yreg: number = 0,
                     public Zflag: number = 0,
-                    public isExecuting: boolean = false,
-                    public memory: Memory = new Memory) {
+                    public isExecuting: boolean = false) {
 
         }
 
@@ -36,11 +35,7 @@ module TSOS {
             this.Yreg = 0;
             this.Zflag = 0;
             this.isExecuting = false;
-<<<<<<< HEAD
-            this.memory.init();
-=======
             this.displayCPU();
->>>>>>> typescript
         }
         public cycle(): void {
             _Kernel.krnTrace('CPU cycle');
@@ -326,9 +321,6 @@ module TSOS {
             Control.displayCPU(output);
         }
 
-<<<<<<< HEAD
-        
-=======
         public updateCPU(): void {
             this.PC = _CurrentProgram.PC;
             this.Acc = _CurrentProgram.Acc;
@@ -337,6 +329,5 @@ module TSOS {
             this.Zflag = _CurrentProgram.Zflag;
             this.displayCPU();
         }
->>>>>>> typescript
     }
 }
