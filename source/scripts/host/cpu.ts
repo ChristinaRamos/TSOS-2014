@@ -38,7 +38,6 @@ module TSOS {
             this.displayCPU();
         }
         public cycle(): void {
-            debugger;
             _Kernel.krnTrace('CPU cycle');
             this.displayPCB();
             this.displayCPU();
@@ -58,7 +57,6 @@ module TSOS {
         }
 
         public execProg(opcode): void {
-            debugger;
             //Call a function based on the opcode
             switch(opcode) {
                 case "A9": 
@@ -105,7 +103,6 @@ module TSOS {
                     break; 
 
                 case "00":
-                    debugger;
                     this.sysBreak();
                     break;
 
@@ -119,7 +116,7 @@ module TSOS {
 
                 default:
                     this.isExecuting = false;
-                    _Kernel.krnTrapError("Invalid opcode.  Welcome to DIE.");
+                    _Kernel.krnTrace("Invalid opcode.  Welcome to DIE.");
             }
             //increment the PC after executing the instruction
             this.PC++;
@@ -202,7 +199,6 @@ module TSOS {
         }
 
         public sysBreak(): void {
-            debugger;
             //Store the CPU's current state in the PCB.
             this.updatePCB();
             _CurrentProgram.state = "Ran";

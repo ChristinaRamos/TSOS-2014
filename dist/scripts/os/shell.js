@@ -430,21 +430,7 @@ var TSOS;
         };
 
         Shell.prototype.kill = function (args) {
-            debugger;
-            var pid = args[0];
-            if (pid === _CurrentPID) {
-                _CurrentProgram.state = "Killed";
-                _StdOut.putText("Program " + _CurrentPID + " successfully killed.");
-                _CPUScheduler.rockinRobin();
-            } else {
-                for (var i = 0; i < _CPUScheduler.readyQueue.getSize(); i++) {
-                    if (pid === _CPUScheduler.readyQueue.get(i).pid) {
-                        _MemoryManager.memoryWipeOneBlock(_CPUScheduler.readyQueue.get(i));
-                        _CPUScheduler.readyQueue.getRemove(i);
-                        _StdOut.putText("Program " + i + " successfully removed.");
-                    }
-                }
-            }
+            _KernelInterruptQueue.enqueue(new TSOS.Interrupt(KILL_IRQ, args[0]));
         };
         return Shell;
     })();

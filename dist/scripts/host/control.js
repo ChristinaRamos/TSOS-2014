@@ -163,6 +163,25 @@ var TSOS;
             //Self explanatory
             document.getElementById("cpuTable").innerHTML = output;
         };
+
+        Control.kill = function (pidparam) {
+            var pid = parseInt(pidparam);
+            if (pid === _CurrentPID) {
+                _CurrentProgram.state = "Killed";
+                _StdOut.putText("Program " + _CurrentPID + " successfully killed.");
+                _StdOut.advanceLine();
+                _CPUScheduler.rockinRobin();
+            } else {
+                for (var i = 0; i < _CPUScheduler.readyQueue.getSize(); i++) {
+                    if (pid === _CPUScheduler.readyQueue.get(i).pid) {
+                        _MemoryManager.memoryWipeOneBlock(_CPUScheduler.readyQueue.get(i));
+                        _CPUScheduler.readyQueue.getRemove(i);
+                        _StdOut.putText("Program " + i + " successfully removed.");
+                        _StdOut.advanceLine();
+                    }
+                }
+            }
+        };
         return Control;
     })();
     TSOS.Control = Control;
