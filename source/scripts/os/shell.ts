@@ -479,5 +479,22 @@ module TSOS {
         public kill(args): void {
             _KernelInterruptQueue.enqueue(new Interrupt(KILL_IRQ, args[0]));
         }
+
+        public setSchedule(args): void {
+            if(args[0] === "rr") {
+                _Schedule = "rr";
+            }
+
+            else if(args[0] === "fcfs") {
+                _Schedule = "fcfs";
+            }
+
+            else if(args[0] === "priority") {
+                _Schedule = "priority";
+            }
+
+            else
+                _StdOut.putText("Either that isn't a schedule or we don't have that here.");
+        }
     }
 }

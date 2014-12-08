@@ -47,6 +47,32 @@ module TSOS {
 	    		//_CPU.cycle();
 	    	}
     	}
+
+    	public fcfs(): void {
+    		_CurrentProgram = this.readyQueue.dequeue();
+    		_CurrentPID = _CurrentProgram.pid;
+    		_CPU.updateCPU();
+    		_MemoryManager.displayMem();
+    		_CPU.displayPCB();
+    	}
+
+    	public priority(): void {
+    		
+    	}
+
+    	public schedule(): void {
+    		if(_Schedule === "rr") {
+    			this.rockinRobin();
+    		}
+
+    		else if(_Schedule === "fcfs") {
+    			this.fcfs();
+    		}
+
+    		else if(_Schedule === "priority") {
+    			this.priority();
+    		}
+    	}
     }
 }
 

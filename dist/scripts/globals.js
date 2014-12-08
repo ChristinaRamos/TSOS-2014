@@ -92,3 +92,4 @@ var _LineWrapped = false;
 var _QuantumOfSolace = 6;
 var _CPUScheduler;
 var _ProgramFinished = false;
+var _Schedule = "rr";

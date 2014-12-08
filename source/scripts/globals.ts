@@ -94,3 +94,4 @@ var _LineWrapped: boolean = false;
 var _QuantumOfSolace: number = 6;
 var _CPUScheduler: TSOS.CPUScheduler;
 var _ProgramFinished: boolean = false;
+var _Schedule = "rr";

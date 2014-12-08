@@ -49,6 +49,27 @@ var TSOS;
                 //_CPU.cycle();
             }
         };
+
+        CPUScheduler.prototype.fcfs = function () {
+            _CurrentProgram = this.readyQueue.dequeue();
+            _CurrentPID = _CurrentProgram.pid;
+            _CPU.updateCPU();
+            _MemoryManager.displayMem();
+            _CPU.displayPCB();
+        };
+
+        CPUScheduler.prototype.priority = function () {
+        };
+
+        CPUScheduler.prototype.schedule = function () {
+            if (_Schedule === "rr") {
+                this.rockinRobin();
+            } else if (_Schedule === "fcfs") {
+                this.fcfs();
+            } else if (_Schedule === "priority") {
+                this.priority();
+            }
+        };
         return CPUScheduler;
     })();
     TSOS.CPUScheduler = CPUScheduler;
