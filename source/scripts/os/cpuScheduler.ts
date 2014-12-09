@@ -18,6 +18,10 @@ module TSOS {
     			this.readyQueue.q[i].state = "Ready";
     		}
 
+            if(_Schedule === "priority") {
+                this.reorderReadyQueue();
+            }
+
     		_CurrentProgram = this.readyQueue.dequeue();
     		_CurrentPID = _CurrentProgram.pid;
     		_CPU.updateCPU();
@@ -54,34 +58,20 @@ module TSOS {
     		_CPU.displayPCB();
     	}
 
-    	public priority(): void {
-            debugger;
-    		this.reorderReadyQueue();
-    		_CurrentProgram = this.readyQueue.dequeue();
-    		_CurrentPID = _CurrentProgram.pid;
-    		_CPU.updateCPU();
-    		_MemoryManager.displayMem();
-    		_CPU.displayPCB();
-    	}
-
     	public schedule(): void {
     		if(_Schedule === "rr") {
     			this.rockinRobin();
     		}
 
-    		else if(_Schedule === "fcfs") {
+    		else if(_Schedule === "fcfs" || _Schedule === "priority") {
     			this.fcfs();
-    		}
-
-    		else if(_Schedule === "priority") {
-    			this.priority();
     		}
     	}
 
     	public compare(a,b): number {
-		    if (a.priority > b.priority)
-		        return -1;
 		    if (a.priority < b.priority)
+		        return -1;
+		    if (a.priority > b.priority)
 		        return 1;
 		    return 0;
 		}

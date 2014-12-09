@@ -21,6 +21,10 @@ var TSOS;
                 this.readyQueue.q[i].state = "Ready";
             }
 
+            if (_Schedule === "priority") {
+                this.reorderReadyQueue();
+            }
+
             _CurrentProgram = this.readyQueue.dequeue();
             _CurrentPID = _CurrentProgram.pid;
             _CPU.updateCPU();
@@ -56,30 +60,18 @@ var TSOS;
             _CPU.displayPCB();
         };
 
-        CPUScheduler.prototype.priority = function () {
-            debugger;
-            this.reorderReadyQueue();
-            _CurrentProgram = this.readyQueue.dequeue();
-            _CurrentPID = _CurrentProgram.pid;
-            _CPU.updateCPU();
-            _MemoryManager.displayMem();
-            _CPU.displayPCB();
-        };
-
         CPUScheduler.prototype.schedule = function () {
             if (_Schedule === "rr") {
                 this.rockinRobin();
-            } else if (_Schedule === "fcfs") {
+            } else if (_Schedule === "fcfs" || _Schedule === "priority") {
                 this.fcfs();
-            } else if (_Schedule === "priority") {
-                this.priority();
             }
         };
 
         CPUScheduler.prototype.compare = function (a, b) {
-            if (a.priority > b.priority)
-                return -1;
             if (a.priority < b.priority)
+                return -1;
+            if (a.priority > b.priority)
                 return 1;
             return 0;
         };
