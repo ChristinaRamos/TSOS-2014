@@ -91,7 +91,10 @@ var TSOS;
 
             //Assign a PCB to the program
             _CPUScheduler.loadProg(new TSOS.PCB());
-            _CPUScheduler.setPriority(parseInt(priority));
+
+            if (priority !== undefined) {
+                _CPUScheduler.setPriority(parseInt(priority));
+            }
             var residentSize = _CPUScheduler.residentList.getSize();
 
             //set base to next empty block

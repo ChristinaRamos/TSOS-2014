@@ -105,6 +105,9 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.setSchedule, "setschedule", "Allows user to set the scheduling type.");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new TSOS.ShellCommand(this.getSchedule, "getschedule", "Allows user to get the scheduling type.");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -437,20 +440,29 @@ var TSOS;
         };
 
         Shell.prototype.setSchedule = function (args) {
-            if (args[0] === "rr") {
-                _Schedule = "rr";
-                _StdOut.putText("Scheduling set to Round Robin.");
-                _StdOut.advanceLine();
-            } else if (args[0] === "fcfs") {
-                _Schedule = "fcfs";
-                _StdOut.putText("Scheduling set to First Come First Serve.");
-                _StdOut.advanceLine();
-            } else if (args[0] === "priority") {
-                _Schedule = "priority";
-                _StdOut.putText("Scheduling set to Priority.");
-                _StdOut.advanceLine();
-            } else
-                _StdOut.putText("Either that isn't a schedule or we don't have that here.");
+            if (_CPU.isExecuting === true) {
+                _StdOut.putText("CAN'T LET YOU DO THAT, STAR FOX.");
+            } else {
+                if (args[0] === "rr") {
+                    _Schedule = "rr";
+                    _StdOut.putText("Scheduling set to Round Robin.");
+                    _StdOut.advanceLine();
+                } else if (args[0] === "fcfs") {
+                    _Schedule = "fcfs";
+                    _StdOut.putText("Scheduling set to First Come First Serve.");
+                    _StdOut.advanceLine();
+                } else if (args[0] === "priority") {
+                    _Schedule = "priority";
+                    _StdOut.putText("Scheduling set to Priority.");
+                    _StdOut.advanceLine();
+                } else
+                    _StdOut.putText("Either that isn't a schedule or we don't have that here.");
+            }
+        };
+
+        Shell.prototype.getSchedule = function () {
+            _StdOut.putText("The current schedule is " + _Schedule + ".");
+            _StdOut.advanceLine();
         };
         return Shell;
     })();
