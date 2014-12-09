@@ -51,6 +51,7 @@ module TSOS {
             }
             //Otherwise, let's do this thing.
             else {
+                debugger;
                 _CurrentProgram.state = "Running";
                 this.execProg(_MemoryManager.getMem(this.PC));
                 _CPUScheduler.ticks++;
@@ -206,10 +207,6 @@ module TSOS {
             this.displayPCB();
             _MemoryManager.memoryWipeOneBlock(_CurrentProgram);
             _KernelInterruptQueue.enqueue(new Interrupt(CPU_BREAK_IRQ, null));
-            
-            //if(!_CPUScheduler.readyQueue.isEmpty()) {
-            //    _CPUScheduler.rockinRobin();
-            //}
         }
 
         public branch(): void {

@@ -49,6 +49,7 @@ var TSOS;
                 _StdOut.advanceLine();
                 _OsShell.putPrompt();
             } else {
+                debugger;
                 _CurrentProgram.state = "Running";
                 this.execProg(_MemoryManager.getMem(this.PC));
                 _CPUScheduler.ticks++;
@@ -203,9 +204,6 @@ var TSOS;
             this.displayPCB();
             _MemoryManager.memoryWipeOneBlock(_CurrentProgram);
             _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CPU_BREAK_IRQ, null));
-            //if(!_CPUScheduler.readyQueue.isEmpty()) {
-            //    _CPUScheduler.rockinRobin();
-            //}
         };
 
         Cpu.prototype.branch = function () {

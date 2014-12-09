@@ -170,7 +170,7 @@ var TSOS;
                 _CurrentProgram.state = "Killed";
                 _StdOut.putText("Program " + _CurrentPID + " successfully killed.");
                 _StdOut.advanceLine();
-                _CPUScheduler.rockinRobin();
+                _CPUScheduler.schedule();
             } else {
                 for (var i = 0; i < _CPUScheduler.readyQueue.getSize(); i++) {
                     if (pid === _CPUScheduler.readyQueue.get(i).pid) {

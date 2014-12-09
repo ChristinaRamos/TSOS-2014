@@ -83,12 +83,13 @@ var TSOS;
             return nextTwo;
         };
 
-        MemoryManager.prototype.loadProg = function () {
+        MemoryManager.prototype.loadProg = function (priority) {
             //Set the PC to the correct block in memory
             this.nextBlock = this.nextEmptyBlock();
 
             //Assign a PCB to the program
             _CPUScheduler.loadProg(new TSOS.PCB());
+            _CPUScheduler.setPriority(priority);
             var residentSize = _CPUScheduler.residentList.getSize();
 
             //set base to next empty block

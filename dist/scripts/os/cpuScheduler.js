@@ -11,10 +11,11 @@ var TSOS;
         }
         CPUScheduler.prototype.loadProg = function (program) {
             this.residentList.enqueue(program);
+            this.residentList;
         };
 
         CPUScheduler.prototype.runAll = function () {
-            //debugger;
+            debugger;
             var residentLength = this.residentList.getSize();
             for (var i = 0; i < residentLength; i++) {
                 this.readyQueue.enqueue(this.residentList.dequeue());
@@ -26,13 +27,11 @@ var TSOS;
             _CPU.updateCPU();
             _CPU.isExecuting = true;
             _CurrentProgram.state = "Running";
-            //_CPU.cycle();
         };
 
         CPUScheduler.prototype.rockinRobin = function () {
             if (this.readyQueue.getSize() < 1) {
                 this.ticks = 0;
-                //_CPU.cycle();
             } else {
                 this.ticks = 0;
                 _CPU.updatePCB();
@@ -51,6 +50,7 @@ var TSOS;
         };
 
         CPUScheduler.prototype.fcfs = function () {
+            debugger;
             _CurrentProgram = this.readyQueue.dequeue();
             _CurrentPID = _CurrentProgram.pid;
             _CPU.updateCPU();
@@ -59,6 +59,12 @@ var TSOS;
         };
 
         CPUScheduler.prototype.priority = function () {
+            this.reorderReadyQueue();
+            _CurrentProgram = this.readyQueue.dequeue();
+            _CurrentPID = _CurrentProgram.pid;
+            _CPU.updateCPU();
+            _MemoryManager.displayMem();
+            _CPU.displayPCB();
         };
 
         CPUScheduler.prototype.schedule = function () {
@@ -69,6 +75,22 @@ var TSOS;
             } else if (_Schedule === "priority") {
                 this.priority();
             }
+        };
+
+        CPUScheduler.prototype.compare = function (a, b) {
+            if (a.priority > b.priority)
+                return -1;
+            if (a.priority < b.priority)
+                return 1;
+            return 0;
+        };
+
+        CPUScheduler.prototype.reorderReadyQueue = function () {
+            this.readyQueue.q.sort(this.compare);
+        };
+
+        CPUScheduler.prototype.setPriority = function (priority) {
+            this.residentList.q[this.residentList.getSize()].priority = priority;
         };
         return CPUScheduler;
     })();

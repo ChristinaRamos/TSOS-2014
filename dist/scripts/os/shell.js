@@ -102,6 +102,9 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.kill, "kill", "Allows user to kill an active process.");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new TSOS.ShellCommand(this.setSchedule, "setschedule", "Allows user to set the scheduling type.");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -348,7 +351,7 @@ var TSOS;
             _DrawingContext.fillRect(0, 0, _Canvas.width, _Canvas.height); //draw a cool rectangle as big as the canvas
         };
 
-        Shell.prototype.shellLoad = function () {
+        Shell.prototype.shellLoad = function (args) {
             var input = "";
             var isHex = true;
 
@@ -376,7 +379,7 @@ var TSOS;
                         _StdOut.putText("This isn't an even number of hex characters.");
                     } else {
                         //Go load the program for realsies.
-                        _MemoryManager.loadProg();
+                        _MemoryManager.loadProg(args[0]);
                     }
                 }
             }
@@ -436,10 +439,16 @@ var TSOS;
         Shell.prototype.setSchedule = function (args) {
             if (args[0] === "rr") {
                 _Schedule = "rr";
+                _StdOut.putText("Scheduling set to Round Robin.");
+                _StdOut.advanceLine();
             } else if (args[0] === "fcfs") {
                 _Schedule = "fcfs";
+                _StdOut.putText("Scheduling set to First Come First Serve.");
+                _StdOut.advanceLine();
             } else if (args[0] === "priority") {
                 _Schedule = "priority";
+                _StdOut.putText("Scheduling set to Priority.");
+                _StdOut.advanceLine();
             } else
                 _StdOut.putText("Either that isn't a schedule or we don't have that here.");
         };

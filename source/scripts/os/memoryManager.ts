@@ -89,11 +89,12 @@ module TSOS {
 
 		}
 
-		public loadProg(): void {
+		public loadProg(priority): void {
 			//Set the PC to the correct block in memory 
 			this.nextBlock = this.nextEmptyBlock();
 			//Assign a PCB to the program
 			_CPUScheduler.loadProg(new PCB());
+			_CPUScheduler.setPriority(priority);
 			var residentSize = _CPUScheduler.residentList.getSize();
 			//set base to next empty block
 			_CPUScheduler.residentList.setBase(residentSize - 1, this.nextBlock);

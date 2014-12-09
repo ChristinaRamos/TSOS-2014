@@ -8,10 +8,11 @@ module TSOS {
 
     	public loadProg(program: PCB): void {
     		this.residentList.enqueue(program);
+            this.residentList
     	}
 
     	public runAll(): void {
-    		//debugger;
+    		debugger;
     		var residentLength = this.residentList.getSize();
     		for(var i = 0; i < residentLength; i++) {
     			this.readyQueue.enqueue(this.residentList.dequeue());
@@ -23,13 +24,11 @@ module TSOS {
     		_CPU.updateCPU();
     		_CPU.isExecuting = true;
     		_CurrentProgram.state = "Running";
-    		//_CPU.cycle();
     	}
 
     	public rockinRobin(): void {
     		if(this.readyQueue.getSize() < 1) {
     			this.ticks = 0;
-    			//_CPU.cycle();
     		}
     		else {
 	    		this.ticks = 0;
@@ -49,6 +48,7 @@ module TSOS {
     	}
 
     	public fcfs(): void {
+    		debugger;
     		_CurrentProgram = this.readyQueue.dequeue();
     		_CurrentPID = _CurrentProgram.pid;
     		_CPU.updateCPU();
@@ -57,7 +57,12 @@ module TSOS {
     	}
 
     	public priority(): void {
-    		
+    		this.reorderReadyQueue();
+    		_CurrentProgram = this.readyQueue.dequeue();
+    		_CurrentPID = _CurrentProgram.pid;
+    		_CPU.updateCPU();
+    		_MemoryManager.displayMem();
+    		_CPU.displayPCB();
     	}
 
     	public schedule(): void {
@@ -73,6 +78,25 @@ module TSOS {
     			this.priority();
     		}
     	}
+
+    	public compare(a,b): number {
+		  if (a.priority > b.priority)
+		     return -1;
+		  if (a.priority < b.priority)
+		    return 1;
+		  return 0;
+		}
+
+    	public reorderReadyQueue(): void {
+    		this.readyQueue.q.sort(this.compare);
+    	}
+
+        public setPriority(priority): void {
+            this.residentList.q[this.residentList.getSize()].priority = priority;
+        }
+
+    	
+
     }
 }
 

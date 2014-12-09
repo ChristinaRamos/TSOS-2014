@@ -81,10 +81,13 @@ var TSOS;
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             } else if (_CPU.isExecuting) {
-                if (_CPUScheduler.ticks < _QuantumOfSolace)
+                if (_Schedule === "rr") {
+                    if (_CPUScheduler.ticks < _QuantumOfSolace)
+                        _CPU.cycle();
+                    else
+                        _CPUScheduler.schedule();
+                } else
                     _CPU.cycle();
-                else
-                    _CPUScheduler.rockinRobin();
             } else {
                 this.krnTrace("Idle");
             }
@@ -137,7 +140,7 @@ var TSOS;
                     if (_CPUScheduler.readyQueue.isEmpty()) {
                         _CPU.isExecuting = false;
                     } else
-                        _CPUScheduler.rockinRobin();
+                        _CPUScheduler.schedule();
                     break;
                 case SYS_CALL_IRQ:
                     _StdIn.sysCall(); //Go to print Y register stuff

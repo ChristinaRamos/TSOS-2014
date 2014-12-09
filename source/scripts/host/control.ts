@@ -176,7 +176,7 @@ module TSOS {
                 _CurrentProgram.state = "Killed";
                 _StdOut.putText("Program " + _CurrentPID + " successfully killed.");
                 _StdOut.advanceLine();
-                _CPUScheduler.rockinRobin();
+                _CPUScheduler.schedule();
             }
 
             else {

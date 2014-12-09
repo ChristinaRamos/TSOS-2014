@@ -85,10 +85,14 @@ module TSOS {
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             } else if (_CPU.isExecuting) { // If there are no interrupts then run one CPU cycle if there is anything being processed. {
-                if(_CPUScheduler.ticks < _QuantumOfSolace) 
-                    _CPU.cycle();
+                if(_Schedule === "rr") { 
+                    if(_CPUScheduler.ticks < _QuantumOfSolace) 
+                        _CPU.cycle();
+                    else
+                        _CPUScheduler.schedule();
+                }
                 else
-                    _CPUScheduler.rockinRobin();  
+                    _CPU.cycle(); 
             } else {                      // If there are no interrupts and there is nothing being executed then just be idle. {
                 this.krnTrace("Idle");
             }
@@ -149,7 +153,7 @@ module TSOS {
                         _CPU.isExecuting = false;
                     }
                     else
-                        _CPUScheduler.rockinRobin();
+                        _CPUScheduler.schedule();
                     break;
                 case SYS_CALL_IRQ:
                     _StdIn.sysCall();   //Go to print Y register stuff
