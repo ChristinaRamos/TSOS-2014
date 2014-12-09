@@ -8,7 +8,6 @@ module TSOS {
 
     	public loadProg(program: PCB): void {
     		this.residentList.enqueue(program);
-            this.residentList
     	}
 
     	public runAll(): void {
@@ -48,7 +47,6 @@ module TSOS {
     	}
 
     	public fcfs(): void {
-    		debugger;
     		_CurrentProgram = this.readyQueue.dequeue();
     		_CurrentPID = _CurrentProgram.pid;
     		_CPU.updateCPU();
@@ -57,6 +55,7 @@ module TSOS {
     	}
 
     	public priority(): void {
+            debugger;
     		this.reorderReadyQueue();
     		_CurrentProgram = this.readyQueue.dequeue();
     		_CurrentPID = _CurrentProgram.pid;
@@ -80,19 +79,20 @@ module TSOS {
     	}
 
     	public compare(a,b): number {
-		  if (a.priority > b.priority)
-		     return -1;
-		  if (a.priority < b.priority)
-		    return 1;
-		  return 0;
+		    if (a.priority > b.priority)
+		        return -1;
+		    if (a.priority < b.priority)
+		        return 1;
+		    return 0;
 		}
 
     	public reorderReadyQueue(): void {
+            debugger;
     		this.readyQueue.q.sort(this.compare);
     	}
 
-        public setPriority(priority): void {
-            this.residentList.q[this.residentList.getSize()].priority = priority;
+        public setPriority(priority: number): void {
+            this.residentList.q[this.residentList.getSize() - 1].priority = priority;
         }
 
     	

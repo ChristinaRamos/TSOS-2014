@@ -418,7 +418,7 @@ module TSOS {
                         _StdOut.putText("This isn't an even number of hex characters.");
                     }
 
-                    else {                  
+                    else {       
                     //Go load the program for realsies.
                         _MemoryManager.loadProg(args[0]);
                     }

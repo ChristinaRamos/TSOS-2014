@@ -11,7 +11,6 @@ var TSOS;
         }
         CPUScheduler.prototype.loadProg = function (program) {
             this.residentList.enqueue(program);
-            this.residentList;
         };
 
         CPUScheduler.prototype.runAll = function () {
@@ -50,7 +49,6 @@ var TSOS;
         };
 
         CPUScheduler.prototype.fcfs = function () {
-            debugger;
             _CurrentProgram = this.readyQueue.dequeue();
             _CurrentPID = _CurrentProgram.pid;
             _CPU.updateCPU();
@@ -59,6 +57,7 @@ var TSOS;
         };
 
         CPUScheduler.prototype.priority = function () {
+            debugger;
             this.reorderReadyQueue();
             _CurrentProgram = this.readyQueue.dequeue();
             _CurrentPID = _CurrentProgram.pid;
@@ -86,11 +85,12 @@ var TSOS;
         };
 
         CPUScheduler.prototype.reorderReadyQueue = function () {
+            debugger;
             this.readyQueue.q.sort(this.compare);
         };
 
         CPUScheduler.prototype.setPriority = function (priority) {
-            this.residentList.q[this.residentList.getSize()].priority = priority;
+            this.residentList.q[this.residentList.getSize() - 1].priority = priority;
         };
         return CPUScheduler;
     })();
