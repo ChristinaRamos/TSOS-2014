@@ -152,6 +152,36 @@ module TSOS {
                                   "Allows user to get the scheduling type.");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new ShellCommand(this.fileCreate,
+                                  "create",
+                                  "Allows user to create a file.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.fileRead,
+                                  "read",
+                                  "Allows user to view the contents of a file.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.fileWrite,
+                                  "write",
+                                  "Allows user to write contents to a file.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.fileDelete,
+                                  "delete",
+                                  "Allows user to remove a file.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.format,
+                                  "format",
+                                  "Allows user to format the disk.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.ls,
+                                  "ls",
+                                  "Allows user to list filenames on disk.");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
@@ -522,5 +552,30 @@ module TSOS {
             _StdOut.putText("The current schedule is " + _Schedule + ".");
             _StdOut.advanceLine();
         }
+
+        public fileCreate(args): void {
+
+        }
+
+        public fileWrite(args): void {
+
+        }
+
+        public fileRead(args): void {
+
+        }
+
+        public fileDelete(args): void {
+
+        }
+
+        public format(): void {
+
+        }
+
+        public ls(): void {
+
+        }
+
     }
 }
