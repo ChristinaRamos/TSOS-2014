@@ -38,9 +38,11 @@ module TSOS {
             this.krnTrace(_krnKeyboardDriver.status);
 
             //
-            // ... more?
+            // ... more? no
             //
-
+            this.krnTrace("LOADING SHIT");
+            _krnFileSystem = new fileSystem();
+            _krnFileSystem.driverEntry();
             // Enable the OS Interrupts.  (Not the CPU clock interrupt, as that is done in the hardware sim.)
             this.krnTrace("Enabling the interrupts.");
             this.krnEnableInterrupts();

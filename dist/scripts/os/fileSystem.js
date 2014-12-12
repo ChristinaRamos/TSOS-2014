@@ -21,6 +21,7 @@ var TSOS;
             _super.call(this, this.krnFSDriverEntry, this.krnFile);
         }
         FileSystem.prototype.krnFSDriverEntry = function () {
+            _FileNames = new Array();
             this.status = "loaded";
         };
 
@@ -28,9 +29,14 @@ var TSOS;
         };
 
         FileSystem.prototype.init = function () {
+            var filler = new Array(this.dataData + this.metaData + 1).join('0');
+            sessionStorage.setItem("000", alanQuote);
             for (var t = 0; t <= this.track - 1; t++) {
                 for (var s = 0; s <= this.sector - 1; s++) {
                     for (var b = 0; b <= this.block - 1; b++) {
+                        if (t.toString() + s.toString() + b.toString() !== "000") {
+                            sessionStorage.setItem(t.toString() + s.toString() + b.toString(), filler);
+                        }
                     }
                 }
             }
@@ -42,6 +48,7 @@ var TSOS;
                 str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
             return str;
         };
+
         FileSystem.prototype.stringToHex = function (str) {
             var arr = [];
             for (var i = 0, l = str.length; i < l; i++) {
@@ -49,6 +56,37 @@ var TSOS;
                 arr.push(hex);
             }
             return arr.join('');
+        };
+
+        FileSystem.prototype.diskIsFull = function () {
+            for (var t = 0; t <= this.track - 1; t++) {
+                for (var s = 0; s <= this.sector - 1; s++) {
+                    for (var b = 0; b <= this.block - 1; b++) {
+                        if (sessionStorage.getItem(t.toString() + s.toString() + b.toString()).substr(0, 1) === "0")
+                            return true;
+                    }
+                }
+            }
+
+            return false;
+        };
+
+        FileSystem.prototype.createFile = function (filename) {
+            if (!this.diskIsFull()) {
+                return true;
+            } else
+                return false;
+        };
+
+        FileSystem.prototype.nextEmptyTSB = function () {
+            for (var t = 0; t <= this.track - 1; t++) {
+                for (var s = 0; s <= this.sector - 1; s++) {
+                    for (var b = 0; b <= this.block - 1; b++) {
+                        if (sessionStorage.getItem(t.toString() + s.toString() + b.toString()).substr(0, 1) === "0")
+                            return t.toString() + s.toString() + b.toString();
+                    }
+                }
+            }
         };
         return FileSystem;
     })(TSOS.DeviceDriver);
