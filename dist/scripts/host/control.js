@@ -206,7 +206,7 @@ var TSOS;
                 }
             }
 
-            document.getElementById("Files").innerHTML = output;
+            document.getElementById("FileDisplay").innerHTML = output;
         };
         return Control;
     })();

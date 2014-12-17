@@ -214,7 +214,7 @@ module TSOS {
                 }
             }
 
-            document.getElementById("Files").innerHTML = output;
+            document.getElementById("FileDisplay").innerHTML = output;
         }
     }
 }
