@@ -28,7 +28,6 @@ module TSOS {
 		}
 
 		public init(): void {
-			debugger;
 			var filler = new Array(this.dataData + this.metaData + 1).join('0');
 			sessionStorage.setItem("000", "1000" + this.hexToString(alanQuote));
 			for (var t = 0; t <= this.track - 1; t++){
@@ -74,7 +73,6 @@ module TSOS {
 		}
 
 		public createFile(filename): boolean {
-			debugger;
 			if(filename in _FileNames) {
 				_StdOut.putText("This file already exists.");
 				return false;
@@ -96,7 +94,6 @@ module TSOS {
 		}
 
 		public writeFile(filename, data): boolean {
-			debugger;
 			var filenameTSB = _FileNames[filename];
 			//check if file is already written to, then overwrite if needed
 			var filenamePointer = this.getMeta(filenameTSB).substr(1);
@@ -148,11 +145,11 @@ module TSOS {
 		}
 
 		public deleteFile(filename): boolean {
-			debugger;
 			var filenameTSB = _FileNames[filename];
 			var filePointer = this.getMeta(filenameTSB).substr(1);
 			//delete filename
 			this.clearBlock(filenameTSB);
+			delete _FileNames[filename];
 			//delete file data
 			if(filePointer !== "000") {
 				this.clearBlock(filePointer);
@@ -179,7 +176,6 @@ module TSOS {
 		}
 
 		public distributeData(filename, data): void {
-			debugger;
 			var filenameTSB = _FileNames[filename];
 			var dataHex = this.stringToHex(data);
 			//if the data is too long, slice it until it's short enough
@@ -195,7 +191,6 @@ module TSOS {
 		}
 
 		public distributeDataOver(filename, data): void {
-			debugger;
 			var filenameTSB = _FileNames[filename]; //TSB of where the filename IS
 			var dataHex = this.stringToHex(data);
 

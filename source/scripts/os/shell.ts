@@ -616,11 +616,13 @@ module TSOS {
         }
 
         public format(): void {
-
+            debugger;
+            _krnFileSystem.format();
         }
 
         public ls(): void {
-
+            debugger;
+            _krnFileSystem.ls();
         }
 
     }

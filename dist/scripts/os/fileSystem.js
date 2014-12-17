@@ -30,7 +30,6 @@ var TSOS;
         };
 
         FileSystem.prototype.init = function () {
-            debugger;
             var filler = new Array(this.dataData + this.metaData + 1).join('0');
             sessionStorage.setItem("000", "1000" + this.hexToString(alanQuote));
             for (var t = 0; t <= this.track - 1; t++) {
@@ -76,7 +75,6 @@ var TSOS;
         };
 
         FileSystem.prototype.createFile = function (filename) {
-            debugger;
             if (filename in _FileNames) {
                 _StdOut.putText("This file already exists.");
                 return false;
@@ -96,7 +94,6 @@ var TSOS;
         };
 
         FileSystem.prototype.writeFile = function (filename, data) {
-            debugger;
             var filenameTSB = _FileNames[filename];
 
             //check if file is already written to, then overwrite if needed
@@ -143,12 +140,12 @@ var TSOS;
         };
 
         FileSystem.prototype.deleteFile = function (filename) {
-            debugger;
             var filenameTSB = _FileNames[filename];
             var filePointer = this.getMeta(filenameTSB).substr(1);
 
             //delete filename
             this.clearBlock(filenameTSB);
+            delete _FileNames[filename];
 
             //delete file data
             if (filePointer !== "000") {
@@ -176,7 +173,6 @@ var TSOS;
         };
 
         FileSystem.prototype.distributeData = function (filename, data) {
-            debugger;
             var filenameTSB = _FileNames[filename];
             var dataHex = this.stringToHex(data);
 
@@ -192,7 +188,6 @@ var TSOS;
         };
 
         FileSystem.prototype.distributeDataOver = function (filename, data) {
-            debugger;
             var filenameTSB = _FileNames[filename];
             var dataHex = this.stringToHex(data);
 

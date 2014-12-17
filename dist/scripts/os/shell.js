@@ -529,9 +529,13 @@ var TSOS;
         };
 
         Shell.prototype.format = function () {
+            debugger;
+            _krnFileSystem.format();
         };
 
         Shell.prototype.ls = function () {
+            debugger;
+            _krnFileSystem.ls();
         };
         return Shell;
     })();
