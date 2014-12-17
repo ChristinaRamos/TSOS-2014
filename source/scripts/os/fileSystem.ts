@@ -20,10 +20,11 @@ module TSOS {
 		public krnFSDriverEntry(): void {
 			_FileNames = new Array();
 			this.status = "loaded";
+			this.init();
 		}
 
-		public krnFile(): void {
-
+		public krnFile(args): void {
+			
 		}
 
 		public init(): void {
@@ -38,6 +39,8 @@ module TSOS {
 					}
 				}
 			}
+
+			Control.displayDingle();
 		}
 
 		public hexToString(hex:string) {
@@ -73,16 +76,24 @@ module TSOS {
 			if(!this.diskIsFull()) {
 				if(filename.length === 0) {
 					_StdOut.putText("You didn't fucking type a filename.");
-				else if(filename.stringToHex.length > 64) {
-
+					return false;
 				}
 
-				return true;
+				else if(filename.stringToHex.length > this.dataData) {
+					_StdOut.putText("Try a shorter fucking filename.");
+					return false;
 				}
+
+				else {
+					sessionStorage.setItem(this.nextEmptyTSB(), filename);
+					_StdOut.putText("File creation successful.  Maybe.");
+					Control.displayDingle();	
+					return true;
+				}
+			}
 
 			else
 				return false;
-			}
 		}
 
 		public nextEmptyTSB(): string {
@@ -95,6 +106,17 @@ module TSOS {
                 }
             }
 		}
+
+		public getData(tsb: string): string {
+			debugger;
+			return sessionStorage.getItem(tsb).substr(this.metaData + 1, this.dataData);
+		}
+
+		public getMeta(tsb: string): string {
+			return sessionStorage.getItem(tsb).substr(0, this.metaData);
+		}
+		
+
 		
 	}
 }

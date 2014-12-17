@@ -94,6 +94,8 @@ var TSOS;
 
             _CPUScheduler = new TSOS.CPUScheduler();
 
+            this.displayDingle();
+
             this.slideBackground();
         };
 
@@ -181,6 +183,30 @@ var TSOS;
                     }
                 }
             }
+        };
+
+        Control.displayDingle = function () {
+            debugger;
+            var output = "";
+            var dataStr = "";
+            var metaStr = "";
+            var tsbStr = "";
+
+            for (var t = 0; t < _krnFileSystem.track; t++) {
+                for (var s = 0; s < _krnFileSystem.sector; s++) {
+                    for (var b = 0; b < _krnFileSystem.block; b++) {
+                        tsbStr = t.toString() + s.toString() + b.toString();
+                        dataStr = _krnFileSystem.getData(tsbStr);
+                        metaStr = _krnFileSystem.getMeta(tsbStr);
+
+                        output += "<tr><td>" + t + ":" + s + ":" + b + "</td>";
+                        output += "<td>" + metaStr.substring(0, 4) + "</td>";
+                        output += "<td>" + dataStr + "</td></tr>";
+                    }
+                }
+            }
+
+            document.getElementById("Files").innerHTML = output;
         };
         return Control;
     })();

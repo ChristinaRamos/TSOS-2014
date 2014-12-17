@@ -41,7 +41,7 @@ module TSOS {
             // ... more? no
             //
             this.krnTrace("LOADING SHIT");
-            _krnFileSystem = new fileSystem();
+            _krnFileSystem = new FileSystem();
             _krnFileSystem.driverEntry();
             // Enable the OS Interrupts.  (Not the CPU clock interrupt, as that is done in the hardware sim.)
             this.krnTrace("Enabling the interrupts.");

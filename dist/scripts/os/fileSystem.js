@@ -15,7 +15,7 @@ var TSOS;
             this.sector = 8;
             this.block = 8;
             this.metaData = 4;
-            this.dataData = 60;
+            this.dataData = 120;
 
             //I sure hope this works like the keyboard driver
             _super.call(this, this.krnFSDriverEntry, this.krnFile);
@@ -23,9 +23,10 @@ var TSOS;
         FileSystem.prototype.krnFSDriverEntry = function () {
             _FileNames = new Array();
             this.status = "loaded";
+            this.init();
         };
 
-        FileSystem.prototype.krnFile = function () {
+        FileSystem.prototype.krnFile = function (args) {
         };
 
         FileSystem.prototype.init = function () {
@@ -40,6 +41,8 @@ var TSOS;
                     }
                 }
             }
+
+            TSOS.Control.displayDingle();
         };
 
         FileSystem.prototype.hexToString = function (hex) {
@@ -73,7 +76,18 @@ var TSOS;
 
         FileSystem.prototype.createFile = function (filename) {
             if (!this.diskIsFull()) {
-                return true;
+                if (filename.length === 0) {
+                    _StdOut.putText("You didn't fucking type a filename.");
+                    return false;
+                } else if (filename.stringToHex.length > this.dataData) {
+                    _StdOut.putText("Try a shorter fucking filename.");
+                    return false;
+                } else {
+                    sessionStorage.setItem(this.nextEmptyTSB(), filename);
+                    _StdOut.putText("File creation successful.  Maybe.");
+                    TSOS.Control.displayDingle();
+                    return true;
+                }
             } else
                 return false;
         };
@@ -87,6 +101,15 @@ var TSOS;
                     }
                 }
             }
+        };
+
+        FileSystem.prototype.getData = function (tsb) {
+            debugger;
+            return sessionStorage.getItem(tsb).substr(this.metaData + 1, this.dataData);
+        };
+
+        FileSystem.prototype.getMeta = function (tsb) {
+            return sessionStorage.getItem(tsb).substr(0, this.metaData);
         };
         return FileSystem;
     })(TSOS.DeviceDriver);
