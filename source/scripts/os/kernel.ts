@@ -52,6 +52,8 @@ module TSOS {
             _OsShell = new Shell();
             _OsShell.init();
 
+            (<HTMLAudioElement>document.getElementById('startAudio')).play();
+
             // Finally, initiate testing.
             if (_GLaDOS) {
                 _GLaDOS.afterStartup();

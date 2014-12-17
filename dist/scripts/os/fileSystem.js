@@ -31,7 +31,8 @@ var TSOS;
 
         FileSystem.prototype.init = function () {
             var filler = new Array(this.dataData + this.metaData + 1).join('0');
-            sessionStorage.setItem("000", alanQuote);
+            this.setMeta("000", "000");
+            this.setData("000", this.hexToString(alanQuote) + " ");
             for (var t = 0; t <= this.track - 1; t++) {
                 for (var s = 0; s <= this.sector - 1; s++) {
                     for (var b = 0; b <= this.block - 1; b++) {
@@ -65,31 +66,85 @@ var TSOS;
             for (var t = 0; t <= this.track - 1; t++) {
                 for (var s = 0; s <= this.sector - 1; s++) {
                     for (var b = 0; b <= this.block - 1; b++) {
-                        if (sessionStorage.getItem(t.toString() + s.toString() + b.toString()).substr(0, 1) === "0")
-                            return true;
+                        if (this.getMeta(t.toString() + s.toString() + b.toString()).substr(0, 1) === "0")
+                            return false;
                     }
                 }
             }
 
-            return false;
+            return true;
         };
 
         FileSystem.prototype.createFile = function (filename) {
             if (!this.diskIsFull()) {
-                if (filename.length === 0) {
-                    _StdOut.putText("You didn't fucking type a filename.");
-                    return false;
-                } else if (filename.stringToHex.length > this.dataData) {
-                    _StdOut.putText("Try a shorter fucking filename.");
-                    return false;
-                } else {
-                    sessionStorage.setItem(this.nextEmptyTSB(), filename);
-                    _StdOut.putText("File creation successful.  Maybe.");
-                    TSOS.Control.displayDingle();
-                    return true;
-                }
+                var nextTSB = this.nextEmptyTSB();
+
+                _FileNames[filename] = nextTSB;
+                this.setMeta(nextTSB, "000");
+                this.setData(nextTSB, this.stringToHex(filename));
+                _StdOut.putText("File creation successful.  Maybe.");
+                TSOS.Control.displayDingle();
+                return true;
             } else
                 return false;
+        };
+
+        FileSystem.prototype.writeFile = function (filename, data) {
+            var fileTSB = _FileNames[filename];
+
+            //check if file is already written to, then overwrite if needed
+            var dataHex = data.stringToHex();
+
+            //file is not written to yet (no pointer to another tsb)
+            if (this.diskIsFull())
+                return false;
+
+            if (fileTSB !== "000") {
+                var nextTSB = this.nextEmptyTSB();
+
+                this.setMeta(fileTSB, "1" + nextTSB);
+
+                if (dataHex.length > this.dataData)
+                    this.distributeData(filename, data);
+                else
+                    this.setData(fileTSB, dataHex);
+            } else {
+                //file has already been written to, overwrite
+                var fileMeta = this.getMeta(fileTSB).substr(1);
+                if (dataHex.length > this.dataData)
+                    this.distributeDataOver(filename, data);
+                else
+                    this.setData(fileMeta, dataHex);
+            }
+
+            return true;
+            TSOS.Control.displayDingle();
+        };
+
+        FileSystem.prototype.distributeData = function (filename, data) {
+            var fileTSB = _FileNames[filename];
+            var dataHex = this.stringToHex(data);
+
+            while (dataHex.length > this.dataData) {
+                var nextTSB = this.nextEmptyTSB();
+                this.setMeta(nextTSB, this.nextEmptyTSB());
+                this.setData(nextTSB, dataHex.slice(0, this.dataData + 1));
+            }
+
+            nextTSB = this.nextEmptyTSB();
+            this.setMeta(nextTSB, "000");
+            this.setData(nextTSB, dataHex);
+        };
+
+        FileSystem.prototype.distributeDataOver = function (filename, data) {
+            var fileTSB = _FileNames[filename];
+            var dataHex = this.stringToHex(data);
+
+            while (dataHex.length > this.dataData) {
+                var nextTSB = this.getMeta(fileTSB.substr(1));
+                this.setData(nextTSB, dataHex.slice(0, this.dataData + 1));
+                fileTSB = nextTSB;
+            }
         };
 
         FileSystem.prototype.nextEmptyTSB = function () {
@@ -104,12 +159,19 @@ var TSOS;
         };
 
         FileSystem.prototype.getData = function (tsb) {
-            debugger;
-            return sessionStorage.getItem(tsb).substr(this.metaData + 1, this.dataData);
+            return sessionStorage.getItem(tsb).substr(this.metaData, this.dataData + this.metaData);
         };
 
         FileSystem.prototype.getMeta = function (tsb) {
             return sessionStorage.getItem(tsb).substr(0, this.metaData);
+        };
+
+        FileSystem.prototype.setData = function (tsb, data) {
+            sessionStorage.setItem(tsb, this.getMeta(tsb) + data + new Array(this.dataData - data.length + 1).join('0'));
+        };
+
+        FileSystem.prototype.setMeta = function (tsb, meta) {
+            sessionStorage.setItem(tsb, "1" + meta + this.getData(tsb));
         };
         return FileSystem;
     })(TSOS.DeviceDriver);

@@ -484,9 +484,28 @@ var TSOS;
         };
 
         Shell.prototype.fileCreate = function (args) {
+            var filename = args[0];
+
+            if (filename === undefined) {
+                _StdOut.putText("You didn't fucking type a filename.");
+            } else if (_krnFileSystem.stringToHex(filename).length > _krnFileSystem.dataData) {
+                _StdOut.putText("Try a shorter fucking filename.");
+            } else
+                _krnFileSystem.createFile(filename);
         };
 
         Shell.prototype.fileWrite = function (args) {
+            var filename = args[0];
+            var data = args[1];
+
+            if (filename === undefined) {
+                _StdOut.putText("Filename pls.");
+            } else if (data === undefined) {
+                _StdOut.putText("Tell me what to write, man.");
+            } else if (!(filename in _FileNames)) {
+                _StdOut.putText("That filename doesn't exist.");
+            } else
+                _krnFileSystem.writeFile(filename, data);
         };
 
         Shell.prototype.fileRead = function (args) {

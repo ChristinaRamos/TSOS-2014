@@ -51,6 +51,8 @@ var TSOS;
             _OsShell = new TSOS.Shell();
             _OsShell.init();
 
+            document.getElementById('startAudio').play();
+
             // Finally, initiate testing.
             if (_GLaDOS) {
                 _GLaDOS.afterStartup();
