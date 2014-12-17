@@ -93,7 +93,7 @@ module TSOS {
 		public writeFile(filename, data): boolean {
 			var fileTSB = _FileNames[filename];
 			//check if file is already written to, then overwrite if needed
-			var dataHex = data.stringToHex();
+			var dataHex = this.stringToHex(data);
 			//file is not written to yet (no pointer to another tsb)
 
 			if(this.diskIsFull()) 
@@ -122,9 +122,8 @@ module TSOS {
 				else
 					this.setData(fileMeta, dataHex);	
 			}
-
-			return true;
 			Control.displayDingle();
+			return true;			
 		}
 
 		public distributeData(filename, data): void {

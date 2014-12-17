@@ -93,7 +93,7 @@ var TSOS;
             var fileTSB = _FileNames[filename];
 
             //check if file is already written to, then overwrite if needed
-            var dataHex = data.stringToHex();
+            var dataHex = this.stringToHex(data);
 
             //file is not written to yet (no pointer to another tsb)
             if (this.diskIsFull())
@@ -116,9 +116,8 @@ var TSOS;
                 else
                     this.setData(fileMeta, dataHex);
             }
-
-            return true;
             TSOS.Control.displayDingle();
+            return true;
         };
 
         FileSystem.prototype.distributeData = function (filename, data) {
