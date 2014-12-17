@@ -144,7 +144,14 @@ var TSOS;
             debugger;
             var filenameTSB = _FileNames[filename];
             var filePointer = this.getMeta(filenameTSB).substr(1);
-            this.setData(filePointer, "0");
+
+            //delete filename
+            this.clearBlock(filenameTSB);
+
+            //delete file data
+            this.clearBlock(filePointer);
+
+            TSOS.Control.displayDingle();
             return true;
         };
 
@@ -201,6 +208,10 @@ var TSOS;
 
         FileSystem.prototype.setMeta = function (tsb, meta) {
             sessionStorage.setItem(tsb, "1" + meta + this.getData(tsb));
+        };
+
+        FileSystem.prototype.clearBlock = function (tsb) {
+            sessionStorage.setItem(tsb, "0000" + new Array(this.dataData).join('0'));
         };
         return FileSystem;
     })(TSOS.DeviceDriver);

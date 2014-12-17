@@ -149,7 +149,12 @@ module TSOS {
 			debugger;
 			var filenameTSB = _FileNames[filename];
 			var filePointer = this.getMeta(filenameTSB).substr(1);
-			this.setData(filePointer, "0");
+			//delete filename
+			this.clearBlock(filenameTSB);
+			//delete file data
+			this.clearBlock(filePointer);
+
+			Control.displayDingle();
 			return true;			
 		}
 
@@ -208,6 +213,10 @@ module TSOS {
 
 		public setMeta(tsb: string, meta: string) {
 			sessionStorage.setItem(tsb, "1" + meta + this.getData(tsb));
+		}
+
+		public clearBlock(tsb: string) {
+			sessionStorage.setItem(tsb, "0000" + new Array(this.dataData).join('0'));
 		}
 		
 	}
