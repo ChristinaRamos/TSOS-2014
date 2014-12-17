@@ -140,6 +140,14 @@ var TSOS;
             return true;
         };
 
+        FileSystem.prototype.deleteFile = function (filename) {
+            debugger;
+            var filenameTSB = _FileNames[filename];
+            var filePointer = this.getMeta(filenameTSB).substr(1);
+            this.setData(filePointer, "0");
+            return true;
+        };
+
         FileSystem.prototype.distributeData = function (filename, data) {
             debugger;
             var filenameTSB = _FileNames[filename];

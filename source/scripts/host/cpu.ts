@@ -51,7 +51,7 @@ module TSOS {
             }
             //Otherwise, let's do this thing.
             else {
-                debugger;
+                 
                 _CurrentProgram.state = "Running";
                 this.execProg(_MemoryManager.getMem(this.PC));
                 _CPUScheduler.ticks++;

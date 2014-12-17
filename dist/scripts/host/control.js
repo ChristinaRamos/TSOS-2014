@@ -186,7 +186,6 @@ var TSOS;
         };
 
         Control.displayDingle = function () {
-            debugger;
             var output = "";
             var dataStr = "";
             var metaStr = "";

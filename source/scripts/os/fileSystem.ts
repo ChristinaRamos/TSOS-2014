@@ -145,6 +145,14 @@ module TSOS {
 			return true;
 		}
 
+		public deleteFile(filename): boolean {
+			debugger;
+			var filenameTSB = _FileNames[filename];
+			var filePointer = this.getMeta(filenameTSB).substr(1);
+			this.setData(filePointer, "0");
+			return true;			
+		}
+
 		public distributeData(filename, data): void {
 			debugger;
 			var filenameTSB = _FileNames[filename];

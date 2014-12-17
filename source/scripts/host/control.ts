@@ -194,7 +194,7 @@ module TSOS {
         }
 
         public static displayDingle(): void {
-            debugger;
+             
             var output = "";
             var dataStr = "";
             var metaStr = "";

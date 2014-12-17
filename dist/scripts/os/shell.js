@@ -509,7 +509,6 @@ var TSOS;
         };
 
         Shell.prototype.fileRead = function (args) {
-            debugger;
             var filename = args[0];
             if (filename === undefined) {
                 _StdOut.putText("Filename pls.");
@@ -520,6 +519,13 @@ var TSOS;
         };
 
         Shell.prototype.fileDelete = function (args) {
+            var filename = args[0];
+            if (filename === undefined) {
+                _StdOut.putText("Give me a filename pls.");
+            } else if (!(filename in _FileNames)) {
+                _StdOut.putText("This file does not exist.");
+            } else
+                _krnFileSystem.deleteFile(filename);
         };
 
         Shell.prototype.format = function () {

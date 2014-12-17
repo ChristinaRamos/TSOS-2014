@@ -77,7 +77,7 @@ module TSOS {
 		}
 
     	public reorderReadyQueue(): void {
-            debugger;
+             
     		this.readyQueue.q.sort(this.compare);
     	}
 

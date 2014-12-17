@@ -77,7 +77,6 @@ var TSOS;
         };
 
         CPUScheduler.prototype.reorderReadyQueue = function () {
-            debugger;
             this.readyQueue.q.sort(this.compare);
         };
 

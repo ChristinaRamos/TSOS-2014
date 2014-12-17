@@ -49,7 +49,6 @@ var TSOS;
                 _StdOut.advanceLine();
                 _OsShell.putPrompt();
             } else {
-                debugger;
                 _CurrentProgram.state = "Running";
                 this.execProg(_MemoryManager.getMem(this.PC));
                 _CPUScheduler.ticks++;

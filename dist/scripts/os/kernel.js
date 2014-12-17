@@ -156,7 +156,6 @@ var TSOS;
                     this.krnTrapError("You are trying to Access memory that doesn't exist.  Cease and desist.");
                     break;
                 case KILL_IRQ:
-                    debugger;
                     TSOS.Control.kill(params);
                     break;
                 default:
