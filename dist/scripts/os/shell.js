@@ -509,6 +509,7 @@ var TSOS;
         };
 
         Shell.prototype.fileRead = function (args) {
+            debugger;
             var filename = args[0];
             if (filename === undefined) {
                 _StdOut.putText("Filename pls.");

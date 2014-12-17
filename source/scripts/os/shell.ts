@@ -588,6 +588,7 @@ module TSOS {
         }
 
         public fileRead(args): void {
+            debugger;
             var filename = args[0];
             if(filename === undefined) {
                 _StdOut.putText("Filename pls.");

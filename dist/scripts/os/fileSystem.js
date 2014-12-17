@@ -76,8 +76,10 @@ var TSOS;
         };
 
         FileSystem.prototype.createFile = function (filename) {
+            debugger;
             if (filename in _FileNames) {
                 _StdOut.putText("This file already exists.");
+                return false;
             }
 
             if (!this.diskIsFull()) {
@@ -114,7 +116,8 @@ var TSOS;
                 if (dataHex.length > this.dataData)
                     this.distributeData(filename, data);
                 else
-                    this.setData(nextTSB, dataHex);
+                    this.setMeta(nextTSB, "000");
+                this.setData(nextTSB, dataHex);
             } else {
                 //file has already been written to, overwrite
                 var fileMeta = this.getMeta(filenameTSB).substr(1);
@@ -129,13 +132,16 @@ var TSOS;
 
         FileSystem.prototype.readFile = function (filename) {
             var filenameTSB = _FileNames[filename];
-            var fileData = this.getMeta(filenameTSB);
-            _StdOut.putText(this.getData(filenameTSB));
+            var fileDataTSB = this.getMeta(filenameTSB);
+            var fileData = this.getData(fileDataTSB);
+            var output = this.hexToString(fileData);
+            _StdOut.putText(output);
 
             return true;
         };
 
         FileSystem.prototype.distributeData = function (filename, data) {
+            debugger;
             var filenameTSB = _FileNames[filename];
             var dataHex = this.stringToHex(data);
 
@@ -151,6 +157,7 @@ var TSOS;
         };
 
         FileSystem.prototype.distributeDataOver = function (filename, data) {
+            debugger;
             var filenameTSB = _FileNames[filename];
             var dataHex = this.stringToHex(data);
 

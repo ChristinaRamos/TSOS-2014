@@ -74,10 +74,12 @@ module TSOS {
 		}
 
 		public createFile(filename): boolean {
+			debugger;
 			if(filename in _FileNames) {
 				_StdOut.putText("This file already exists.");
+				return false;
 			}
-			
+
 			if(!this.diskIsFull()) {
 				var nextTSB = this.nextEmptyTSB();
 
@@ -115,6 +117,7 @@ module TSOS {
 					this.distributeData(filename, data);
 
 				else
+					this.setMeta(nextTSB, "000");
 					this.setData(nextTSB, dataHex);
 			}
 				
@@ -134,13 +137,16 @@ module TSOS {
 
 		public readFile(filename): boolean {
 			var filenameTSB = _FileNames[filename];
-			var fileData = this.getMeta(filenameTSB);
-			_StdOut.putText(this.getData(filenameTSB));
+			var fileDataTSB = this.getMeta(filenameTSB);
+			var fileData = this.getData(fileDataTSB);
+			var output = this.hexToString(fileData);
+			_StdOut.putText(output);
 
 			return true;
 		}
 
 		public distributeData(filename, data): void {
+			debugger;
 			var filenameTSB = _FileNames[filename];
 			var dataHex = this.stringToHex(data);
 			//if the data is too long, slice it until it's short enough
@@ -156,6 +162,7 @@ module TSOS {
 		}
 
 		public distributeDataOver(filename, data): void {
+			debugger;
 			var filenameTSB = _FileNames[filename]; //TSB of where the filename IS
 			var dataHex = this.stringToHex(data);
 
