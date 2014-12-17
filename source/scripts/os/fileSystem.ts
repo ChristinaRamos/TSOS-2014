@@ -91,31 +91,34 @@ module TSOS {
 		}
 
 		public writeFile(filename, data): boolean {
-			var fileTSB = _FileNames[filename];
+			debugger;
+			var filenameTSB = _FileNames[filename];
 			//check if file is already written to, then overwrite if needed
+			var filenamePointer = this.getMeta(filenameTSB).substr(1);
+			
 			var dataHex = this.stringToHex(data);
-			//file is not written to yet (no pointer to another tsb)
 
 			if(this.diskIsFull()) 
 				return false;
 
-			if(fileTSB !== "000") {
+			//if the filename is not pointing to anything, it hasn't been written to yet
+			if(filenamePointer === "000") {
 				
 				var nextTSB = this.nextEmptyTSB();
 				
-				this.setMeta(fileTSB, "1" + nextTSB);
+				this.setMeta(filenameTSB, nextTSB);
 
 				if(dataHex.length > this.dataData) 
 					this.distributeData(filename, data);
 
 				else
-					this.setData(fileTSB, dataHex);
+					this.setData(nextTSB, dataHex);
 			}
 				
 
 			else {
 				//file has already been written to, overwrite
-				var fileMeta = this.getMeta(fileTSB).substr(1);
+				var fileMeta = this.getMeta(filenameTSB).substr(1);
 				if(dataHex.length > this.dataData)
 					this.distributeDataOver(filename, data);
 
@@ -127,7 +130,7 @@ module TSOS {
 		}
 
 		public distributeData(filename, data): void {
-			var fileTSB = _FileNames[filename];
+			var filenameTSB = _FileNames[filename];
 			var dataHex = this.stringToHex(data);
 			//if the data is too long, slice it until it's short enough
 			while(dataHex.length > this.dataData) {
@@ -142,13 +145,13 @@ module TSOS {
 		}
 
 		public distributeDataOver(filename, data): void {
-			var fileTSB = _FileNames[filename]; //TSB of where the filename IS
+			var filenameTSB = _FileNames[filename]; //TSB of where the filename IS
 			var dataHex = this.stringToHex(data);
 
 			while(dataHex.length > this.dataData) {
-				var nextTSB = this.getMeta(fileTSB.substr(1));  //Get where file points next
+				var nextTSB = this.getMeta(filenameTSB.substr(1));  //Get where file points next
 				this.setData(nextTSB, dataHex.slice(0, this.dataData + 1));
-				fileTSB = nextTSB;
+				filenameTSB = nextTSB;
 			}
 
 
