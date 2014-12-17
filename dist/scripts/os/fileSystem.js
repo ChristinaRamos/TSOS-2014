@@ -151,7 +151,9 @@ var TSOS;
             this.clearBlock(filenameTSB);
 
             //delete file data
-            this.clearBlock(filePointer);
+            if (filePointer !== "000") {
+                this.clearBlock(filePointer);
+            }
 
             _StdOut.putText("File and contents deleted successfully.");
 
