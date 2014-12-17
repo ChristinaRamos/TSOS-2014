@@ -2,7 +2,7 @@
 var TSOS;
 (function (TSOS) {
     var PCB = (function () {
-        function PCB(PC, Acc, Xreg, Yreg, Zflag, pid, base, limit, state) {
+        function PCB(PC, Acc, Xreg, Yreg, Zflag, pid, base, limit, priority, state) {
             if (typeof PC === "undefined") { PC = 0; }
             if (typeof Acc === "undefined") { Acc = 0; }
             if (typeof Xreg === "undefined") { Xreg = 0; }
@@ -11,6 +11,7 @@ var TSOS;
             if (typeof pid === "undefined") { pid = 0; }
             if (typeof base === "undefined") { base = 0; }
             if (typeof limit === "undefined") { limit = 0; }
+            if (typeof priority === "undefined") { priority = 0; }
             if (typeof state === "undefined") { state = "New"; }
             this.PC = PC;
             this.Acc = Acc;
@@ -20,6 +21,7 @@ var TSOS;
             this.pid = pid;
             this.base = base;
             this.limit = limit;
+            this.priority = priority;
             this.state = state;
             //Every time a PCB is created, it's a new program
             //so increment dat PID

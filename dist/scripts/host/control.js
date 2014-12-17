@@ -94,6 +94,8 @@ var TSOS;
 
             _CPUScheduler = new TSOS.CPUScheduler();
 
+            this.displayDingle();
+
             this.slideBackground();
         };
 
@@ -170,7 +172,7 @@ var TSOS;
                 _CurrentProgram.state = "Killed";
                 _StdOut.putText("Program " + _CurrentPID + " successfully killed.");
                 _StdOut.advanceLine();
-                _CPUScheduler.rockinRobin();
+                _CPUScheduler.schedule();
             } else {
                 for (var i = 0; i < _CPUScheduler.readyQueue.getSize(); i++) {
                     if (pid === _CPUScheduler.readyQueue.get(i).pid) {
@@ -181,6 +183,29 @@ var TSOS;
                     }
                 }
             }
+        };
+
+        Control.displayDingle = function () {
+            var output = "";
+            var dataStr = "";
+            var metaStr = "";
+            var tsbStr = "";
+
+            for (var t = 0; t < _krnFileSystem.track; t++) {
+                for (var s = 0; s < _krnFileSystem.sector; s++) {
+                    for (var b = 0; b < _krnFileSystem.block; b++) {
+                        tsbStr = t.toString() + s.toString() + b.toString();
+                        dataStr = _krnFileSystem.getData(tsbStr);
+                        metaStr = _krnFileSystem.getMeta(tsbStr);
+
+                        output += "<tr><td>" + t + ":" + s + ":" + b + "</td>";
+                        output += "<td>" + metaStr.substring(0, 4) + "</td>";
+                        output += "<td>" + dataStr + "</td></tr>";
+                    }
+                }
+            }
+
+            document.getElementById("FileDisplay").innerHTML = output;
         };
         return Control;
     })();

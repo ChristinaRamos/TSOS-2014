@@ -209,9 +209,6 @@ var TSOS;
             this.displayPCB();
             _MemoryManager.memoryWipeOneBlock(_CurrentProgram);
             _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CPU_BREAK_IRQ, null));
-            //if(!_CPUScheduler.readyQueue.isEmpty()) {
-            //    _CPUScheduler.rockinRobin();
-            //}
         };
 
         Cpu.prototype.branch = function () {
@@ -283,6 +280,7 @@ var TSOS;
             output += "<td id='cell'" + 6 + "'>" + "State: " + _CurrentProgram.state + '</td>';
             output += "<td id='cell'" + 7 + "'>" + "Base: " + _CurrentProgram.base.toString() + '</td>';
             output += "<td id='cell'" + 8 + "'>" + "Limit: " + _CurrentProgram.limit.toString() + '</td>';
+            output += "<td id='cell'" + 9 + "'>" + "Priority: " + _CurrentProgram.priority.toString() + '</td>';
             output += "</tr>";
             if (typeof _CPUScheduler.readyQueue !== "undefined") {
                 for (var i = 0; i < _CPUScheduler.readyQueue.getSize(); i++) {
@@ -296,6 +294,7 @@ var TSOS;
                     output += "<td id='cell'" + 6 + "'>" + "State: " + _CPUScheduler.readyQueue.q[i].state + '</td>';
                     output += "<td id='cell'" + 7 + "'>" + "Base: " + _CPUScheduler.readyQueue.q[i].base.toString() + '</td>';
                     output += "<td id='cell'" + 8 + "'>" + "Limit: " + _CPUScheduler.readyQueue.q[i].limit.toString() + '</td>';
+                    output += "<td id='cell'" + 9 + "'>" + "Priority: " + _CurrentProgram.priority.toString() + '</td>';
                     output += "</tr>";
                 }
             }

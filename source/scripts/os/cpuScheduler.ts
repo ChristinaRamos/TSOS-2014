@@ -11,25 +11,27 @@ module TSOS {
     	}
 
     	public runAll(): void {
-    		//debugger;
+    		debugger;
     		var residentLength = this.residentList.getSize();
     		for(var i = 0; i < residentLength; i++) {
     			this.readyQueue.enqueue(this.residentList.dequeue());
     			this.readyQueue.q[i].state = "Ready";
     		}
 
+            if(_Schedule === "priority") {
+                this.reorderReadyQueue();
+            }
+
     		_CurrentProgram = this.readyQueue.dequeue();
     		_CurrentPID = _CurrentProgram.pid;
     		_CPU.updateCPU();
     		_CPU.isExecuting = true;
     		_CurrentProgram.state = "Running";
-    		//_CPU.cycle();
     	}
 
     	public rockinRobin(): void {
     		if(this.readyQueue.getSize() < 1) {
     			this.ticks = 0;
-    			//_CPU.cycle();
     		}
     		else {
 	    		this.ticks = 0;
@@ -47,6 +49,44 @@ module TSOS {
 	    		//_CPU.cycle();
 	    	}
     	}
+
+    	public fcfs(): void {
+    		_CurrentProgram = this.readyQueue.dequeue();
+    		_CurrentPID = _CurrentProgram.pid;
+    		_CPU.updateCPU();
+    		_MemoryManager.displayMem();
+    		_CPU.displayPCB();
+    	}
+
+    	public schedule(): void {
+    		if(_Schedule === "rr") {
+    			this.rockinRobin();
+    		}
+
+    		else if(_Schedule === "fcfs" || _Schedule === "priority") {
+    			this.fcfs();
+    		}
+    	}
+
+    	public compare(a,b): number {
+		    if (a.priority < b.priority)
+		        return -1;
+		    if (a.priority > b.priority)
+		        return 1;
+		    return 0;
+		}
+
+    	public reorderReadyQueue(): void {
+             
+    		this.readyQueue.q.sort(this.compare);
+    	}
+
+        public setPriority(priority: number): void {
+            this.residentList.q[this.residentList.getSize() - 1].priority = priority;
+        }
+
+    	
+
     }
 }
 

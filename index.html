@@ -30,7 +30,8 @@
    <script type="text/javascript" src="dist/scripts/os/userCommand.js"></script>
    <script type="text/javascript" src="dist/scripts/os/memoryManager.js"></script>
    <script type="text/javascript" src="dist/scripts/os/cpuScheduler.js"></script>
-   <script type="text/javascript" src="dist/scripts/os/pcb.js"></script>
+   <script type="text/javascript" src="dist/scripts/os/pcb.js"></script>   
+   <script type="text/javascript" src="dist/scripts/os/fileSystem.js"></script>
    <script type="text/javascript" src="dist/scripts/os/kernel.js"></script>
 
    <!-- Other Routines -->
@@ -38,6 +39,7 @@
    <!-- Uncomment this line below to enable Glados testing -->
    <!-- <script type="text/javascript" src="http://www.labouseur.com/courses/os/projects/glados.js"></script> -->
 </head>
+<audio id ="startAudio" src="https://clyp.it/4hhzjmp3.ogg"></audio>
 
 <body id="body" onload="onDocumentLoad();">
 
@@ -129,6 +131,21 @@
          <table id="pcbTable">
          </table>
    </label>
+  </div>
+
+  <div id="Files">
+   <table id="fileTable">
+    <thead style="font-weight:bold">
+     <tr>
+       File System
+         <td>T:S:B</td>
+         <td>Meta</td>
+         <td>Data</td>
+     </tr>
+    </thead>
+    <tbody id="FileDisplay">
+    </tbody>
+   </table>
   </div>
 
 <br>

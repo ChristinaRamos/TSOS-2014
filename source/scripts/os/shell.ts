@@ -142,6 +142,45 @@ module TSOS {
                                   "Allows user to kill an active process.");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new ShellCommand(this.setSchedule,
+                                  "setschedule",
+                                  "Allows user to set the scheduling type.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.getSchedule,
+                                  "getschedule",
+                                  "Allows user to get the scheduling type.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.fileCreate,
+                                  "create",
+                                  "Allows user to create a file.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.fileRead,
+                                  "read",
+                                  "Allows user to view the contents of a file.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.fileWrite,
+                                  "write",
+                                  "Allows user to write contents to a file.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.fileDelete,
+                                  "delete",
+                                  "Allows user to remove a file.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.format,
+                                  "format",
+                                  "Allows user to format the disk.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.ls,
+                                  "ls",
+                                  "Allows user to list filenames on disk.");
+            this.commandList[this.commandList.length] = sc;
 
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
@@ -385,7 +424,7 @@ module TSOS {
             _DrawingContext.fillRect(0, 0, _Canvas.width, _Canvas.height);      //draw a cool rectangle as big as the canvas
         }
 
-        public shellLoad() {
+        public shellLoad(args?) {
             var input = "";
             var isHex = true;
             //all those valid hex characters.  what a bunch of kool kidz
@@ -414,9 +453,9 @@ module TSOS {
                         _StdOut.putText("This isn't an even number of hex characters.");
                     }
 
-                    else {                  
+                    else {       
                     //Go load the program for realsies.
-                        _MemoryManager.loadProg();
+                        _MemoryManager.loadProg(args[0]);
                     }
                 }
 
@@ -479,5 +518,112 @@ module TSOS {
         public kill(args): void {
             _KernelInterruptQueue.enqueue(new Interrupt(KILL_IRQ, args[0]));
         }
+
+        public setSchedule(args): void {
+            if(_CPU.isExecuting === true) {
+                _StdOut.putText("CAN'T LET YOU DO THAT, STAR FOX.");
+            }
+
+            else {
+                if(args[0] === "rr") {
+                    _Schedule = "rr";
+                    _StdOut.putText("Scheduling set to Round Robin.");
+                    _StdOut.advanceLine();
+                }
+
+                else if(args[0] === "fcfs") {
+                    _Schedule = "fcfs";
+                    _StdOut.putText("Scheduling set to First Come First Serve.");
+                    _StdOut.advanceLine();
+                }
+
+                else if(args[0] === "priority") {
+                    _Schedule = "priority";
+                    _StdOut.putText("Scheduling set to Priority.");
+                    _StdOut.advanceLine();
+                }
+
+                else
+                    _StdOut.putText("Either that isn't a schedule or we don't have that here.");
+            }
+        }
+
+        public getSchedule(): void {
+            _StdOut.putText("The current schedule is " + _Schedule + ".");
+            _StdOut.advanceLine();
+        }
+
+        public fileCreate(args): void {
+            var filename = args[0];
+
+            if(filename === undefined) {
+                    _StdOut.putText("You didn't fucking type a filename.");
+            }
+
+            else if(_krnFileSystem.stringToHex(filename).length > _krnFileSystem.dataData) {
+                    _StdOut.putText("Try a shorter fucking filename.");
+            }
+            
+            else
+                _krnFileSystem.createFile(filename);
+        }   
+
+        public fileWrite(args): void {
+            var filename = args[0];
+            var data = args[1];
+
+            if(filename === undefined) {
+                _StdOut.putText("Filename pls.");
+            }
+            else if(data === undefined) {
+                _StdOut.putText("Tell me what to write, man.");
+            }
+
+            else if(!(filename in _FileNames)) {
+                _StdOut.putText("That filename doesn't exist.");
+            }
+
+            else
+                _krnFileSystem.writeFile(filename, data);
+        }
+
+        public fileRead(args): void {
+            var filename = args[0];
+            if(filename === undefined) {
+                _StdOut.putText("Filename pls.");
+            }
+
+            else if(!(filename in _FileNames)) {
+                _StdOut.putText("That filename doesn't exist.");
+            }
+
+            else
+                _krnFileSystem.readFile(filename);
+        }
+
+        public fileDelete(args): void {
+            var filename = args[0];
+            if(filename === undefined) {
+                _StdOut.putText("Give me a filename pls.");
+            }
+
+            else if(!(filename in _FileNames)) { 
+                _StdOut.putText("This file does not exist.");
+            }
+
+            else
+                _krnFileSystem.deleteFile(filename);
+        }
+
+        public format(): void {
+            debugger;
+            _krnFileSystem.format();
+        }
+
+        public ls(): void {
+            debugger;
+            _krnFileSystem.ls();
+        }
+
     }
 }

@@ -10,6 +10,7 @@ module TSOS {
 					public pid: number = 0,
 					public base: number = 0,
 					public limit: number = 0,
+					public priority: number = 0,
 					public state: string = "New") {
 			//Every time a PCB is created, it's a new program 
 			//so increment dat PID

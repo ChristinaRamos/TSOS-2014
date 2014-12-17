@@ -56,6 +56,7 @@ module TSOS {
             }
             //Otherwise, let's do this thing.
             else {
+                 
                 _CurrentProgram.state = "Running";
                 this.execProg(_MemoryManager.getMem(this.PC));
                 _CPUScheduler.ticks++;
@@ -211,10 +212,6 @@ module TSOS {
             this.displayPCB();
             _MemoryManager.memoryWipeOneBlock(_CurrentProgram);
             _KernelInterruptQueue.enqueue(new Interrupt(CPU_BREAK_IRQ, null));
-            
-            //if(!_CPUScheduler.readyQueue.isEmpty()) {
-            //    _CPUScheduler.rockinRobin();
-            //}
         }
 
         public branch(): void {
@@ -294,6 +291,7 @@ module TSOS {
                 output += "<td id='cell'" + 6 + "'>" + "State: " + _CurrentProgram.state + '</td>';
                 output += "<td id='cell'" + 7 + "'>" + "Base: " + _CurrentProgram.base.toString() + '</td>';
                 output += "<td id='cell'" + 8 + "'>" + "Limit: " + _CurrentProgram.limit.toString() + '</td>';
+                output += "<td id='cell'" + 9 + "'>" + "Priority: " + _CurrentProgram.priority.toString() + '</td>';                
                 output += "</tr>";
             if(typeof _CPUScheduler.readyQueue !== "undefined"){ 
                 for(var i = 0; i < _CPUScheduler.readyQueue.getSize(); i++) {
@@ -307,6 +305,7 @@ module TSOS {
                     output += "<td id='cell'" + 6 + "'>" + "State: " + _CPUScheduler.readyQueue.q[i].state + '</td>';
                     output += "<td id='cell'" + 7 + "'>" + "Base: " + _CPUScheduler.readyQueue.q[i].base.toString() + '</td>';
                     output += "<td id='cell'" + 8 + "'>" + "Limit: " + _CPUScheduler.readyQueue.q[i].limit.toString() + '</td>';
+                    output += "<td id='cell'" + 9 + "'>" + "Priority: " + _CurrentProgram.priority.toString() + '</td>';
                     output += "</tr>";
                 }
             }

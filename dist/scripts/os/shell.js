@@ -102,6 +102,30 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.kill, "kill", "Allows user to kill an active process.");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new TSOS.ShellCommand(this.setSchedule, "setschedule", "Allows user to set the scheduling type.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new TSOS.ShellCommand(this.getSchedule, "getschedule", "Allows user to get the scheduling type.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new TSOS.ShellCommand(this.fileCreate, "create", "Allows user to create a file.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new TSOS.ShellCommand(this.fileRead, "read", "Allows user to view the contents of a file.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new TSOS.ShellCommand(this.fileWrite, "write", "Allows user to write contents to a file.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new TSOS.ShellCommand(this.fileDelete, "delete", "Allows user to remove a file.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new TSOS.ShellCommand(this.format, "format", "Allows user to format the disk.");
+            this.commandList[this.commandList.length] = sc;
+
+            sc = new TSOS.ShellCommand(this.ls, "ls", "Allows user to list filenames on disk.");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -348,7 +372,7 @@ var TSOS;
             _DrawingContext.fillRect(0, 0, _Canvas.width, _Canvas.height); //draw a cool rectangle as big as the canvas
         };
 
-        Shell.prototype.shellLoad = function () {
+        Shell.prototype.shellLoad = function (args) {
             var input = "";
             var isHex = true;
 
@@ -376,7 +400,7 @@ var TSOS;
                         _StdOut.putText("This isn't an even number of hex characters.");
                     } else {
                         //Go load the program for realsies.
-                        _MemoryManager.loadProg();
+                        _MemoryManager.loadProg(args[0]);
                     }
                 }
             }
@@ -431,6 +455,87 @@ var TSOS;
 
         Shell.prototype.kill = function (args) {
             _KernelInterruptQueue.enqueue(new TSOS.Interrupt(KILL_IRQ, args[0]));
+        };
+
+        Shell.prototype.setSchedule = function (args) {
+            if (_CPU.isExecuting === true) {
+                _StdOut.putText("CAN'T LET YOU DO THAT, STAR FOX.");
+            } else {
+                if (args[0] === "rr") {
+                    _Schedule = "rr";
+                    _StdOut.putText("Scheduling set to Round Robin.");
+                    _StdOut.advanceLine();
+                } else if (args[0] === "fcfs") {
+                    _Schedule = "fcfs";
+                    _StdOut.putText("Scheduling set to First Come First Serve.");
+                    _StdOut.advanceLine();
+                } else if (args[0] === "priority") {
+                    _Schedule = "priority";
+                    _StdOut.putText("Scheduling set to Priority.");
+                    _StdOut.advanceLine();
+                } else
+                    _StdOut.putText("Either that isn't a schedule or we don't have that here.");
+            }
+        };
+
+        Shell.prototype.getSchedule = function () {
+            _StdOut.putText("The current schedule is " + _Schedule + ".");
+            _StdOut.advanceLine();
+        };
+
+        Shell.prototype.fileCreate = function (args) {
+            var filename = args[0];
+
+            if (filename === undefined) {
+                _StdOut.putText("You didn't fucking type a filename.");
+            } else if (_krnFileSystem.stringToHex(filename).length > _krnFileSystem.dataData) {
+                _StdOut.putText("Try a shorter fucking filename.");
+            } else
+                _krnFileSystem.createFile(filename);
+        };
+
+        Shell.prototype.fileWrite = function (args) {
+            var filename = args[0];
+            var data = args[1];
+
+            if (filename === undefined) {
+                _StdOut.putText("Filename pls.");
+            } else if (data === undefined) {
+                _StdOut.putText("Tell me what to write, man.");
+            } else if (!(filename in _FileNames)) {
+                _StdOut.putText("That filename doesn't exist.");
+            } else
+                _krnFileSystem.writeFile(filename, data);
+        };
+
+        Shell.prototype.fileRead = function (args) {
+            var filename = args[0];
+            if (filename === undefined) {
+                _StdOut.putText("Filename pls.");
+            } else if (!(filename in _FileNames)) {
+                _StdOut.putText("That filename doesn't exist.");
+            } else
+                _krnFileSystem.readFile(filename);
+        };
+
+        Shell.prototype.fileDelete = function (args) {
+            var filename = args[0];
+            if (filename === undefined) {
+                _StdOut.putText("Give me a filename pls.");
+            } else if (!(filename in _FileNames)) {
+                _StdOut.putText("This file does not exist.");
+            } else
+                _krnFileSystem.deleteFile(filename);
+        };
+
+        Shell.prototype.format = function () {
+            debugger;
+            _krnFileSystem.format();
+        };
+
+        Shell.prototype.ls = function () {
+            debugger;
+            _krnFileSystem.ls();
         };
         return Shell;
     })();

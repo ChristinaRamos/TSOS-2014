@@ -65,6 +65,7 @@ var _SarcasticMode = false;
 
 // Global Device Driver Objects - page 12
 var _krnKeyboardDriver = null;
+var _krnFileSystem = null;
 
 var _hardwareClockID = null;
 
@@ -92,3 +93,7 @@ var _LineWrapped = false;
 var _QuantumOfSolace = 6;
 var _CPUScheduler;
 var _ProgramFinished = false;
+var _Schedule = "rr";
+
+var alanQuote = "22492063616e20646f20776861746576657220746865204655434b20492077616e742122202d20416c616e2032303134";
+var _FileNames;

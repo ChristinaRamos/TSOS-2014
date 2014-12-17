@@ -36,8 +36,12 @@ var TSOS;
             this.krnTrace(_krnKeyboardDriver.status);
 
             //
-            // ... more?
+            // ... more? no
             //
+            this.krnTrace("LOADING SHIT");
+            _krnFileSystem = new TSOS.FileSystem();
+            _krnFileSystem.driverEntry();
+
             // Enable the OS Interrupts.  (Not the CPU clock interrupt, as that is done in the hardware sim.)
             this.krnTrace("Enabling the interrupts.");
             this.krnEnableInterrupts();
@@ -46,6 +50,8 @@ var TSOS;
             this.krnTrace("Creating and Launching the shell.");
             _OsShell = new TSOS.Shell();
             _OsShell.init();
+
+            document.getElementById('startAudio').play();
 
             // Finally, initiate testing.
             if (_GLaDOS) {
@@ -81,10 +87,13 @@ var TSOS;
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             } else if (_CPU.isExecuting) {
-                if (_CPUScheduler.ticks < _QuantumOfSolace)
+                if (_Schedule === "rr") {
+                    if (_CPUScheduler.ticks < _QuantumOfSolace)
+                        _CPU.cycle();
+                    else
+                        _CPUScheduler.schedule();
+                } else
                     _CPU.cycle();
-                else
-                    _CPUScheduler.rockinRobin();
             } else {
                 this.krnTrace("Idle");
             }
@@ -137,7 +146,7 @@ var TSOS;
                     if (_CPUScheduler.readyQueue.isEmpty()) {
                         _CPU.isExecuting = false;
                     } else
-                        _CPUScheduler.rockinRobin();
+                        _CPUScheduler.schedule();
                     break;
                 case SYS_CALL_IRQ:
                     _StdIn.sysCall(); //Go to print Y register stuff
@@ -147,7 +156,6 @@ var TSOS;
                     this.krnTrapError("You are trying to Access memory that doesn't exist.  Cease and desist.");
                     break;
                 case KILL_IRQ:
-                    debugger;
                     TSOS.Control.kill(params);
                     break;
                 default:

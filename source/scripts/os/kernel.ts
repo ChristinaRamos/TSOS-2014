@@ -38,9 +38,11 @@ module TSOS {
             this.krnTrace(_krnKeyboardDriver.status);
 
             //
-            // ... more?
+            // ... more? no
             //
-
+            this.krnTrace("LOADING SHIT");
+            _krnFileSystem = new FileSystem();
+            _krnFileSystem.driverEntry();
             // Enable the OS Interrupts.  (Not the CPU clock interrupt, as that is done in the hardware sim.)
             this.krnTrace("Enabling the interrupts.");
             this.krnEnableInterrupts();
@@ -49,6 +51,8 @@ module TSOS {
             this.krnTrace("Creating and Launching the shell.");
             _OsShell = new Shell();
             _OsShell.init();
+
+            (<HTMLAudioElement>document.getElementById('startAudio')).play();
 
             // Finally, initiate testing.
             if (_GLaDOS) {
@@ -85,10 +89,14 @@ module TSOS {
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             } else if (_CPU.isExecuting) { // If there are no interrupts then run one CPU cycle if there is anything being processed. {
-                if(_CPUScheduler.ticks < _QuantumOfSolace) 
-                    _CPU.cycle();
+                if(_Schedule === "rr") { 
+                    if(_CPUScheduler.ticks < _QuantumOfSolace) 
+                        _CPU.cycle();
+                    else
+                        _CPUScheduler.schedule();
+                }
                 else
-                    _CPUScheduler.rockinRobin();  
+                    _CPU.cycle(); 
             } else {                      // If there are no interrupts and there is nothing being executed then just be idle. {
                 this.krnTrace("Idle");
             }
@@ -149,7 +157,7 @@ module TSOS {
                         _CPU.isExecuting = false;
                     }
                     else
-                        _CPUScheduler.rockinRobin();
+                        _CPUScheduler.schedule();
                     break;
                 case SYS_CALL_IRQ:
                     _StdIn.sysCall();   //Go to print Y register stuff
@@ -159,7 +167,7 @@ module TSOS {
                     this.krnTrapError("You are trying to Access memory that doesn't exist.  Cease and desist.")
                     break;
                 case KILL_IRQ:
-                    debugger;
+                     
                     Control.kill(params);
                     break;
                 default:
