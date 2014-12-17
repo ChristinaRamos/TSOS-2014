@@ -167,8 +167,12 @@ var TSOS;
             _StdOut.putText("Files on disk:");
             _StdOut.advanceLine();
 
-            for (var file in _FileNames) {
-                _StdOut.putText(file + ", ");
+            if (_FileNames.length === 0) {
+                _StdOut.putText("None");
+            } else {
+                for (var file in _FileNames) {
+                    _StdOut.putText(file + ", ");
+                }
             }
         };
 
