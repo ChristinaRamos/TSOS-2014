@@ -588,7 +588,17 @@ module TSOS {
         }
 
         public fileRead(args): void {
+            var filename = args[0];
+            if(filename === undefined) {
+                _StdOut.putText("Filename pls.");
+            }
 
+            else if(!(filename in _FileNames)) {
+                _StdOut.putText("That filename doesn't exist.");
+            }
+
+            else
+                _krnFileSystem.readFile(filename);
         }
 
         public fileDelete(args): void {

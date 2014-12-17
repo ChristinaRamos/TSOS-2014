@@ -74,7 +74,10 @@ module TSOS {
 		}
 
 		public createFile(filename): boolean {
-
+			if(filename in _FileNames) {
+				_StdOut.putText("This file already exists.");
+			}
+			
 			if(!this.diskIsFull()) {
 				var nextTSB = this.nextEmptyTSB();
 
@@ -127,6 +130,14 @@ module TSOS {
 			}
 			Control.displayDingle();
 			return true;			
+		}
+
+		public readFile(filename): boolean {
+			var filenameTSB = _FileNames[filename];
+			var fileData = this.getMeta(filenameTSB);
+			_StdOut.putText(this.getData(filenameTSB));
+
+			return true;
 		}
 
 		public distributeData(filename, data): void {

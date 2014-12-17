@@ -76,6 +76,10 @@ var TSOS;
         };
 
         FileSystem.prototype.createFile = function (filename) {
+            if (filename in _FileNames) {
+                _StdOut.putText("This file already exists.");
+            }
+
             if (!this.diskIsFull()) {
                 var nextTSB = this.nextEmptyTSB();
 
@@ -120,6 +124,14 @@ var TSOS;
                     this.setData(fileMeta, dataHex);
             }
             TSOS.Control.displayDingle();
+            return true;
+        };
+
+        FileSystem.prototype.readFile = function (filename) {
+            var filenameTSB = _FileNames[filename];
+            var fileData = this.getMeta(filenameTSB);
+            _StdOut.putText(this.getData(filenameTSB));
+
             return true;
         };
 
