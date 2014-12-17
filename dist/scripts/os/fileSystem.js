@@ -126,7 +126,9 @@ var TSOS;
                 else
                     this.setData(fileMeta, dataHex);
             }
+
             TSOS.Control.displayDingle();
+            _StdOut.putText("Write successful.");
             return true;
         };
 
@@ -151,8 +153,24 @@ var TSOS;
             //delete file data
             this.clearBlock(filePointer);
 
+            _StdOut.putText("File and contents deleted successfully.");
+
             TSOS.Control.displayDingle();
             return true;
+        };
+
+        FileSystem.prototype.format = function () {
+            this.init();
+            _StdOut.putText("Formatting successful.");
+        };
+
+        FileSystem.prototype.ls = function () {
+            _StdOut.putText("Files on disk:");
+            _StdOut.advanceLine();
+
+            for (var file in _FileNames) {
+                _StdOut.putText(file + ", ");
+            }
         };
 
         FileSystem.prototype.distributeData = function (filename, data) {

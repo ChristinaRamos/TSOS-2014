@@ -131,7 +131,9 @@ module TSOS {
 				else
 					this.setData(fileMeta, dataHex);	
 			}
+
 			Control.displayDingle();
+			_StdOut.putText("Write successful.");
 			return true;			
 		}
 
@@ -154,8 +156,24 @@ module TSOS {
 			//delete file data
 			this.clearBlock(filePointer);
 
+			_StdOut.putText("File and contents deleted successfully.");
+
 			Control.displayDingle();
 			return true;			
+		}
+
+		public format(): void {
+			this.init();
+			_StdOut.putText("Formatting successful.");
+		}
+
+		public ls(): void {
+			_StdOut.putText("Files on disk:");
+			_StdOut.advanceLine();
+
+			for(var file in _FileNames) {
+				_StdOut.putText(file + ", ");
+			}
 		}
 
 		public distributeData(filename, data): void {
