@@ -28,9 +28,9 @@ module TSOS {
 		}
 
 		public init(): void {
+			debugger;
 			var filler = new Array(this.dataData + this.metaData + 1).join('0');
-			this.setMeta("000", "000");
-			this.setData("000", this.hexToString(alanQuote) + " ");
+			sessionStorage.setItem("000", "1000" + this.hexToString(alanQuote));
 			for (var t = 0; t <= this.track - 1; t++){
               	for (var s = 0; s <= this.sector - 1; s++){
                 	for (var b = 0; b <= this.block - 1; b++){
