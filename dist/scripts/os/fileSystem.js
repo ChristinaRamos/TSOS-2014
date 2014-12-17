@@ -132,7 +132,7 @@ var TSOS;
 
         FileSystem.prototype.readFile = function (filename) {
             var filenameTSB = _FileNames[filename];
-            var fileDataTSB = this.getMeta(filenameTSB);
+            var fileDataTSB = this.getMeta(filenameTSB).substr(1);
             var fileData = this.getData(fileDataTSB);
             var output = this.hexToString(fileData);
             _StdOut.putText(output);
